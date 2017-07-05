@@ -27,6 +27,8 @@ var roleHarvester = {
             }
           });
         }
+      } else if(creep.pos.getRangeTo(Game.spawns.Spawn1) > 3) {
+        creep.moveTo(Game.spawns.Spawn1.pos);
       }
     }
   }
