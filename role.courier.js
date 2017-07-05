@@ -18,16 +18,6 @@ module.exports = {
             }
           });
         }
-      } else {
-        // If there's no dropped energy, find the nearest miner and
-        // drain his energy
-        var miners = creep.room.find(FIND_MY_CREEPS, {
-          filter: creep => {
-            return creep.memory.role == 'miner';
-          }
-        });
-        console.log(miners);
-
       }
     } else {
       // Proceed to the nearest building that needs energy and dump it

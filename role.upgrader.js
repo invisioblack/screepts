@@ -21,13 +21,16 @@ var roleUpgrader = {
         });
       }
     } else {
-      var source = creep.pos.findClosestByPath(FIND_SOURCES);
-      if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
-        creep.moveTo(source, {
-          visualizePathStyle: {
-            stroke: '#ffaa00'
-          }
-        });
+      // Find the nearest piece of dropped energy and pick it up
+      var dropped = creep.pos.findClosestByPath(FIND_DROPPED_RESOURCES);
+      if (dropped) {
+        if (creep.pickup(dropped) == ERR_NOT_IN_RANGE) {
+          creep.moveTo(dropped, {
+            visualizePathStyle: {
+              stroke: '#ffff00'
+            }
+          });
+        }
       }
     }
   }
