@@ -1,0 +1,44 @@
+const bodies = require('creeps.bodies');
+
+module.exports = {
+  roleMiner: {
+
+    /** @param {Creep} creep **/
+    run: function(creep) {
+
+      // Init source assignments if there are none
+      if (!creep.room.memory.sourcesToMiners) {
+        creep.room.memory.sourcesToMiners = {};
+        var sources = creep.room.find(FIND_SOURCES);
+
+        for (var source in sources) {
+          creep.room.memory.sourcesToMiners[sources[source].id] = null;
+        }
+      }
+
+      // Find first unclaimed source and claim it
+      if (!creep.memory.mySource) {
+        var sources = creep.room.find(FIND_SOURCES);
+
+        for (var source in creep.room.memory.sourcesToMiners) {
+          if (creep.room.memory.sourcesToMiners[source] == null) {
+            creep.memory.mySource = _.find(sources, {'id': source});
+          }
+        }
+      } else {
+        var mySource = Game.getObjectById(creep.memory.mySource.id);
+        if (creep.harvest(mySource) == ERR_NOT_IN_RANGE) {
+          console.log(creep.moveTo(mySource));
+        }
+      }
+
+    },
+
+    /** @param {StructureSpawn} spawn**/
+    create: function(spawn) {
+      spawn.createCreep(bodies.basic, memory = {
+        role: 'miner'
+      });
+    }
+  }
+}
