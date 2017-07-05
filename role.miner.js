@@ -28,7 +28,7 @@ module.exports = {
       } else {
         var mySource = Game.getObjectById(creep.memory.mySource.id);
         if (creep.harvest(mySource) == ERR_NOT_IN_RANGE) {
-          console.log(creep.moveTo(mySource));
+          creep.moveTo(mySource);
         }
       }
 

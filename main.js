@@ -13,7 +13,6 @@ module.exports.loop = function() {
         creep.room.visual.text(role, creep.pos);
       }
     }
-
   }
 
   spawn.spawnBehavior();
