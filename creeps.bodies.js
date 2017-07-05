@@ -1,3 +1,3 @@
 module.exports = {
-  basic: [WORK, CARRY, MOVE]
+  basic: [WORK, WORK, CARRY, MOVE]
 };

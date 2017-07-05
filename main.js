@@ -1,5 +1,6 @@
 const bodies = require('creeps.bodies');
 const roles = require('creeps.roles');
+const spawn = require('spawn.main');
 
 module.exports.loop = function() {
 
@@ -9,10 +10,13 @@ module.exports.loop = function() {
     for (var role in roles) {
       if (creep.memory.role == role) {
         roles[role].behavior.run(creep);
+        creep.room.visual.text(role, creep.pos);
       }
     }
 
   }
+
+  spawn.spawnBehavior();
 }
 
 if (!Creep.prototype._moveTo) {
