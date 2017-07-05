@@ -25,10 +25,13 @@ module.exports = {
       return;
     }
 
-    if(roles.harvester < 2) {
-      Game.spawns.Spawn1.createCreep(bodies.basic, memory={role: 'harvester'});
-      incOrCreate(Game.spawns.Spawn1.memory.spawnStats, 'harvesters');
-    } else if (roles.upgrader < 2) {
+    if(roles.miner < 2) {
+      Game.spawns.Spawn1.createCreep(bodies.basic, memory={role: 'miner'});
+      incOrCreate(Game.spawns.Spawn1.memory.spawnStats, 'miner');
+    } else if (roles.courier < 2) {
+      Game.spawns.Spawn1.createCreep(bodies.fast, memory={role: 'courier'});
+      incOrCreate(Game.spawns.Spawn1.memory.spawnStats, 'couriers');
+    }else if (roles.upgrader < 2) {
       Game.spawns.Spawn1.createCreep(bodies.basic, memory={role: 'upgrader'});
       incOrCreate(Game.spawns.Spawn1.memory.spawnStats, 'upgraders');
     } else if (roles.builder < 4) {
