@@ -3,6 +3,7 @@ const roleUpgrader = require('role.upgrader');
 const roleMiner = require('role.miner');
 const roleCourier = require('role.courier');
 const roleRepairman = require('role.repairman');
+const roleScout = require('role.scout');
 
 module.exports = {
   builder: {
@@ -20,5 +21,9 @@ module.exports = {
   },
   courier: {
     behavior: roleCourier
+  },
+
+  scout: {
+    behavior: roleScout
   }
 }
