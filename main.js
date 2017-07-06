@@ -1,7 +1,7 @@
 const bodies = require('creeps.bodies');
 const roles = require('creeps.roles');
-const spawn = require('spawn.main');
-const room = require('room.main');
+const spawnModule = require('spawn.main');
+const roomModule = require('room.main');
 
 module.exports.loop = function() {
 
@@ -17,12 +17,12 @@ module.exports.loop = function() {
   }
 
   for(var spawn in Game.spawns){
-    spawn.spawnBehavior(Game.spawns[spawn]);
+    spawnModule.spawnBehavior(Game.spawns[spawn]);
   }
 
 
   for(var room in Game.rooms){
-    room.roomBehavior(Game.rooms[room]);
+    roomModule.roomBehavior(Game.rooms[room]);
   }
 
 }
