@@ -21,16 +21,26 @@ module.exports = {
       }
     } else {
       // Proceed to the nearest building that needs energy and dump it
-      var possibleTargets = creep.room.find(FIND_MY_STRUCTURES, {
+      // Prioritize containers
+      var containers = creep.room.find(FIND_MY_STRUCTURES, {
         filter: structure => {
-          return ((structure.structureType == STRUCTURE_SPAWN || structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_CONTAINER || structure.structureType == STRUCTURE_STORAGE) && structure.energy < structure.energyCapacity);
+          return structure.structureType == STRUCTURE_CONTAINER && structure.energy < structure.energyCapacity
         }
       });
 
+      var possibleTargets = containers;
+
+      if (possibleTargets.length < 1) {
+        possibleTargets = creep.room.find(FIND_MY_STRUCTURES, {
+          filter: structure => {
+            return ((structure.structureType == STRUCTURE_SPAWN || structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_CONTAINER || structure.structureType == STRUCTURE_STORAGE) && structure.energy < structure.energyCapacity);
+          }
+        });
+      }
+
       var closest = _.sortBy(possibleTargets, [target => {
-          creep.pos.getRangeTo(target.pos);
-        }
-      ])[0];
+        creep.pos.getRangeTo(target.pos);
+      }])[0];
 
       if (creep.transfer(closest, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
         creep.moveTo(closest, {
