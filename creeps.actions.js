@@ -108,9 +108,34 @@ function dumpEnergyAt(creep, structureType) {
   return false;
 }
 
+/*
+  Finds the nearest structure that requires repairs, and attempts to repair it.
+*/
+function repairNearest(creep) {
+  var targets = creep.room.find(FIND_STRUCTURES, {
+    filter: object => object.hits < object.hitsMax
+  });
+
+  if (targets.length) {
+    var closest = _.sortBy(targets, [target => {
+        creep.pos.getRangeTo(target.pos);
+      }
+    ])[0];
+
+    if (creep.repair(closest) == ERR_NOT_IN_RANGE) {
+      creep.moveTo(closest);
+    }
+
+    return true;
+  }
+
+  return false;
+}
+
 module.exports = {
   collectNearestDroppedEnergy,
   withdrawFromNearestContainer,
   buildNearestConstructionSite,
-  dumpEnergyAt
+  dumpEnergyAt,
+  repairNearest
 };
