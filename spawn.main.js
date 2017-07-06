@@ -10,9 +10,9 @@ function incOrCreate(collection, key) {
 }
 
 module.exports = {
-  spawnBehavior: () => {
-      if(!Game.spawns.Spawn1.memory.spawnStats) {
-          Game.spawns.Spawn1.memory.spawnStats = {};
+  spawnBehavior: (spawn) => {
+      if(!spawn.memory.spawnStats) {
+          spawn.memory.spawnStats = {};
       }
 
     var roles = _.map(Game.creeps, creep => {
@@ -21,22 +21,22 @@ module.exports = {
 
     roles = _.countBy(roles, arg => arg);
 
-    if (Game.spawns.Spawn1.energy < 200 || Game.spawns.Spawn1.canCreateCreep(bodies.basic) != 0) {
+    if (spawn.energy < 200 || spawn.canCreateCreep(bodies.basic) != 0) {
       return;
     }
 
     if(roles.miner < 2) {
-      Game.spawns.Spawn1.createCreep(bodies.worker, memory={role: 'miner'});
-      incOrCreate(Game.spawns.Spawn1.memory.spawnStats, 'miner');
+      spawn.createCreep(bodies.worker, memory={role: 'miner'});
+      incOrCreate(spawn.memory.spawnStats, 'miner');
     } else if (roles.courier < 2) {
-      Game.spawns.Spawn1.createCreep(bodies.fast, memory={role: 'courier'});
-      incOrCreate(Game.spawns.Spawn1.memory.spawnStats, 'couriers');
+      spawn.createCreep(bodies.fast, memory={role: 'courier'});
+      incOrCreate(spawn.memory.spawnStats, 'couriers');
     }else if (roles.upgrader < 2) {
-      Game.spawns.Spawn1.createCreep(bodies.basic, memory={role: 'upgrader'});
-      incOrCreate(Game.spawns.Spawn1.memory.spawnStats, 'upgraders');
+      spawn.createCreep(bodies.basic, memory={role: 'upgrader'});
+      incOrCreate(spawn.memory.spawnStats, 'upgraders');
     } else if (roles.builder < 4) {
-      Game.spawns.Spawn1.createCreep(bodies.basic, memory={role: 'builder'});
-      incOrCreate(Game.spawns.Spawn1.memory.spawnStats, 'builders');
+      spawn.createCreep(bodies.basic, memory={role: 'builder'});
+      incOrCreate(spawn.memory.spawnStats, 'builders');
     }
   }
 };
