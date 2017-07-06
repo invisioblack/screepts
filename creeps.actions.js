@@ -28,16 +28,27 @@ function withdrawFromNearestContainer(creep) {
     }
   });
 
-  var closest = _.sortBy(containers, [targe => {
+  var closest = _.sortBy(containers, [target => {
     creep.pos.getRangeTo(target.pos);
   }])[0];
 
-  if (creep.withdraw(closest, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-    creep.moveTo(closest, {
-      visualizePathStyle: {
-        stroke: '#ffff00'
-      }
-    });
+  if (closest && creep.withdraw(closest, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+    creep.moveTo(closest, {visualizePathStyle: {stroke: '#ffff00'}});
+  }
+}
+
+/*
+  Attempts to build the nearest construction site
+*/
+function buildNearestConstructionSite(creep) {
+  var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
+
+  var closest = _.sortBy(targets, [target => {
+    creep.pos.getRangeTo(target.pos);
+  }])[0];
+
+  if (closest && creep.build(closest) === ERR_NOT_IN_RANGE) {
+    creep.moveTo(closest, {visualizePathStyle: {stroke: '#00ff00'}});
   }
 }
 
