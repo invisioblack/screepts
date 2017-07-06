@@ -26,7 +26,7 @@ module.exports = {
     }
 
     if(roles.miner < 2) {
-      Game.spawns.Spawn1.createCreep(bodies.basic, memory={role: 'miner'});
+      Game.spawns.Spawn1.createCreep(bodies.worker, memory={role: 'miner'});
       incOrCreate(Game.spawns.Spawn1.memory.spawnStats, 'miner');
     } else if (roles.courier < 2) {
       Game.spawns.Spawn1.createCreep(bodies.fast, memory={role: 'courier'});
