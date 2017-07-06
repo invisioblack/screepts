@@ -1,9 +1,10 @@
 require('creeps.prototype');
+require('rooms.prototype');
 
 const bodies = require('creeps.bodies');
 const roles = require('creeps.roles');
 const spawnModule = require('spawn.main');
-const roomModule = require('room.main');
+const roomModule = require('rooms.main');
 
 module.exports.loop = function() {
 

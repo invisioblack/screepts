@@ -54,5 +54,6 @@ function buildNearestConstructionSite(creep) {
 
 module.exports = {
   collectNearestDroppedEnergy,
-  withdrawFromNearestContainer
+  withdrawFromNearestContainer,
+  buildNearestConstructionSite
 };
