@@ -24,7 +24,8 @@ module.exports = {
       // Prioritize containers
       var containers = creep.room.find(FIND_MY_STRUCTURES, {
         filter: structure => {
-          return structure.structureType == STRUCTURE_CONTAINER && structure.energy < structure.energyCapacity
+          return structure.structureType == STRUCTURE_CONTAINER &&
+          structure.store[RESOURCE_ENERGY] < structure.storeCapacity
         }
       });
 
@@ -33,7 +34,7 @@ module.exports = {
       if (possibleTargets.length < 1) {
         possibleTargets = creep.room.find(FIND_MY_STRUCTURES, {
           filter: structure => {
-            return ((structure.structureType == STRUCTURE_SPAWN || structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_CONTAINER || structure.structureType == STRUCTURE_STORAGE) && structure.energy < structure.energyCapacity);
+            return ((structure.structureType == STRUCTURE_SPAWN || structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_STORAGE) && structure.energy < structure.energyCapacity);
           }
         });
       }
