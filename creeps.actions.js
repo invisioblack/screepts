@@ -111,5 +111,6 @@ function dumpEnergyAt(creep, structureType) {
 module.exports = {
   collectNearestDroppedEnergy,
   withdrawFromNearestContainer,
-  buildNearestConstructionSite
+  buildNearestConstructionSite,
+  dumpEnergyAt
 };

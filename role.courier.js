@@ -17,7 +17,7 @@ module.exports = {
 
       if (!actions.dumpEnergyAt(creep, STRUCTURE_SPAWN)) {
         if (!actions.dumpEnergyAt(creep, STRUCTURE_CONTAINER)) {
-          actions.dumpEnergyAt(Creep, STRUCTURE_EXTENSION);
+          actions.dumpEnergyAt(creep, STRUCTURE_EXTENSION);
         }
       }
 

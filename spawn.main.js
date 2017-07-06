@@ -28,13 +28,13 @@ module.exports = {
     if(roles.miner < 2) {
       spawn.createCreep(bodies.worker, memory={role: 'miner'});
       incOrCreate(spawn.memory.spawnStats, 'miner');
-    } else if (roles.courier < 2) {
+    } else if (roles.courier < 4) {
       spawn.createCreep(bodies.fast, memory={role: 'courier'});
       incOrCreate(spawn.memory.spawnStats, 'couriers');
-    }else if (roles.upgrader < 2) {
+    }else if (roles.upgrader < 5) {
       spawn.createCreep(bodies.basic, memory={role: 'upgrader'});
       incOrCreate(spawn.memory.spawnStats, 'upgraders');
-    } else if (roles.builder < 4) {
+    } else if (roles.builder < 5) {
       spawn.createCreep(bodies.basic, memory={role: 'builder'});
       incOrCreate(spawn.memory.spawnStats, 'builders');
     }
