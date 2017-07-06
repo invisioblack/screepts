@@ -1,7 +1,7 @@
 const actions = require('creeps.actions');
+const bodies = require('creeps.bodies');
 
-var roleUpgrader = {
-
+module.exports = {
   /** @param {Creep} creep **/
   run: function(creep) {
 
@@ -29,7 +29,12 @@ var roleUpgrader = {
         actions.withdrawFromNearestContainer(creep);
       }
     }
-  }
-};
+  },
 
-module.exports = roleUpgrader;
+  /** @param {StructureSpawn} spawn**/
+  create: function(spawn) {
+    spawn.createCreep(bodies.basic, memory = {
+      role: 'upgrader'
+    });
+  }
+}

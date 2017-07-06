@@ -1,8 +1,7 @@
 const actions = require('creeps.actions');
+const bodies = require('creeps.bodies');
 
-var roleBuilder = {
-
-  /** @param {Creep} creep **/
+module.exports = {
   run: function(creep) {
 
     if (creep.memory.building === undefined) {
@@ -29,7 +28,12 @@ var roleBuilder = {
       }
 
     }
-  }
-};
+  },
 
-module.exports = roleBuilder;
+  /** @param {StructureSpawn} spawn **/
+  create: function(spawn) {
+    spawn.createCreep(bodies.basic, memory = {
+      role: 'builder'
+    });
+  }
+}
