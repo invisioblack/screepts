@@ -5,8 +5,10 @@ const roleCourier = require('role.courier');
 const roleRepairman = require('role.repairman');
 const roleScout = require('role.scout');
 const roleRemoteMiner = require('role.remoteminer');
+const roleSentinel = require('role.sentinel');
 
 module.exports = {
+  // Infrastructure
   builder: {
     behavior: roleBuilder
   },
@@ -17,6 +19,7 @@ module.exports = {
     behavior: roleRepairman
   },
 
+  // Resource extraction
   miner: {
     behavior: roleMiner
   },
@@ -27,7 +30,11 @@ module.exports = {
     behavior: roleRemoteMiner
   }
 
+  // Military
   scout: {
     behavior: roleScout
+  },
+  sentinel: {
+    behavior: roleSentinel
   }
 }

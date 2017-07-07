@@ -21,7 +21,7 @@ module.exports = {
 
       if (creep.carry.energy < creep.carryCapacity) {
 
-        if (!action.collectNearestDroppedEnergy()) {
+        if (!actions.collectNearestDroppedEnergy(creep)) {
           // Go to the nearest source and mine untill full
           var source = creep.pos.findClosestByPath(FIND_SOURCES);
 
