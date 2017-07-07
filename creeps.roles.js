@@ -28,7 +28,7 @@ module.exports = {
   },
   remoteminer: {
     behavior: roleRemoteMiner
-  }
+  },
 
   // Military
   scout: {
