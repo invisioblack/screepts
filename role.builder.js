@@ -20,13 +20,7 @@ module.exports = {
     if (creep.memory.building) {
       actions.buildNearestConstructionSite(creep);
     } else {
-      // Find the nearest piece of dropped energy and pick it up
-
-      if (!actions.collectNearestDroppedEnergy(creep)) {
-        // Find a container and get energy from it
-        actions.withdrawFromNearestContainer(creep);
-      }
-
+      actions.withdrawFromNearestContainer(creep);
     }
   },
 

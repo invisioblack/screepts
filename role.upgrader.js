@@ -23,11 +23,8 @@ module.exports = {
         });
       }
     } else {
-      // Find the nearest piece of dropped energy and pick it up
-      if (!actions.collectNearestDroppedEnergy(creep)) {
-        // Find a container and get energy from it
-        actions.withdrawFromNearestContainer(creep);
-      }
+      // Find a container and get energy from it
+      actions.withdrawFromNearestContainer(creep);
     }
   },
 
