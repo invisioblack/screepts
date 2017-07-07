@@ -25,19 +25,19 @@ module.exports = {
       return;
     }
 
-    if(rolesNum.miner < 2) {
+    if(!rolesNum.miner || rolesNum.miner < 2) {
       roles.miner.behavior.create(spawn);
       incOrCreate(spawn.memory.spawnStats, 'miner');
-    } else if (rolesNum.courier < 4) {
+    } else if (!rolesNum.courier || rolesNum.courier < 4) {
       roles.courier.behavior.create(spawn);
       incOrCreate(spawn.memory.spawnStats, 'couriers');
-    }else if (rolesNum.upgrader < 5) {
+    }else if (!rolesNum.upgrader || rolesNum.upgrader < 5) {
       roles.upgrader.behavior.create(spawn);
       incOrCreate(spawn.memory.spawnStats, 'upgraders');
-    } else if (rolesNum.builder < 5) {
+    } else if (!rolesNum.builder || rolesNum.builder < 5) {
       roles.builder.behavior.create(spawn);
       incOrCreate(spawn.memory.spawnStats, 'builders');
-    } else if (rolesNum.repairman < 2) {
+    } else if (!rolesNum.repairman || rolesNum.repairman < 2) {
       roles.repairman.behavior.create(spawn);
       incOrCreate(spawn.memory.spawnStats, 'repairmen');
     }
