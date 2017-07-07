@@ -10,7 +10,7 @@ module.exports = {
     if (creep.carry.energy < creep.carryCapacity) {
 
       // Find the nearest piece of dropped energy and pick it up
-      actions.collectNearestDroppedEnergy(creep);
+      actions.collectBiggestDroppedEnergy(creep);
     } else {
       // Proceed to the nearest building that needs energy and dump it
       // Prioritize spawns, then containers

@@ -20,6 +20,29 @@ function collectNearestDroppedEnergy(creep) {
 }
 
 /*
+  Attempts to pick up a piece of dropped energy from the biggest pile in the room.
+*/
+function collectBiggestDroppedEnergy(creep) {
+  var dropped = creep.room.find(FIND_DROPPED_RESOURCES, {
+    filter: {resourceType: RESOURCE_ENERGY}
+  });
+
+  if(dropped.length) {
+    dropped = _.sortBy(dropped, e => {return e.amount});
+    if (creep.pickup(dropped[0]) == ERR_NOT_IN_RANGE) {
+      creep.moveTo(dropped[0], {
+        visualizePathStyle: {
+          stroke: '#ff5500'
+        }
+      });
+    }
+    return true;
+  }
+
+  return false;
+}
+
+/*
   Attempts to approach the nearest container and withdraw energy from it
   Returns true if there is a container with non-zero energy reserves anywhere
   in the room, false otherwise

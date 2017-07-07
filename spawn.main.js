@@ -28,10 +28,10 @@ module.exports = {
     if(!rolesNum.miner || rolesNum.miner < 2) {
       roles.miner.behavior.create(spawn);
       incOrCreate(spawn.memory.spawnStats, 'miner');
-    } else if (!rolesNum.courier || rolesNum.courier < 4) {
+    } else if (!rolesNum.courier || rolesNum.courier < 8) {
       roles.courier.behavior.create(spawn);
       incOrCreate(spawn.memory.spawnStats, 'couriers');
-    }else if (!rolesNum.upgrader || rolesNum.upgrader < 5) {
+    }else if (!rolesNum.upgrader || rolesNum.upgrader < 4) {
       roles.upgrader.behavior.create(spawn);
       incOrCreate(spawn.memory.spawnStats, 'upgraders');
     } else if (!rolesNum.builder || rolesNum.builder < 5) {
@@ -43,6 +43,9 @@ module.exports = {
     } else if (!rolesNum.towerfiller || rolesNum.towerfiller < 2) {
       roles.towerfiller.behavior.create(spawn);
       incOrCreate(spawn.memory.spawnStats, 'towerfiller');
+    } else if (!rolesNum.reclaimer || rolesNum.reclaimer < 2) {
+      roles.reclaimer.behavior.create(spawn);
+      incOrCreate(spawn.memory.spawnStats, 'reclaimer');
     }
   }
 };
