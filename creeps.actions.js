@@ -29,8 +29,8 @@ function collectBiggestDroppedEnergy(creep) {
 
   if(dropped.length) {
     dropped = _.sortBy(dropped, e => {return e.amount});
-    if (creep.pickup(dropped[0]) == ERR_NOT_IN_RANGE) {
-      creep.moveTo(dropped[0], {
+    if (creep.pickup(_.last(dropped)) == ERR_NOT_IN_RANGE) {
+      creep.moveTo(_.last(dropped), {
         visualizePathStyle: {
           stroke: '#ff5500'
         }
@@ -142,6 +142,7 @@ function repairNearest(creep) {
 
 module.exports = {
   collectNearestDroppedEnergy,
+  collectBiggestDroppedEnergy,
   withdrawFromNearestContainer,
   buildNearestConstructionSite,
   dumpEnergyAt,
