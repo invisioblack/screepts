@@ -21,9 +21,7 @@ module.exports = {
     // Get away from the spawn if we're not chasing an invader
     var spawn = creep.pos.findClosestByPath(FIND_MY_SPAWNS);
     if (!attacking) {
-      if (creep.pos.getRangeTo(spawn) < 3) {
-        creep.move(getOppositeDirection(creep.pos.getDirectionTo(spawn)));
-      }
+      actions.rallyAtFlag(creep, creep.room.find(FIND_FLAGS)[0]);
     }
 
   },

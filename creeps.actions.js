@@ -24,11 +24,15 @@ function collectNearestDroppedEnergy(creep) {
 */
 function collectBiggestDroppedEnergy(creep) {
   var dropped = creep.room.find(FIND_DROPPED_RESOURCES, {
-    filter: {resourceType: RESOURCE_ENERGY}
+    filter: {
+      resourceType: RESOURCE_ENERGY
+    }
   });
 
-  if(dropped.length) {
-    dropped = _.sortBy(dropped, e => {return e.amount});
+  if (dropped.length) {
+    dropped = _.sortBy(dropped, e => {
+      return e.amount
+    });
     if (creep.pickup(_.last(dropped)) == ERR_NOT_IN_RANGE) {
       creep.moveTo(_.last(dropped), {
         visualizePathStyle: {
@@ -53,7 +57,6 @@ function withdrawFromNearestContainer(creep) {
       return structure.structureType == STRUCTURE_CONTAINER && structure.store[RESOURCE_ENERGY] > 0
     }
   });
-
 
   if (target && creep.withdraw(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
     creep.moveTo(target, {
@@ -99,7 +102,7 @@ function buildNearestConstructionSite(creep) {
   false otherwise.
 */
 function dumpEnergyAt(creep, structureType) {
-  var target = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
+  var target = creep.pos.findClosestByPath(FIND_STRUCTURES, {
     filter: structure => {
       return structure.structureType == structureType && ((structure.store && structure.store[RESOURCE_ENERGY] < structure.storeCapacity) || structure.energy < structure.energyCapacity)
     }
@@ -140,11 +143,20 @@ function repairNearest(creep) {
 
 }
 
+/*
+  Walks to a flag
+*/
+function rallyAtFlag(creep, flag, dist=3) {
+  if(creep.pos.getRangeTo(flag) > dist) {
+    creep.moveTo(flag);
+  }
+}
+
 module.exports = {
   collectNearestDroppedEnergy,
   collectBiggestDroppedEnergy,
   withdrawFromNearestContainer,
   buildNearestConstructionSite,
-  dumpEnergyAt,
+xs  dumpEnergyAt,
   repairNearest
 };
