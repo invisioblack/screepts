@@ -6,7 +6,10 @@ module.exports = {
 
 
     if (creep.room.controller.my) {
-      creep.moveTo(49, 20);
+      var target = creep.pos.findClosestByPath(FIND_EXIT);
+      if(target) {
+        creep.moveTo(target);
+      }
     } else {
       var target = creep.pos.findClosestByPath(FIND_HOSTILE_CREEPS);
       if (creep.attack(target) == ERR_NOT_IN_RANGE) {
