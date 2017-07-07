@@ -25,55 +25,49 @@ function collectNearestDroppedEnergy(creep) {
   in the room, false otherwise
 */
 function withdrawFromNearestContainer(creep) {
-  var containers = creep.room.find(FIND_STRUCTURES, {
+  var target = creep.pos.findClosestByPath(FIND_STRUCTURES, {
     filter: structure => {
       return structure.structureType == STRUCTURE_CONTAINER && structure.store[RESOURCE_ENERGY] > 0
     }
   });
 
-  if (containers.length) {
-    var closest = _.sortBy(containers, [target => {
-        creep.pos.getRangeTo(target.pos);
-      }
-    ])[0];
 
-    if (closest && creep.withdraw(closest, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-      creep.moveTo(closest, {
-        visualizePathStyle: {
-          stroke: '#ffff00'
-        }
-      });
-    }
-    return true;
+  if (target && creep.withdraw(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+    creep.moveTo(target, {
+      visualizePathStyle: {
+        stroke: '#ffff00'
+      }
+    });
   }
 
-  return false;
+  if (target) {
+    return true;
+  } else {
+    return false;
+  }
+
 }
 
 /*
   Attempts to build the nearest construction site
 */
 function buildNearestConstructionSite(creep) {
-  var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
+  var target = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES);
 
-  if (targets.length) {
-    var closest = _.sortBy(targets, [target => {
-        creep.pos.getRangeTo(target.pos);
+  if (target && creep.build(target) === ERR_NOT_IN_RANGE) {
+    creep.moveTo(target, {
+      visualizePathStyle: {
+        stroke: '#00ff00'
       }
-    ])[0];
-
-    if (closest && creep.build(closest) === ERR_NOT_IN_RANGE) {
-      creep.moveTo(closest, {
-        visualizePathStyle: {
-          stroke: '#00ff00'
-        }
-      });
-    }
-
-    return true;
+    });
   }
 
-  return false;
+  if (target) {
+    return true;
+  } else {
+    return false;
+  }
+
 }
 
 /*
@@ -82,54 +76,45 @@ function buildNearestConstructionSite(creep) {
   false otherwise.
 */
 function dumpEnergyAt(creep, structureType) {
-  var targets = creep.room.find(FIND_MY_STRUCTURES, {
+  var target = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
     filter: structure => {
       return structure.structureType == structureType && ((structure.store && structure.store[RESOURCE_ENERGY] < structure.storeCapacity) || structure.energy < structure.energyCapacity)
     }
   });
 
-  if (targets.length) {
-    var closest = _.sortBy(targets, [target => {
-        creep.pos.getRangeTo(target.pos);
+  if (target && creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+    creep.moveTo(target, {
+      visualizePathStyle: {
+        stroke: '#00ff00'
       }
-    ])[0];
-
-    if (closest && creep.transfer(closest, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-      creep.moveTo(closest, {
-        visualizePathStyle: {
-          stroke: '#00ff00'
-        }
-      });
-    }
-
-    return true;
+    });
   }
 
-  return false;
+  if (target) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 /*
   Finds the nearest structure that requires repairs, and attempts to repair it.
 */
 function repairNearest(creep) {
-  var targets = creep.room.find(FIND_STRUCTURES, {
+  var target = creep.pos.findClosestByPath(FIND_STRUCTURES, {
     filter: object => object.hits < object.hitsMax
   });
 
-  if (targets.length) {
-    var closest = _.sortBy(targets, [target => {
-        creep.pos.getRangeTo(target.pos);
-      }
-    ])[0];
-
-    if (creep.repair(closest) == ERR_NOT_IN_RANGE) {
-      creep.moveTo(closest);
-    }
-
-    return true;
+  if (target && creep.repair(target) == ERR_NOT_IN_RANGE) {
+    creep.moveTo(target);
   }
 
-  return false;
+  if (target) {
+    return true;
+  } else {
+    return false;
+  }
+
 }
 
 module.exports = {

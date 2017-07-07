@@ -40,6 +40,9 @@ module.exports = {
     } else if (!rolesNum.repairman || rolesNum.repairman < 2) {
       roles.repairman.behavior.create(spawn);
       incOrCreate(spawn.memory.spawnStats, 'repairmen');
+    } else if (!rolesNum.towerfiller || rolesNum.towerfiller < 2) {
+      roles.towerfiller.behavior.create(towerfiller);
+      incOrCreate(spawn.memory.spawnStats, 'towerfiller');
     }
   }
 };
