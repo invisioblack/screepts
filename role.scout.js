@@ -21,7 +21,7 @@ module.exports = {
 
         if (!target) {
           target = creep.room.controller;
-          if (creep.attack(target) == ERR_NOT_IN_RANGE) {
+          if (creep.attackController(target) == ERR_NOT_IN_RANGE) {
             creep.moveTo(target);
           }
 

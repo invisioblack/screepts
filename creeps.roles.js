@@ -4,6 +4,7 @@ const roleMiner = require('role.miner');
 const roleCourier = require('role.courier');
 const roleRepairman = require('role.repairman');
 const roleScout = require('role.scout');
+const roleRemoteMiner = require('role.remoteminer');
 
 module.exports = {
   builder: {
@@ -22,6 +23,9 @@ module.exports = {
   courier: {
     behavior: roleCourier
   },
+  remoteminer: {
+    behavior: roleRemoteMiner
+  }
 
   scout: {
     behavior: roleScout
