@@ -22,6 +22,7 @@ module.exports = {
         if (creep.room.memory.sourcesToMiners[source] == null) {
           creep.memory.mySource = _.find(sources, {'id': source});
           creep.room.memory.sourcesToMiners[source] = creep.id;
+          return;
         }
       }
     } else {
