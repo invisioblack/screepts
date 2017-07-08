@@ -9,7 +9,8 @@ module.exports = {
     // While there's still room for energy
     if (creep.carry.energy < creep.carryCapacity) {
 
-      if (creep.room.executeEveryTicks(50) || !creep.memory.energyTarget) {
+
+      if(!creep.memory.energyTarget || Game.getObjectById(creep.memory.energyTarget) == null){
         creep.memory.energyTarget = actions.findBiggestDroppedEnergy(creep);
       }
 
