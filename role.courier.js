@@ -9,8 +9,20 @@ module.exports = {
     // While there's still room for energy
     if (creep.carry.energy < creep.carryCapacity) {
 
-      // Find the nearest piece of dropped energy and pick it up
-      actions.collectBiggestDroppedEnergy(creep);
+      if (creep.room.executeEveryTicks(150)) {
+        creep.memory.energyTarget = actions.findBiggestDroppedEnergy(creep);
+      }
+
+    var target = Game.getObjectById(creep.memory.energyTarget.id);
+
+      if (creep.pickup(target) == ERR_NOT_IN_RANGE) {
+        creep.moveTo(target, {
+          visualizePathStyle: {
+            stroke: '#ff5500'
+          }
+        });
+      }
+
     } else {
       // Proceed to the nearest building that needs energy and dump it
       // Prioritize spawns, then containers

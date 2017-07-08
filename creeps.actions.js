@@ -47,6 +47,26 @@ function collectBiggestDroppedEnergy(creep) {
 }
 
 /*
+  Finds the biggest pile of dropped energy in the room
+*/
+function findBiggestDroppedEnergy(creep) {
+  var dropped = creep.room.find(FIND_DROPPED_RESOURCES, {
+    filter: {
+      resourceType: RESOURCE_ENERGY
+    }
+  });
+
+  if(dropped.length) {
+    dropped = _.sortBy(dropped, e => {
+      return e.amount
+    });
+    return _.last(dropped);
+  } else {
+    return null;
+  }
+}
+
+/*
   Attempts to approach the nearest container and withdraw energy from it
   Returns true if there is a container with non-zero energy reserves anywhere
   in the room, false otherwise
@@ -155,6 +175,7 @@ function rallyAtFlag(creep, flag, dist=3) {
 module.exports = {
   collectNearestDroppedEnergy,
   collectBiggestDroppedEnergy,
+  findBiggestDroppedEnergy,
   withdrawFromNearestContainer,
   buildNearestConstructionSite,
   dumpEnergyAt,
