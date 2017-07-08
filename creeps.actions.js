@@ -157,6 +157,7 @@ module.exports = {
   collectBiggestDroppedEnergy,
   withdrawFromNearestContainer,
   buildNearestConstructionSite,
-xs  dumpEnergyAt,
-  repairNearest
+  dumpEnergyAt,
+  repairNearest,
+  rallyAtFlag
 };
