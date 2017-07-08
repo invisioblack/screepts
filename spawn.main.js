@@ -43,12 +43,12 @@ module.exports = {
     } else if (!rolesNum.towerfiller || rolesNum.towerfiller < 1) {
       roles.towerfiller.behavior.create(spawn);
       incOrCreate(spawn.memory.spawnStats, 'towerfiller');
+    }else if (!rolesNum.sentinel || rolesNum.sentinel < 3) {
+      roles.sentinel.behavior.create(spawn);
+      incOrCreate(spawn.memory.spawnStats, 'sentinel');
     } else if (!rolesNum.reclaimer || rolesNum.reclaimer < 2) {
       roles.reclaimer.behavior.create(spawn);
       incOrCreate(spawn.memory.spawnStats, 'reclaimer');
-    } else if (!rolesNum.sentinel || rolesNum.sentinel < 3) {
-      roles.sentinel.behavior.create(spawn);
-      incOrCreate(spawn.memory.spawnStats, 'sentinel');
     }
   }
 };

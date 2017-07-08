@@ -9,18 +9,20 @@ module.exports = {
     // While there's still room for energy
     if (creep.carry.energy < creep.carryCapacity) {
 
-      if (creep.room.executeEveryTicks(150)) {
+      if (creep.room.executeEveryTicks(50) || !creep.memory.energyTarget) {
         creep.memory.energyTarget = actions.findBiggestDroppedEnergy(creep);
       }
 
-    var target = Game.getObjectById(creep.memory.energyTarget.id);
+      if (creep.memory.energyTarget) {
+        var target = Game.getObjectById(creep.memory.energyTarget.id);
 
-      if (creep.pickup(target) == ERR_NOT_IN_RANGE) {
-        creep.moveTo(target, {
-          visualizePathStyle: {
-            stroke: '#ff5500'
-          }
-        });
+        if (creep.pickup(target) == ERR_NOT_IN_RANGE) {
+          creep.moveTo(target, {
+            visualizePathStyle: {
+              stroke: '#ff5500'
+            }
+          });
+        }
       }
 
     } else {
