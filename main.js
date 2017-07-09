@@ -20,20 +20,16 @@ module.exports.loop = function() {
     }
   }
 
-  for(var spawn in Game.spawns){
+  for (var spawn in Game.spawns) {
     spawnModule.spawnBehavior(Game.spawns[spawn]);
   }
 
-
-  for(var room in Game.rooms){
+  for (var room in Game.rooms) {
     roomModule.roomBehavior(Game.rooms[room]);
   }
 
-  for(var tower in _.filter(Game.structures,
-  structure => {
-    structure.structureType = STRUCTURE_TOWER
-  })) {
-    towerModule.towerBehavior(tower);
-  }
+  towerModule.towerBehavior(_.filter(Game.structures, structure => {
+    return (structure.structureType == STRUCTURE_TOWER);
+  })[0]);
 
 }
