@@ -18,7 +18,7 @@ module.exports = {
     } else if (wounded) {
       tower.heal(wounded);
     } else if (damaged) {
-      tower.heal(damaged);
+      tower.repair(damaged);
     }
 
   }
