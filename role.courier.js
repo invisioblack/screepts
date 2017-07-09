@@ -10,7 +10,7 @@ module.exports = {
     if (creep.carry.energy < creep.carryCapacity) {
 
 
-      if(!creep.memory.energyTarget || Game.getObjectById(creep.memory.energyTarget) == null){
+      if(!creep.memory.energyTarget || Game.getObjectById(creep.memory.energyTarget.id) == null){
         creep.memory.energyTarget = actions.findBiggestDroppedEnergy(creep);
       }
 
@@ -31,8 +31,8 @@ module.exports = {
       // Prioritize spawns, then containers
 
       if (!actions.dumpEnergyAt(creep, STRUCTURE_SPAWN)) {
-        if (!actions.dumpEnergyAt(creep, STRUCTURE_CONTAINER)) {
-          actions.dumpEnergyAt(creep, STRUCTURE_EXTENSION);
+        if (!actions.dumpEnergyAt(creep, STRUCTURE_EXTENSION)) {
+          actions.dumpEnergyAt(creep, STRUCTURE_CONTAINER);
         }
       }
 
