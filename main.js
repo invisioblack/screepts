@@ -5,6 +5,7 @@ const bodies = require('creeps.bodies');
 const roles = require('creeps.roles');
 const spawnModule = require('spawn.main');
 const roomModule = require('rooms.main');
+const towerModule = require('towers.main');
 
 module.exports.loop = function() {
 
@@ -26,6 +27,13 @@ module.exports.loop = function() {
 
   for(var room in Game.rooms){
     roomModule.roomBehavior(Game.rooms[room]);
+  }
+
+  for(var tower in _.filter(Game.structures,
+  structure => {
+    structure.structureType = STRUCTURE_TOWER
+  })) {
+    towerModule.towerBehavior(tower);
   }
 
 }
