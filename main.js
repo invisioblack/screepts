@@ -41,7 +41,7 @@ module.exports.loop = function() {
   })[0]);
 
 
-  hivemind.planRoads();
+  hivemind.think();
 
 
 
