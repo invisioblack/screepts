@@ -47,13 +47,26 @@ hivemind.planRoads = () => {
         }
 
         roomInst.memory.plan.roads = roads;
-        _.map(roomInst.memory.plan.roads, road => {
-          _.map(road, point => {
-            roomInst.createConstructionSite(point, STRUCTURE_ROAD);
-          });
-        });
 
       }
     }
   }
+}
+
+hivemind.restoreRoads = () => {
+  for (var room in Game.rooms) {
+    var roomInst = Game.rooms[room];
+    if (roomInst.executeEveryTicks(200)) {
+      _.map(roomInst.memory.plan.roads, road => {
+        _.map(road, point => {
+          roomInst.createConstructionSite(point, STRUCTURE_ROAD);
+        });
+      });
+    }
+  }
+};
+
+hivemind.think = () => {
+  hivemind.planRoads();
+  hivemind.restoreRoads();
 }
