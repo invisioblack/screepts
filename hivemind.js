@@ -1,7 +1,7 @@
 hivemind = {};
 
 hivemind.planRoads = () => {
-  for(var room in Game.rooms) {
+  for (var room in Game.rooms) {
     var roomInst = Game.rooms[room];
 
     if (roomInst.controller.my) {
@@ -12,22 +12,46 @@ hivemind.planRoads = () => {
         }
         var roads = [];
 
-        //Connect spawns to sources
-        var spawns = room.find(FIND_MY_SPAWNS);
+        // Connect spawns
+        var spawns = roomInst.find(FIND_MY_SPAWNS);
         for (var spawn in spawns) {
-          var sources = room.find(FIND_SOURCES);
+
+          var road;
+
+          // Connect spawns to sources
+          var sources = roomInst.find(FIND_SOURCES);
           for (var source in sources) {
-            var road = PathFinder.search(spawns[spawn].pos, sources[source].pos);
-            if (!road.incomplete) {
+            var road = PathFinder.search(spawns[spawn].pos, {pos: sources[source].pos, range: 1});
+            roads.push(road.path);
+          }
+
+          // Connect spawns to room controller
+          road = PathFinder.search(spawns[spawn].pos, {pos: roomInst.controller.pos, range: 1});
+          roads.push(road.path);
+
+          // Connect spawns to exits
+          var exits = [
+            spawns[spawn].pos.findClosestByPath(FIND_EXIT_TOP),
+            spawns[spawn].pos.findClosestByPath(FIND_EXIT_BOTTOM),
+            spawns[spawn].pos.findClosestByPath(FIND_EXIT_RIGHT),
+            spawns[spawn].pos.findClosestByPath(FIND_EXIT_LEFT)
+          ];
+
+          for (var exit in exits) {
+            if (exits[exit]) {
+              road = PathFinder.search(spawns[spawn].pos, exits[exit], {maxRooms: 1});
               roads.push(road.path);
             }
           }
+
         }
 
-        roads = _.flatten(roads);
-
         roomInst.memory.plan.roads = roads;
-
+        _.map(roomInst.memory.plan.roads, road => {
+          _.map(road, point => {
+            roomInst.createConstructionSite(point, STRUCTURE_ROAD);
+          });
+        });
 
       }
     }

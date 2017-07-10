@@ -1,5 +1,6 @@
 require('creeps.prototype');
 require('rooms.prototype');
+require('hivemind');
 
 const bodies = require('creeps.bodies');
 const roles = require('creeps.roles');
@@ -26,10 +27,22 @@ module.exports.loop = function() {
 
   for (var room in Game.rooms) {
     roomModule.roomBehavior(Game.rooms[room]);
+
+    if(Game.rooms[room].memory.plan && Game.rooms[room].memory.plan.roads) {
+      for( var road in Game.rooms[room].memory.plan.roads) {
+        Game.rooms[room].visual.poly(Game.rooms[room].memory.plan.roads[road], {stroke: '#0000FF', opacity: 1, strokeWidth: 0.2});
+      }
+    }
+
   }
 
   towerModule.towerBehavior(_.filter(Game.structures, structure => {
     return (structure.structureType == STRUCTURE_TOWER);
   })[0]);
+
+
+  hivemind.planRoads();
+
+
 
 }
