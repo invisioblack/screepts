@@ -6,8 +6,6 @@ const home = 'E68N43';
 module.exports = {
   run: function(creep) {
 
-
-
     if (creep.room.name != creep.memory.targetRoom) {
 
       if (creep.carry.energy < creep.carryCapacity) {
@@ -17,9 +15,16 @@ module.exports = {
         creep.moveTo(exit);
 
       } else {
-        actions.dumpEnergyAt(creep, STRUCTURE_CONTAINER);
-      }
+        if (creep.room.name == home) {
+          actions.dumpEnergyAt(creep, STRUCTURE_CONTAINER);
+        } else {
+          // Head home
+          const exitDir = Game.map.findExit(creep.room, home);
+          const exit = creep.pos.findClosestByRange(exitDir);
+          creep.moveTo(exit);
+        }
 
+      }
 
     } else {
 
@@ -38,15 +43,10 @@ module.exports = {
         }
       } else {
 
-
         // Head home
-        const route = Game.map.findRoute(creep.room, home);
-
-        if (route.length > 0) {
-          const exit = creep.pos.findClosestByRange(route[0].exit);
-          creep.moveTo(exit);
-        }
-
+        const exitDir = Game.map.findExit(creep.room, home);
+        const exit = creep.pos.findClosestByRange(exitDir);
+        creep.moveTo(exit);
 
       }
     }
@@ -54,7 +54,7 @@ module.exports = {
   },
 
   create: function(spawn) {
-    spawn.createCreep(bodies.basic, memory = {
+    spawn.createCreep(bodies.remoteminer, memory = {
       role: 'remoteminer'
     })
   }
