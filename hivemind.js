@@ -21,12 +21,12 @@ hivemind.planRoads = () => {
           // Connect spawns to sources
           var sources = roomInst.find(FIND_SOURCES);
           for (var source in sources) {
-            var road = PathFinder.search(spawns[spawn].pos, {pos: sources[source].pos, range: 1});
+            var road = PathFinder.search(spawns[spawn].pos, {pos: sources[source].pos, range: 1}, {plainCost: 1, swampCost: 1});
             roads.push(road.path);
           }
 
           // Connect spawns to room controller
-          road = PathFinder.search(spawns[spawn].pos, {pos: roomInst.controller.pos, range: 1});
+          road = PathFinder.search(spawns[spawn].pos, {pos: roomInst.controller.pos, range: 1}, {plainCost: 1, swampCost: 1});
           roads.push(road.path);
 
           // Connect spawns to exits
@@ -39,7 +39,7 @@ hivemind.planRoads = () => {
 
           for (var exit in exits) {
             if (exits[exit]) {
-              road = PathFinder.search(spawns[spawn].pos, exits[exit], {maxRooms: 1});
+              road = PathFinder.search(spawns[spawn].pos, exits[exit], {maxRooms: 1}, {plainCost: 1, swampCost: 1});
               roads.push(road.path);
             }
           }
