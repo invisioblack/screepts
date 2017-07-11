@@ -23,8 +23,10 @@ module.exports = {
         });
       }
     } else {
-      // Find a container and get energy from it
-      actions.withdrawFromNearestContainer(creep);
+      // Find a container or storage and get energy from it
+      if (!actions.withdrawFromNearestContainer(creep)) {
+        actions.withdrawFromNearestStorage(creep);
+      }
     }
   },
 

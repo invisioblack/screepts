@@ -56,7 +56,7 @@ function findBiggestDroppedEnergy(creep) {
     }
   });
 
-  if(dropped.length) {
+  if (dropped.length) {
     dropped = _.sortBy(dropped, e => {
       return e.amount
     });
@@ -67,14 +67,14 @@ function findBiggestDroppedEnergy(creep) {
 }
 
 /*
-  Attempts to approach the nearest container and withdraw energy from it
-  Returns true if there is a container with non-zero energy reserves anywhere
+  Attempts to approach the nearest structure of given type and withdraw energy from it
+  Returns true if there is a structure with non-zero energy reserves anywhere
   in the room, false otherwise
 */
-function withdrawFromNearestContainer(creep) {
+function withdrawFromNearestEnergyStructure(creep, structureType) {
   var target = creep.pos.findClosestByPath(FIND_STRUCTURES, {
     filter: structure => {
-      return structure.structureType == STRUCTURE_CONTAINER && structure.store[RESOURCE_ENERGY] > 0
+      return structure.structureType == structureType && structure.store[RESOURCE_ENERGY] > 0
     }
   });
 
@@ -92,6 +92,14 @@ function withdrawFromNearestContainer(creep) {
     return false;
   }
 
+}
+
+function withdrawFromNearestContainer(creep) {
+  return withdrawFromNearestEnergyStructure(creep, STRUCTURE_CONTAINER);
+}
+
+function withdrawFromNearestStorage(creep) {
+  return withdrawFromNearestEnergyStructure(creep, STRUCTURE_STORAGE);
 }
 
 /*
@@ -166,8 +174,8 @@ function repairNearest(creep) {
 /*
   Walks to a flag
 */
-function rallyAtFlag(creep, flag, dist=3) {
-  if(creep.pos.getRangeTo(flag) > dist) {
+function rallyAtFlag(creep, flag, dist = 3) {
+  if (creep.pos.getRangeTo(flag) > dist) {
     creep.moveTo(flag);
   }
 }
@@ -177,6 +185,7 @@ module.exports = {
   collectBiggestDroppedEnergy,
   findBiggestDroppedEnergy,
   withdrawFromNearestContainer,
+  withdrawFromNearestStorage,
   buildNearestConstructionSite,
   dumpEnergyAt,
   repairNearest,

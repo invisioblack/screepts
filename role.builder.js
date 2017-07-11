@@ -20,7 +20,9 @@ module.exports = {
     if (creep.memory.building) {
       actions.buildNearestConstructionSite(creep);
     } else {
-      actions.withdrawFromNearestContainer(creep);
+      if (!actions.withdrawFromNearestContainer(creep)) {
+        actions.withdrawFromNearestStorage(creep);
+      }
     }
   },
 

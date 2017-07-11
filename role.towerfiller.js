@@ -4,7 +4,9 @@ const bodies = require('creeps.bodies');
 module.exports = {
   run: function(creep) {
     if(creep.carry.energy < creep.carryCapacity) {
-      actions.withdrawFromNearestContainer(creep);
+      if (!actions.withdrawFromNearestContainer(creep)) {
+        actions.withdrawFromNearestStorage(creep);
+      }
     } else {
       actions.dumpEnergyAt(creep, STRUCTURE_TOWER);
     }
