@@ -1,6 +1,7 @@
 require('creeps.prototype');
 require('rooms.prototype');
 require('hivemind');
+require('config');
 
 const bodies = require('creeps.bodies');
 const roles = require('creeps.roles');

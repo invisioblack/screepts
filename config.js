@@ -1,0 +1,3 @@
+config = {
+  allies: ['WaltonSimons', 'nekonee']
+};

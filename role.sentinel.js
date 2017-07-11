@@ -11,7 +11,11 @@ function getOppositeDirection(direction) {
 */
 module.exports = {
   run: function(creep) {
-    var target = creep.pos.findClosestByPath(FIND_HOSTILE_CREEPS);
+    var target = creep.pos.findClosestByPath(FIND_HOSTILE_CREEPS, {
+      filter: c => {
+        return !_.includes(config.allies, c.owner);
+      }
+    });
     var attacking = false;
     if (target && creep.attack(target) == ERR_NOT_IN_RANGE) {
       creep.moveTo(target);
@@ -21,9 +25,8 @@ module.exports = {
     // Get away from the spawn if we're not chasing an invader
     var spawn = creep.pos.findClosestByPath(FIND_MY_SPAWNS);
     if (!attacking) {
-      actions.rallyAtFlag(creep, creep.room.find(FIND_FLAGS)[0]);
+      actions.rallyAtFlag(creep, Game.flags.SentinelFlag);
     }
-
   },
 
   create: function(spawn) {
