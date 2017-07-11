@@ -68,7 +68,7 @@ hivemind.planRoads = () => {
 hivemind.restoreRoads = () => {
   for (var room in Game.rooms) {
     var roomInst = Game.rooms[room];
-    if (roomInst.executeEveryTicks(200)) {
+    if (roomInst.executeEveryTicks(200) && roomInst.memory.plan) {
       _.map(roomInst.memory.plan.roads, road => {
         _.map(road, point => {
           roomInst.createConstructionSite(point.x, point.y, STRUCTURE_ROAD);

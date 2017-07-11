@@ -137,6 +137,7 @@ function dumpEnergyAt(creep, structureType) {
   });
 
   if (target && creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+
     creep.moveTo(target, {
       visualizePathStyle: {
         stroke: '#00ff00'

@@ -34,6 +34,10 @@ module.exports.loop = function() {
         Game.rooms[room].visual.poly(Game.rooms[room].memory.plan.roads[road], {stroke: '#FFFFFF', opacity: 0.5, strokeWidth: 0.1});
       }
     }
+    
+    if(Game.rooms[room].executeEveryTicks(25)) {
+        _.map(_.filter(Game.creeps, creep => {return creep.memory.role==='remoteminer'}), creep => {creep.memory.targetRoom='E69N42'})
+    }
 
   }
 

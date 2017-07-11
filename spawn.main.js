@@ -37,7 +37,7 @@ module.exports = {
     } else if (!rolesNum.builder || rolesNum.builder < 5) {
       roles.builder.behavior.create(spawn);
       incOrCreate(spawn.memory.spawnStats, 'builders');
-    } else if (!rolesNum.repairman || rolesNum.repairman < 2) {
+    } else if (!rolesNum.repairman || rolesNum.repairman < 1) {
       roles.repairman.behavior.create(spawn);
       incOrCreate(spawn.memory.spawnStats, 'repairmen');
     } else if (!rolesNum.towerfiller || rolesNum.towerfiller < 1) {
@@ -49,6 +49,9 @@ module.exports = {
     } else if (!rolesNum.reclaimer || rolesNum.reclaimer < 2) {
       roles.reclaimer.behavior.create(spawn);
       incOrCreate(spawn.memory.spawnStats, 'reclaimer');
+    } else if (!rolesNum.remoteminer || rolesNum.remoteminer < 4) {
+      roles.reclaimer.behavior.create(spawn);
+      incOrCreate(spawn.memory.spawnStats, 'remoteminer');
     }
   }
 };

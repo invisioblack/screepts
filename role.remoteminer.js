@@ -10,13 +10,18 @@ module.exports = {
 
       if (creep.carry.energy < creep.carryCapacity) {
 
+        // Go to the target room
         const exitDir = Game.map.findExit(creep.room, creep.memory.targetRoom);
         const exit = creep.pos.findClosestByRange(exitDir);
         creep.moveTo(exit);
 
       } else {
+
+        //Dump energy at storage structures, else head home
         if (creep.room.name == home) {
-          actions.dumpEnergyAt(creep, STRUCTURE_CONTAINER);
+          if (!actions.dumpEnergyAt(creep, STRUCTURE_STORAGE)) {
+            actions.dumpEnergyAt(creep, STRUCTURE_CONTAINER);
+          }
         } else {
           // Head home
           const exitDir = Game.map.findExit(creep.room, home);
@@ -31,7 +36,7 @@ module.exports = {
       if (creep.carry.energy < creep.carryCapacity) {
 
         if (!actions.collectNearestDroppedEnergy(creep)) {
-          // Go to the nearest source and mine untill full
+          // Go to the nearest source and mine until full
           var source = creep.pos.findClosestByPath(FIND_SOURCES);
 
           if (source) {
