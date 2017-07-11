@@ -46,11 +46,11 @@ module.exports = {
     }else if (!rolesNum.sentinel || rolesNum.sentinel < 3) {
       roles.sentinel.behavior.create(spawn);
       incOrCreate(spawn.memory.spawnStats, 'sentinel');
-    } else if (!rolesNum.reclaimer || rolesNum.reclaimer < 2) {
-      roles.reclaimer.behavior.create(spawn);
-      incOrCreate(spawn.memory.spawnStats, 'reclaimer');
+    } else if (!rolesNum.reserver || rolesNum.reserver < 2) {
+      roles.reserver.behavior.create(spawn);
+      incOrCreate(spawn.memory.spawnStats, 'reserver');
     } else if (!rolesNum.remoteminer || rolesNum.remoteminer < 4) {
-      roles.reclaimer.behavior.create(spawn);
+      roles.remoteminer.behavior.create(spawn);
       incOrCreate(spawn.memory.spawnStats, 'remoteminer');
     }
   }

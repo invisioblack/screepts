@@ -36,7 +36,8 @@ module.exports.loop = function() {
     }
     
     if(Game.rooms[room].executeEveryTicks(25)) {
-        _.map(_.filter(Game.creeps, creep => {return creep.memory.role==='remoteminer'}), creep => {creep.memory.targetRoom='E69N42'})
+        _.map(_.filter(Game.creeps, creep => {return creep.memory.role==='remoteminer'}), creep => {creep.memory.targetRoom='E69N42'});
+        _.map(_.filter(Game.creeps, creep => {return creep.memory.role==='reserver'}), creep => {creep.memory.targetRoom='E69N42'});
     }
 
   }
