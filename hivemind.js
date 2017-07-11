@@ -39,7 +39,7 @@ hivemind.planRoads = () => {
 
           for (var exit in exits) {
             if (exits[exit]) {
-              road = PathFinder.search(spawns[spawn].pos, exits[exit], {maxRooms: 1}, {plainCost: 1, swampCost: 1});
+              road = PathFinder.search(spawns[spawn].pos, exits[exit], {maxRooms: 1, plainCost: 1, swampCost: 1});
               roads.push(road.path);
             }
           }
