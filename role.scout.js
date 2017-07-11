@@ -4,12 +4,10 @@ const bodies = require('creeps.bodies');
 module.exports = {
   run: function(creep) {
 
-
-    if (creep.room.controller.my) {
-      var target = creep.pos.findClosestByPath(FIND_EXIT);
-      if(target) {
-        creep.moveTo(target);
-      }
+    if (creep.room != creep.memory.targetRoom) {
+      const exitDir = Game.map.findExit(creep.room, creep.memory.targetRoom);
+      const exit = creep.pos.findClosestByRange(exitDir);
+      creep.moveTo(exit);
     } else {
       var target = creep.pos.findClosestByPath(FIND_HOSTILE_CREEPS);
       if (creep.attack(target) == ERR_NOT_IN_RANGE) {
@@ -21,21 +19,8 @@ module.exports = {
         if (creep.attack(target) == ERR_NOT_IN_RANGE) {
           creep.moveTo(target);
         }
-
-        if (!target) {
-          target = creep.room.controller;
-          if (creep.attackController(target) == ERR_NOT_IN_RANGE) {
-            creep.moveTo(target);
-          }
-
-          if (!target) {
-            creep.moveTo(0, 21);
-          }
-        }
       }
-
     }
-
   },
 
   create: function(spawn) {

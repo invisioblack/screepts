@@ -14,12 +14,14 @@ hivemind.planRoads = () => {
 
         // Connect spawns
         var spawns = roomInst.find(FIND_MY_SPAWNS);
+        var sources = roomInst.find(FIND_SOURCES);
+        var extensions = roomInst.find(FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_EXTENSION}});
+
         for (var spawn in spawns) {
 
           var road;
-
           // Connect spawns to sources
-          var sources = roomInst.find(FIND_SOURCES);
+
           for (var source in sources) {
             var road = PathFinder.search(spawns[spawn].pos, {pos: sources[source].pos, range: 1}, {plainCost: 1, swampCost: 1});
             roads.push(road.path);
@@ -46,6 +48,16 @@ hivemind.planRoads = () => {
 
         }
 
+        _.map(sources, source => {
+          // Connect sources to extensions
+          if(extensions.length) {
+            _.map(extensions, (extension) => {
+              road = PathFinder.search(source.pos, extension.pos, {plainCost: 1, swampCost: 1});
+              roads.push(road.path);
+            });
+          }
+        });
+
         roomInst.memory.plan.roads = roads;
 
       }
@@ -59,12 +71,18 @@ hivemind.restoreRoads = () => {
     if (roomInst.executeEveryTicks(200)) {
       _.map(roomInst.memory.plan.roads, road => {
         _.map(road, point => {
-          roomInst.createConstructionSite(point, STRUCTURE_ROAD);
+          roomInst.createConstructionSite(point.x, point.y, STRUCTURE_ROAD);
         });
       });
     }
   }
 };
+
+hivemind.regenerateRoomPlans = () => {
+  _.map(Game.rooms, room => {
+    room.memory.plan = {};
+  });
+}
 
 hivemind.think = () => {
   hivemind.planRoads();
