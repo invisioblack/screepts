@@ -4,7 +4,7 @@ const bodies = require('creeps.bodies');
 module.exports = {
   run: function(creep) {
 
-    if (creep.room != creep.memory.targetRoom) {
+    if (creep.room.name != creep.memory.targetRoom) {
       const exitDir = Game.map.findExit(creep.room, creep.memory.targetRoom);
       const exit = creep.pos.findClosestByRange(exitDir);
       creep.moveTo(exit);

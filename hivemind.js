@@ -52,7 +52,7 @@ hivemind.planRoads = () => {
           // Connect sources to extensions
           if(extensions.length) {
             _.map(extensions, (extension) => {
-              road = PathFinder.search(source.pos, extension.pos, {plainCost: 1, swampCost: 1});
+              road = PathFinder.search(source.pos, {pos: extension.pos, range: 1}, {plainCost: 1, swampCost: 1});
               roads.push(road.path);
             });
           }

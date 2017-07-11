@@ -30,7 +30,7 @@ module.exports.loop = function() {
 
     if(Game.rooms[room].memory.plan && Game.rooms[room].memory.plan.roads) {
       for( var road in Game.rooms[room].memory.plan.roads) {
-        Game.rooms[room].visual.poly(Game.rooms[room].memory.plan.roads[road], {stroke: '#0000FF', opacity: 1, strokeWidth: 0.2});
+        Game.rooms[room].visual.poly(Game.rooms[room].memory.plan.roads[road], {stroke: '#0000FF', opacity: 0.5, strokeWidth: 0.1});
       }
     }
 

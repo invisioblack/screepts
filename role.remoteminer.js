@@ -5,13 +5,17 @@ const home = 'E68N43';
 
 module.exports = {
   run: function(creep) {
-    if (creep.room.controller.my) {
+
+
+
+    if (creep.room.name != creep.memory.targetRoom) {
 
       if (creep.carry.energy < creep.carryCapacity) {
-        var target = creep.pos.findClosestByPath(FIND_EXIT);
-        if (target) {
-          creep.moveTo(target);
-        }
+
+        const exitDir = Game.map.findExit(creep.room, creep.memory.targetRoom);
+        const exit = creep.pos.findClosestByRange(exitDir);
+        creep.moveTo(exit);
+
       } else {
         actions.dumpEnergyAt(creep, STRUCTURE_CONTAINER);
       }
