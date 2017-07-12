@@ -14,6 +14,8 @@ const towerModule = require('towers.main');
 
 module.exports.loop = function() {
 
+  stats.clearStats();
+
   for (var name in Game.creeps) {
     var creep = Game.creeps[name];
 
@@ -30,13 +32,17 @@ module.exports.loop = function() {
   }
 
   for (var room in Game.rooms) {
-    if(Game.rooms[room].controller && Game.rooms[room].controller.my) {
+    if (Game.rooms[room].controller && Game.rooms[room].controller.my) {
       roomModule.roomBehavior(Game.rooms[room]);
     }
 
-    if(Game.rooms[room].memory.plan && Game.rooms[room].memory.plan.roads) {
-      for( var road in Game.rooms[room].memory.plan.roads) {
-        Game.rooms[room].visual.poly(Game.rooms[room].memory.plan.roads[road], {stroke: '#FFFFFF', opacity: 0.5, strokeWidth: 0.1});
+    if (Game.rooms[room].memory.plan && Game.rooms[room].memory.plan.roads) {
+      for (var road in Game.rooms[room].memory.plan.roads) {
+        Game.rooms[room].visual.poly(Game.rooms[room].memory.plan.roads[road], {
+          stroke: '#FFFFFF',
+          opacity: 0.5,
+          strokeWidth: 0.1
+        });
       }
     }
 
@@ -46,11 +52,8 @@ module.exports.loop = function() {
     return (structure.structureType == STRUCTURE_TOWER);
   })[0]);
 
-
   hivemind.think();
 
-
   stats.collectStats();
-
 
 }

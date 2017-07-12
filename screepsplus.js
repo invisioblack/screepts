@@ -1,3 +1,9 @@
+function clearStats() {
+  Memory.stats = {
+    tick: Game.time
+  };
+}
+
 function collectStats() {
   if (Memory.stats == null) {
     Memory.stats = {
@@ -20,15 +26,20 @@ function collectStats() {
       Memory.stats.rooms[room.name] = {
         energyAvailable: room.energyAvailable,
         energyCapacityAvailable: room.energyCapacityAvailable,
-        storageCapacity: room.storage ? room.storage.store : null
+        storageCapacity: room.storage
+          ? room.storage.store
+          : null,
+        RCL: room.controller.level,
+        controllerProgress: room.controller.progress,
+        controllerProgressTotal: room.controller.progressTotal
       };
     }
 
   });
 
   var rolesNum = _.map(Game.creeps, creep => {
-      return creep.memory.role;
-    });
+    return creep.memory.role;
+  });
 
   rolesNum = _.countBy(rolesNum, arg => arg);
 
@@ -37,5 +48,6 @@ function collectStats() {
 }
 
 module.exports = {
+  clearStats,
   collectStats
 };

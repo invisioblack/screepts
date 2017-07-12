@@ -143,6 +143,13 @@ function dumpEnergyAt(creep, structureType) {
         stroke: '#00ff00'
       }
     });
+  } else if (target && creep.transfer(target, RESOURCE_ENERGY) == OK) {
+
+    if(Memory.stats.energyGathered) {
+      Memory.stats.energyGathered += creep.carry.energy;
+    } else {
+      Memory.stats.energyGathered = creep.carry.energy;
+    }
   }
 
   if (target) {
