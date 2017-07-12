@@ -51,8 +51,8 @@ module.exports.loop = function() {
 
   hivemind.think();
 
-  if (Game.rooms.E68N43.executeEveryTicks(25)) {
-    stats.collectStats();
-  }
+
+  stats.collectStats();
+
 
 }
