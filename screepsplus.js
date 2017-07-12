@@ -14,6 +14,7 @@ function collectStats() {
     // Other memory stats here?
   };
 
+  Memory.stats.rooms = {};
   _.forEach(Game.rooms, room => {
     if (room.controller.my) {
       Memory.stats.rooms[room.name] = {
