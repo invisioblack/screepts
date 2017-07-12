@@ -19,7 +19,8 @@ function collectStats() {
     if (room.controller.my) {
       Memory.stats.rooms[room.name] = {
         energyAvailable: room.energyAvailable,
-        energyCapacityAvailable: room.energyCapacityAvailable
+        energyCapacityAvailable: room.energyCapacityAvailable,
+        storageCapacity: room.storage ? room.storage.store : null
       };
     }
 
