@@ -3,6 +3,8 @@ require('rooms.prototype');
 require('hivemind');
 require('config');
 
+const stats = require('screepsplus');
+
 const bodies = require('creeps.bodies');
 const roles = require('creeps.roles');
 const spawnModule = require('spawn.main');
@@ -34,7 +36,7 @@ module.exports.loop = function() {
         Game.rooms[room].visual.poly(Game.rooms[room].memory.plan.roads[road], {stroke: '#FFFFFF', opacity: 0.5, strokeWidth: 0.1});
       }
     }
-    
+
     if(Game.rooms[room].executeEveryTicks(25)) {
         _.map(_.filter(Game.creeps, creep => {return creep.memory.role==='remoteminer'}), creep => {creep.memory.targetRoom='E69N42'});
         _.map(_.filter(Game.creeps, creep => {return creep.memory.role==='reserver'}), creep => {creep.memory.targetRoom='E69N42'});
@@ -49,6 +51,8 @@ module.exports.loop = function() {
 
   hivemind.think();
 
-
+  if (Game.rooms.E68N43.executeEveryTicks(25)) {
+    stats.collectStats();
+  }
 
 }
