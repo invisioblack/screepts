@@ -16,7 +16,7 @@ function collectStats() {
 
   Memory.stats.rooms = {};
   _.forEach(Game.rooms, room => {
-    if (room.controller.my) {
+    if (room.controller && room.controller.my) {
       Memory.stats.rooms[room.name] = {
         energyAvailable: room.energyAvailable,
         energyCapacityAvailable: room.energyCapacityAvailable,

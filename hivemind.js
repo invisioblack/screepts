@@ -1,10 +1,9 @@
 hivemind = {};
 
 hivemind.planRoads = () => {
-  for (var room in Game.rooms) {
-    var roomInst = Game.rooms[room];
+  _.forEach(Game.rooms, roomInst => {
 
-    if (roomInst.controller.my) {
+    if (roomInst.controller && roomInst.controller.my) {
       if (!roomInst.memory.plan || !roomInst.memory.plan.roads) {
 
         if (!roomInst.memory.plan) {
@@ -83,20 +82,20 @@ hivemind.planRoads = () => {
 
       }
     }
-  }
+  });
 }
 
 hivemind.restoreRoads = () => {
-  for (var room in Game.rooms) {
-    var roomInst = Game.rooms[room];
-    if (roomInst.executeEveryTicks(200) && roomInst.memory.plan) {
+  _.forEach(Game.rooms, roomInst => {
+
+    if (roomInst.controller && roomInst.controller.my && roomInst.executeEveryTicks(200) && roomInst.memory.plan) {
       _.map(roomInst.memory.plan.roads, road => {
         _.map(road, point => {
           roomInst.createConstructionSite(point.x, point.y, STRUCTURE_ROAD);
         });
       });
     }
-  }
+  });
 };
 
 hivemind.regenerateRoomPlans = () => {
@@ -109,35 +108,36 @@ hivemind.interpretFlags = () => {
   _.forEach(Game.flags, flag => {
     switch (flag.color) {
       case COLOR_RED:
-        if (!flag.room.controller.my) {
+        if (!flag.room || !flag.room.controller.my) {
           _.map(_.filter(Game.creeps, creep => {
             return creep.memory.role === 'scout'
           }), creep => {
-            creep.memory.targetRoom = flag.room.name
+            creep.memory.targetRoom = flag.pos.roomName
           });
         }
+        flag.remove();
         break;
       case COLOR_BLUE:
-        if (!flag.room.controller.my) {
+        if (!flag.room || !flag.room.controller.my) {
           _.map(_.filter(Game.creeps, creep => {
             return creep.memory.role === 'reserver'
           }), creep => {
-            creep.memory.targetRoom = flag.room.name
+            creep.memory.targetRoom = flag.pos.roomName
           });
         }
         break;
       case COLOR_YELLOW:
-        if (!flag.room.controller.my) {
+        if (!flag.room || !flag.room.controller.my) {
           _.map(_.filter(Game.creeps, creep => {
             return creep.memory.role === 'remoteminer'
           }), creep => {
-            creep.memory.targetRoom = flag.room.name
+            creep.memory.targetRoom = flag.pos.roomName
           });
         }
         break;
     }
 
-    flag.remove();
+
   });
 }
 

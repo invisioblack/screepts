@@ -2,6 +2,7 @@ require('creeps.prototype');
 require('rooms.prototype');
 require('hivemind');
 require('config');
+require('utils');
 
 const stats = require('screepsplus');
 
@@ -29,17 +30,14 @@ module.exports.loop = function() {
   }
 
   for (var room in Game.rooms) {
-    roomModule.roomBehavior(Game.rooms[room]);
+    if(Game.rooms[room].controller && Game.rooms[room].controller.my) {
+      roomModule.roomBehavior(Game.rooms[room]);
+    }
 
     if(Game.rooms[room].memory.plan && Game.rooms[room].memory.plan.roads) {
       for( var road in Game.rooms[room].memory.plan.roads) {
         Game.rooms[room].visual.poly(Game.rooms[room].memory.plan.roads[road], {stroke: '#FFFFFF', opacity: 0.5, strokeWidth: 0.1});
       }
-    }
-
-    if(Game.rooms[room].executeEveryTicks(25)) {
-        _.map(_.filter(Game.creeps, creep => {return creep.memory.role==='remoteminer'}), creep => {creep.memory.targetRoom='E69N42'});
-        _.map(_.filter(Game.creeps, creep => {return creep.memory.role==='reserver'}), creep => {creep.memory.targetRoom='E69N42'});
     }
 
   }

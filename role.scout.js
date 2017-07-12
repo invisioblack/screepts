@@ -35,8 +35,12 @@ module.exports = {
               creep.moveTo(target);
             }
         }
+        
+        
       }
+
     }
+    
   },
 
   create: function(spawn) {
