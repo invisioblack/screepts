@@ -11,7 +11,7 @@ module.exports = {
     } else {
       var target = creep.pos.findClosestByPath(FIND_HOSTILE_CREEPS, {
         filter: c => {
-          return !_.includes(config.allies, c.owner);
+          return !_.includes(config.allies, c.owner.username);
         }
       });
       if (target && creep.attack(target) == ERR_NOT_IN_RANGE) {
@@ -21,7 +21,7 @@ module.exports = {
       if (!target) {
         target = creep.pos.findClosestByPath(FIND_HOSTILE_SPAWNS, {
           filter: spawn => {
-            return !_.includes(config.allies, spawn.owner);
+            return !_.includes(config.allies, spawn.owner.username);
           }
         });
         if (target && creep.attack(target) == ERR_NOT_IN_RANGE) {
