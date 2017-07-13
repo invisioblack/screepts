@@ -60,14 +60,15 @@ module.exports = {
   },
 
   create: function(spawn) {
-    return spawn.createCreep(bodies.remoteminer, memory = {
+    var body  = bodies.createFastest(spawn, [WORK, WORK, CARRY, CARRY, CARRY]);
+    return spawn.createCreep(body, memory = {
       role: 'remoteminer'
     });
 
     if(Memory.stats.remoteMiningLosses) {
-      Memory.stats.remoteMiningLosses += utils.calculateBodyCost(bodies.remoteminer);
+      Memory.stats.remoteMiningLosses += utils.calculateBodyCost(body);
     } else {
-      Memory.stats.remoteMiningLosses = utils.calculateBodyCost(bodies.remoteminer);
+      Memory.stats.remoteMiningLosses = utils.calculateBodyCost(body);
     }
   }
 }

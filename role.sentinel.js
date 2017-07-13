@@ -30,7 +30,7 @@ module.exports = {
   },
 
   create: function(spawn) {
-    return spawn.createCreep(bodies.sentinel, memory = {
+    return spawn.createCreep(bodies.createStrongestMelee(spawn, [TOUGH, MOVE]), memory = {
       role: 'sentinel'
     });
   }

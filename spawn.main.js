@@ -21,7 +21,7 @@ module.exports = {
 
     rolesNum = _.countBy(rolesNum, arg => arg);
 
-    if (spawn.energy < 200 || spawn.canCreateCreep(bodies.basic) != 0) {
+    if (spawn.energy < 200 || spawn.canCreateCreep(bodies.createBasic()) != 0) {
       return;
     }
 

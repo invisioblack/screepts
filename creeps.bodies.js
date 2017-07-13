@@ -46,36 +46,12 @@ const createStrongestMelee = (spawn, base = null) => {
 };
 
 module.exports = {
-  basic: [
-    WORK, WORK, CARRY, MOVE
-  ],
-  worker: [
-    WORK, MOVE
-  ],
-  fast: [
-    MOVE, CARRY
-  ],
-  scout: [
-    MOVE, MOVE, MOVE, ATTACK, ATTACK
-  ],
-  sentinel: [
-    TOUGH, ATTACK, ATTACK, ATTACK, MOVE
-  ],
   reclaimer: [
     CLAIM,
     CLAIM,
     CLAIM,
     CLAIM,
     CLAIM,
-    MOVE
-  ],
-  remoteminer: [
-    WORK,
-    WORK,
-    CARRY,
-    CARRY,
-    CARRY,
-    MOVE,
     MOVE
   ],
   reserver: [
