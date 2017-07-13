@@ -28,7 +28,7 @@ module.exports = {
 
   /** @param {StructureSpawn} spawn **/
   create: function(spawn) {
-    return spawn.createCreep(bodies.createFastest(spawn, base=[WORK, WORK]), memory = {
+    return spawn.createCreep(bodies.createFastest(spawn, base=[WORK, WORK, CARRY]), memory = {
       role: 'builder'
     });
   }
