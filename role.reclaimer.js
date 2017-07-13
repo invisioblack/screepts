@@ -18,6 +18,6 @@ module.exports = {
   },
 
   create: function(spawn) {
-    spawn.createCreep(bodies.reclaimer, memory={role: 'reclaimer'});
+    return spawn.createCreep(bodies.reclaimer, memory={role: 'reclaimer'});
   }
 }

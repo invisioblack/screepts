@@ -27,24 +27,24 @@ module.exports = {
         if (target && creep.attack(target) == ERR_NOT_IN_RANGE) {
           creep.moveTo(target);
         }
-        
+
         if (!target) {
             target = creep.pos.findClosestByPath(FIND_STRUCTURES, {filter: structure=>{return structure.structureType == STRUCTURE_TOWER}});
-            
+
             if (target && creep.attack(target) == ERR_NOT_IN_RANGE) {
               creep.moveTo(target);
             }
         }
-        
-        
+
+
       }
 
     }
-    
+
   },
 
   create: function(spawn) {
-    spawn.createCreep(bodies.scout, memory = {
+    return spawn.createCreep(bodies.scout, memory = {
       role: 'scout'
     });
   }

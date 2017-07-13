@@ -13,7 +13,7 @@ module.exports = {
   },
 
   create: function(spawn) {
-    spawn.createCreep(bodies.basic, memory = {
+    return spawn.createCreep(bodies.basic, memory = {
       role: 'towerfiller'
     });
   }

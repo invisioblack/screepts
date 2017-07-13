@@ -36,7 +36,7 @@ module.exports = {
 
   /** @param {StructureSpawn} spawn**/
   create: function(spawn) {
-    spawn.createCreep(bodies.worker, memory = {
+    return spawn.createCreep(bodies.createLargestWorker(spawn, base=bodies.worker), memory = {
       role: 'miner'
     });
   }

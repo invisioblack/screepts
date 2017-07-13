@@ -21,6 +21,6 @@ module.exports = {
   },
 
   create: function(spawn) {
-    spawn.createCreep(bodies.reserver, memory = {role: 'reserver'})
+    return spawn.createCreep(bodies.reserver, memory = {role: 'reserver'})
   }
 }

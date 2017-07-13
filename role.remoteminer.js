@@ -60,7 +60,7 @@ module.exports = {
   },
 
   create: function(spawn) {
-    spawn.createCreep(bodies.remoteminer, memory = {
+    return spawn.createCreep(bodies.remoteminer, memory = {
       role: 'remoteminer'
     });
 

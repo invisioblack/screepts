@@ -46,9 +46,6 @@ module.exports = {
     }else if (!rolesNum.sentinel || rolesNum.sentinel < 3) {
       roles.sentinel.behavior.create(spawn);
       incOrCreate(spawn.memory.spawnStats, 'sentinel');
-    } else if (!rolesNum.reserver || rolesNum.reserver < 2) {
-      roles.reserver.behavior.create(spawn);
-      incOrCreate(spawn.memory.spawnStats, 'reserver');
     } else if (!rolesNum.remoteminer || rolesNum.remoteminer < 1) {
       roles.remoteminer.behavior.create(spawn);
       incOrCreate(spawn.memory.spawnStats, 'remoteminer');

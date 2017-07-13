@@ -11,6 +11,6 @@ module.exports = {
   },
 
   create: function(spawn) {
-    spawn.createCreep(bodies.basic, memory={role: 'repairman'});
+    return spawn.createCreep(bodies.basic, memory={role: 'repairman'});
   }
 }
