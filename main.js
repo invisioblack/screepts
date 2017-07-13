@@ -27,26 +27,26 @@ module.exports.loop = function() {
     }
   }
 
-  for (var spawn in Game.spawns) {
-    spawnModule.spawnBehavior(Game.spawns[spawn]);
-  }
+  _.forEach(Game.spawns, spawn => {
+    spawnModule.spawnBehavior(spawn);
+  })
 
-  for (var room in Game.rooms) {
-    if (Game.rooms[room].controller && Game.rooms[room].controller.my) {
-      roomModule.roomBehavior(Game.rooms[room]);
+  _.forEach(Game.rooms, room => {
+    roomModule.initRoom(room);
+    if (room.memory.my) {
+      roomModule.roomBehavior(room);
     }
 
-    if (Game.rooms[room].memory.plan && Game.rooms[room].memory.plan.roads) {
-      for (var road in Game.rooms[room].memory.plan.roads) {
-        Game.rooms[room].visual.poly(Game.rooms[room].memory.plan.roads[road], {
+    if (room.memory.plan && room.memory.plan.roads) {
+      for (var road in room.memory.plan.roads) {
+        room.visual.poly(room.memory.plan.roads[road], {
           stroke: '#FFFFFF',
           opacity: 0.5,
           strokeWidth: 0.1
         });
       }
     }
-
-  }
+  })
 
   towerModule.towerBehavior(_.filter(Game.structures, structure => {
     return (structure.structureType == STRUCTURE_TOWER);
