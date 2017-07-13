@@ -59,24 +59,7 @@ hivemind.planRoads = () => {
               roads.push(road.path);
             }
           }
-
         }
-
-        _.map(sources, source => {
-          // Connect sources to extensions
-          if (extensions.length) {
-            _.map(extensions, (extension) => {
-              road = PathFinder.search(source.pos, {
-                pos: extension.pos,
-                range: 1
-              }, {
-                plainCost: 1,
-                swampCost: 1
-              });
-              roads.push(road.path);
-            });
-          }
-        });
 
         roomInst.memory.plan.roads = roads;
 

@@ -145,6 +145,12 @@ function dumpEnergyAt(creep, structureType) {
     });
   } else if (target && creep.transfer(target, RESOURCE_ENERGY) == OK) {
 
+    if(creep.memory.role == 'remoteminer' && Memory.stats.energyGatheredRemote) {
+      Memory.stats.energyGatheredRemote += creep.carry.energy;
+    } else if (creep.memory.role == 'remoteminer') {
+      Memory.stats.energyGatheredRemote = creep.carry.energy;
+    }
+
     if(Memory.stats.energyGathered) {
       Memory.stats.energyGathered += creep.carry.energy;
     } else {

@@ -49,7 +49,7 @@ module.exports = {
     } else if (!rolesNum.reserver || rolesNum.reserver < 2) {
       roles.reserver.behavior.create(spawn);
       incOrCreate(spawn.memory.spawnStats, 'reserver');
-    } else if (!rolesNum.remoteminer || rolesNum.remoteminer < 4) {
+    } else if (!rolesNum.remoteminer || rolesNum.remoteminer < 1) {
       roles.remoteminer.behavior.create(spawn);
       incOrCreate(spawn.memory.spawnStats, 'remoteminer');
     }

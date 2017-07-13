@@ -1,5 +1,6 @@
 const actions = require('creeps.actions');
 const bodies = require('creeps.bodies');
+const utils = require('utils');
 
 const home = 'E68N43';
 
@@ -61,6 +62,12 @@ module.exports = {
   create: function(spawn) {
     spawn.createCreep(bodies.remoteminer, memory = {
       role: 'remoteminer'
-    })
+    });
+
+    if(Memory.stats.remoteMiningLosses) {
+      Memory.stats.remoteMiningLosses += utils.calculateBodyCost(bodies.remoteminer);
+    } else {
+      Memory.stats.remoteMiningLosses = utils.calculateBodyCost(bodies.remoteminer);
+    }
   }
 }
