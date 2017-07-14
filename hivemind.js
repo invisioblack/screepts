@@ -1,4 +1,4 @@
-const utils = require ('utils');
+const utils = require('utils');
 
 hivemind = {};
 
@@ -36,7 +36,7 @@ hivemind.planRoom = () => {
       }
 
       if (!roomInst.memory.plan.upgrader) {
-        roomInst.memory.plan.upgrader = roomInst.memory.plan.storage.findNearPosition().next().value;
+        roomInst.memory.plan.upgrader = new RoomPosition(roomInst.memory.plan.storage.x, roomInst.memory.plan.storage.y, roomInst.memory.plan.storage.roomName).findNearPosition().next().value;
       }
 
       if (!roomInst.memory.plan.roads) {
@@ -150,7 +150,6 @@ hivemind.interpretFlags = () => {
         }
         break;
     }
-
 
   });
 }

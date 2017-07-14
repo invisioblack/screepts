@@ -22,9 +22,6 @@ RoomPosition.prototype.validPosition = function() {
   if (this.checkForWall()) {
     return false;
   }
-  if (this.inPath()) {
-    return false;
-  }
   return true;
 };
 
@@ -46,4 +43,19 @@ RoomPosition.prototype.getRoom = function() {
     throw new Error(`Could not access room ${this.roomName}`);
   }
   return room;
+};
+
+RoomPosition.prototype.getAdjacentPosition = function(direction) {
+  var adjacentPos = [
+    [0, 0],
+    [0, -1],
+    [1, -1],
+    [1, 0],
+    [1, 1],
+    [0, 1],
+    [-1, 1],
+    [-1, 0],
+    [-1, -1]
+  ];
+  return new RoomPosition(this.x + adjacentPos[direction][0], this.y + adjacentPos[direction][1], this.roomName);
 };
