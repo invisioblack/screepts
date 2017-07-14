@@ -28,8 +28,8 @@ hivemind.planRoom = () => {
       }
 
       if (!roomInst.memory.plan.storage) {
-        var freeSpaces = utils.findFreeSpaces();
-        roomInst.memory.plan.storage = freeSpaces[Math.floor(Math.random() * freeSapces.length)];
+        var freeSpaces = utils.findFreeSpaces(roomInst.controller.pos);
+        roomInst.memory.plan.storage = freeSpaces[Math.floor(Math.random() * freeSpaces.length)];
       }
 
       if (!roomInst.memory.plan.roads) {
