@@ -7,12 +7,15 @@ module.exports = {
     if (creep.room.energyAvailable < creep.room.energyCapacityAvailable) {
       if(creep.carry.energy < creep.carryCapacity) {
         if (!actions.withdrawFromNearestContainer(creep)) {
-          actions.withdrawFromNearestStorage(creep);
+          if (!actions.withdrawFromNearestStorage(creep)) {
+            actions.recycleSelf(creep);
+          }
+          }
         }
       } else {
         if (!actions.dumpEnergyAt(creep, STRUCTURE_SPAWN)) {
           if (!actions.dumpEnergyAt(creep, STRUCTURE_EXTENSION)) {
-            actions.recycleSelf(creep, creep.pos.findClosestByPath(FIND_MY_SPAWNS));
+            actions.recycleSelf(creep);
           }
         }
       }

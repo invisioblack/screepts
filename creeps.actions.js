@@ -145,13 +145,13 @@ function dumpEnergyAt(creep, structureType) {
     });
   } else if (target && creep.transfer(target, RESOURCE_ENERGY) == OK) {
 
-    if(creep.memory.role == 'remoteminer' && Memory.stats.energyGatheredRemote) {
+    if (creep.memory.role == 'remoteminer' && Memory.stats.energyGatheredRemote) {
       Memory.stats.energyGatheredRemote += creep.carry.energy;
     } else if (creep.memory.role == 'remoteminer') {
       Memory.stats.energyGatheredRemote = creep.carry.energy;
     }
 
-    if(Memory.stats.energyGathered) {
+    if (Memory.stats.energyGathered) {
       Memory.stats.energyGathered += creep.carry.energy;
     } else {
       Memory.stats.energyGathered = creep.carry.energy;
@@ -197,9 +197,15 @@ function rallyAtFlag(creep, flag, dist = 3) {
 /*
   Recycles a creep
 */
-function recycleSelf(creep, spawn) {
-  if (spawn.recycleCreep(creep) == ERR_NOT_IN_RANGE) {
-    creep.moveTo(spawn);
+function recycleSelf(creep) {
+  var spawn = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+    filter: structure => (structure.structureType == STRUCTURE_SPAWN && structure.my)
+  });
+
+  if (spawn) {
+    if (spawn.recycleCreep(creep) == ERR_NOT_IN_RANGE) {
+      creep.moveTo(spawn);
+    }
   }
 }
 
@@ -212,5 +218,6 @@ module.exports = {
   buildNearestConstructionSite,
   dumpEnergyAt,
   repairNearest,
-  rallyAtFlag
+  rallyAtFlag,
+  recycleSelf
 };
