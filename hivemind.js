@@ -16,6 +16,10 @@ hivemind.visualizePlans = (room) => {
   if (room.memory.plan && room.memory.plan.storage) {
     room.visual.text('S', room.memory.plan.storage);
   }
+
+  if (room.memory.plan && room.memory.plan.upgrader) {
+    room.visual.text('U', room.memory.plan.upgrader);
+  }
 };
 
 hivemind.planRoom = () => {
@@ -28,8 +32,11 @@ hivemind.planRoom = () => {
       }
 
       if (!roomInst.memory.plan.storage) {
-        var freeSpaces = utils.findFreeSpaces(roomInst.controller.pos);
-        roomInst.memory.plan.storage = freeSpaces[Math.floor(Math.random() * freeSpaces.length)];
+        roomInst.memory.plan.storage = roomInst.controller.pos.findNearPosition().next().value;
+      }
+
+      if (!roomInst.memory.plan.upgrader) {
+        roomInst.memory.plan.upgrader = roomInst.memory.plan.storage.findNearPosition().next().value;
       }
 
       if (!roomInst.memory.plan.roads) {

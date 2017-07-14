@@ -1,5 +1,6 @@
 require('creeps.prototype');
 require('rooms.prototype');
+require('roomPosition.prototype');
 require('hivemind');
 require('config');
 require('utils');
