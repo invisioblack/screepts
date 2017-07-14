@@ -17,9 +17,9 @@ module.exports = {
       return;
     }
 
-    if(spawn.room.energyAvailable < 0.75 * creep.room.energyCapacityAvailable &&
-        (!rolesNum.spawnsupplier || rolesNum.spawnsuplier < 1)) {
-          roles.spawnsuplier.create(spawn);
+    if(spawn.room.energyAvailable < 0.75 * spawn.room.energyCapacityAvailable &&
+        (!rolesNum.spawnsupplier || rolesNum.spawnsupplier < 1)) {
+          roles.spawnsupplier.behavior.create(spawn);
           return;
     }
 

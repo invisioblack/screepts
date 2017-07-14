@@ -26,7 +26,7 @@ module.exports = {
     behavior: roleTowerFiller
   },
   spawnsupplier: {
-    behvior: roleSpawnSupplier
+    behavior: roleSpawnSupplier
   },
 
   // Resource extraction
