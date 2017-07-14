@@ -27,7 +27,7 @@ module.exports = {
   },
   spawnsupplier: {
     behvior: roleSpawnSupplier
-  }
+  },
 
   // Resource extraction
   miner: {
