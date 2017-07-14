@@ -9,6 +9,7 @@ const roleSentinel = require('role.sentinel');
 const roleTowerFiller = require('role.towerfiller');
 const roleReclaimer = require('role.reclaimer');
 const roleReserver = require('role.reserver');
+const roleSpawnSupplier = require('role.spawnsupplier');
 
 module.exports = {
   // Infrastructure
@@ -24,6 +25,9 @@ module.exports = {
   towerfiller: {
     behavior: roleTowerFiller
   },
+  spawnsupplier: {
+    behvior: roleSpawnSupplier
+  }
 
   // Resource extraction
   miner: {

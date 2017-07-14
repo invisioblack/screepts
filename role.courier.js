@@ -9,7 +9,6 @@ module.exports = {
     // While there's still room for energy
     if (creep.carry.energy < creep.carryCapacity) {
 
-
       if(!creep.memory.energyTarget || Game.getObjectById(creep.memory.energyTarget.id) == null){
         creep.memory.energyTarget = actions.findBiggestDroppedEnergy(creep);
       }
@@ -43,7 +42,7 @@ module.exports = {
 
   /** @param {StructureSpawn} spawn**/
   create: function(spawn) {
-    return spawn.createCreep(bodies.createFastest(spawn, base=bodies.createBasic()), memory = {
+    return spawn.createCreep(bodies.createFastest(spawn, base=[CARRY, MOVE, MOVE, MOVE, MOVE]), memory = {
       role: 'courier'
     });
   }
