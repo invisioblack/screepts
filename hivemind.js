@@ -1,14 +1,38 @@
+const utils = require ('utils');
+
 hivemind = {};
 
-hivemind.planRoads = () => {
+hivemind.visualizePlans = (room) => {
+  if (room.memory.plan && room.memory.plan.roads) {
+    for (var road in room.memory.plan.roads) {
+      room.visual.poly(room.memory.plan.roads[road], {
+        stroke: '#FFFFFF',
+        opacity: 0.5,
+        strokeWidth: 0.1
+      });
+    }
+  }
+
+  if (room.memory.plan && room.memory.plan.storage) {
+    room.visual.text('S', room.memory.plan.storage);
+  }
+};
+
+hivemind.planRoom = () => {
   _.forEach(Game.rooms, roomInst => {
 
     if (roomInst.controller && roomInst.controller.my) {
-      if (!roomInst.memory.plan || !roomInst.memory.plan.roads) {
 
-        if (!roomInst.memory.plan) {
-          roomInst.memory.plan = {};
-        }
+      if (!roomInst.memory.plan) {
+        roomInst.memory.plan = {};
+      }
+
+      if (!roomInst.memory.plan.storage) {
+        var freeSpaces = utils.findFreeSpaces();
+        roomInst.memory.plan.storage = freeSpaces[Math.floor(Math.random() * freeSapces.length)];
+      }
+
+      if (!roomInst.memory.plan.roads) {
         var roads = [];
 
         // Connect spawns
@@ -125,7 +149,7 @@ hivemind.interpretFlags = () => {
 }
 
 hivemind.think = () => {
-  hivemind.planRoads();
+  hivemind.planRoom();
   hivemind.restoreRoads();
   hivemind.interpretFlags();
 }

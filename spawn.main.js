@@ -37,8 +37,6 @@ module.exports = {
       roles.towerfiller.behavior.create(spawn);
     }else if (!rolesNum.sentinel || rolesNum.sentinel < 3) {
       roles.sentinel.behavior.create(spawn);
-    } else if (!rolesNum.remoteminer || rolesNum.remoteminer < 1) {
-      roles.remoteminer.behavior.create(spawn);
     }
 
   }

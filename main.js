@@ -43,15 +43,7 @@ module.exports.loop = function() {
       roomModule.roomBehavior(room);
     }
 
-    if (room.memory.plan && room.memory.plan.roads) {
-      for (var road in room.memory.plan.roads) {
-        room.visual.poly(room.memory.plan.roads[road], {
-          stroke: '#FFFFFF',
-          opacity: 0.5,
-          strokeWidth: 0.1
-        });
-      }
-    }
+    hivemind.visualizePlans(room);
   })
 
   profiler.rooms = Game.cpu.getUsed() - _.sum(profiler);

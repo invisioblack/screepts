@@ -4,6 +4,7 @@ function calculateBodyCost(body) {
 
 function freeSpaces(roomPosition) {
   let freeSpaceCount = 0;
+
   [
     roomPosition.x - 1,
     roomPosition.x,
@@ -23,6 +24,28 @@ function freeSpaces(roomPosition) {
   return freeSpaceCount;
 }
 
+function findFreeSpaces(roomPosition) {
+  var freeSpaces = [];
+
+  [
+    roomPosition.x - 1,
+    roomPosition.x,
+    roomPosition.x + 1
+  ].forEach(x => {
+    [
+      roomPosition.y - 1,
+      roomPosition.y,
+      roomPosition.y + 1
+    ].forEach(y => {
+      if (Game.map.getTerrainAt(x, y, roomPosition.roomName) != 'wall') {
+        freeSpaces.push(new RoomPosition(x, y, roomPosition.roomName));
+      }
+    });
+  });
+
+  return freeSpaces;
+}
+
 function getExtensionsAtRCL(rcl) {
   switch (rcl) {
     case 1:
@@ -36,5 +59,7 @@ function getExtensionsAtRCL(rcl) {
 
 module.exports = {
   calculateBodyCost,
-  freeSpaces
+  freeSpaces,
+  findFreeSpaces,
+  getExtensionsAtRCL
 }
