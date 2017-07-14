@@ -11,13 +11,16 @@ module.exports = {
             actions.recycleSelf(creep);
           }
         }
-      }
-    } else {
-      if (!actions.dumpEnergyAt(creep, STRUCTURE_SPAWN)) {
-        if (!actions.dumpEnergyAt(creep, STRUCTURE_EXTENSION)) {
-          actions.recycleSelf(creep);
+
+      } else {
+        if (!actions.dumpEnergyAt(creep, STRUCTURE_SPAWN)) {
+          if (!actions.dumpEnergyAt(creep, STRUCTURE_EXTENSION)) {
+            actions.recycleSelf(creep);
+          }
         }
       }
+    } else {
+      actions.recycleSelf(creep);
     }
   },
 
