@@ -1,4 +1,4 @@
-RoomPosition.prototype.findNearPosition = function() {
+RoomPosition.prototype.findNearPosition = function*() {
   let distanceMax = 1;
   for (let distance = 1; distance <= distanceMax; distance++) {
     for (let direction = 1; direction <= 8 * distance; direction++) {

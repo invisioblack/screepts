@@ -57,24 +57,12 @@ hivemind.planRoom = () => {
           // Connect spawns to sources
 
           for (var source in sources) {
-            var road = PathFinder.search(spawns[spawn].pos, {
-              pos: sources[source].pos,
-              range: 1
-            }, {
-              plainCost: 1,
-              swampCost: 1
-            });
+            road = hivemind.roadFromTo(spawns[spawn].pos, sources[source].pos);
             roads.push(road.path);
           }
 
           // Connect spawns to room controller
-          road = PathFinder.search(spawns[spawn].pos, {
-            pos: roomInst.controller.pos,
-            range: 1
-          }, {
-            plainCost: 1,
-            swampCost: 1
-          });
+          road = hivemind.roadFromTo(spawns[spawn].pos, roomInst.controller.pos);
           roads.push(road.path);
 
           // Connect spawns to exits
@@ -82,11 +70,7 @@ hivemind.planRoom = () => {
 
           for (var exit in exits) {
             if (exits[exit]) {
-              road = PathFinder.search(spawns[spawn].pos, exits[exit], {
-                maxRooms: 1,
-                plainCost: 1,
-                swampCost: 1
-              });
+              road = hivemind.roadFromTo(spawns[spawn].pos, exits[exit]);
               roads.push(road.path);
             }
           }
@@ -96,6 +80,17 @@ hivemind.planRoom = () => {
 
       }
     }
+  });
+}
+
+hivemind.roadFromTo = (from, to) => {
+  return PathFinder.search(from, {
+    pos: to,
+    range: 1
+  }, {
+    plainCost: 1,
+    swampCost: 1,
+    maxRooms: 1
   });
 }
 
@@ -122,7 +117,7 @@ hivemind.interpretFlags = () => {
   _.forEach(Game.flags, flag => {
     switch (flag.color) {
       case COLOR_RED:
-        if (!flag.room || !flag.room.controller.my) {
+        if (flag.room==undefined || !flag.room.controller.my) {
           _.map(_.filter(Game.creeps, creep => {
             return creep.memory.role === 'scout'
           }), creep => {
@@ -132,7 +127,7 @@ hivemind.interpretFlags = () => {
         flag.remove();
         break;
       case COLOR_BLUE:
-        if (!flag.room || !flag.room.controller.my) {
+        if (flag.room==undefined || !flag.room.controller.my) {
           _.map(_.filter(Game.creeps, creep => {
             return creep.memory.role === 'reserver'
           }), creep => {
@@ -141,13 +136,23 @@ hivemind.interpretFlags = () => {
         }
         break;
       case COLOR_YELLOW:
-        if (!flag.room || !flag.room.controller.my) {
+        if (flag.room==undefined || !flag.room.controller.my) {
           _.map(_.filter(Game.creeps, creep => {
             return creep.memory.role === 'remoteminer'
           }), creep => {
             creep.memory.targetRoom = flag.pos.roomName
           });
         }
+        break;
+      case COLOR_ORANGE:
+        if(flag.room && flag.room.controller.my) {
+          var spawns = flag.room.find(FIND_STRUCTURES, {filter: {structureType: STRUCTURE_SPAWN}});
+          _.forEach(spawns, spawn => {
+            var road = hivemind.roadFromTo(spawn.pos, flag.pos);
+            flag.room.memory.plan.roads.push(road.path);
+          })
+        }
+        flag.remove();
         break;
     }
 

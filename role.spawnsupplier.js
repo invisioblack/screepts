@@ -4,7 +4,7 @@ const bodies = require('creeps.bodies');
 module.exports = {
   run: function(creep) {
 
-    if (creep.room.energyAvailable < creep.room.energyCapacityAvailable) {
+    if (creep.room.energyAvailable < 0.75*creep.room.energyCapacityAvailable) {
       if (creep.carry.energy < creep.carryCapacity) {
         if (!actions.withdrawFromNearestContainer(creep)) {
           if (!actions.withdrawFromNearestStorage(creep)) {

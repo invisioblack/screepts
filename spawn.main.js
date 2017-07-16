@@ -13,9 +13,10 @@ module.exports = {
 
     rolesNum = _.countBy(rolesNum, arg => arg);
 
-    if (spawn.energy < 200 || spawn.canCreateCreep(bodies.createBasic()) != 0) {
-      return;
-    }
+     if(spawn.room.energyAvailable < 0.65 * spawn.room.energyCapacityAvailable) {
+         return;
+     }
+
 
     if(spawn.room.energyAvailable < 0.75 * spawn.room.energyCapacityAvailable &&
         (!rolesNum.spawnsupplier || rolesNum.spawnsupplier < 1)) {
@@ -27,15 +28,15 @@ module.exports = {
       roles.miner.behavior.create(spawn);
     } else if (!rolesNum.courier || rolesNum.courier < 8) {
       roles.courier.behavior.create(spawn);
-    }else if (!rolesNum.upgrader || rolesNum.upgrader < 4) {
+    }else if (!rolesNum.upgrader || rolesNum.upgrader < 8) {
       roles.upgrader.behavior.create(spawn);
-    } else if (!rolesNum.builder || rolesNum.builder < 5) {
+    } else if (!rolesNum.builder || rolesNum.builder < 3) {
       roles.builder.behavior.create(spawn);
     } else if (!rolesNum.repairman || rolesNum.repairman < 1) {
       roles.repairman.behavior.create(spawn);
     } else if (!rolesNum.towerfiller || rolesNum.towerfiller < 1) {
       roles.towerfiller.behavior.create(spawn);
-    }else if (!rolesNum.sentinel || rolesNum.sentinel < 3) {
+    }else if (!rolesNum.sentinel || rolesNum.sentinel < 1) {
       roles.sentinel.behavior.create(spawn);
     }
 

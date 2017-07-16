@@ -32,7 +32,7 @@ module.exports = {
 
   /** @param {StructureSpawn} spawn**/
   create: function(spawn) {
-    return spawn.createCreep(bodies.createFastest(spawn, [MOVE, WORK, WORK, CARRY, CARRY]), memory = {
+    return spawn.createCreep(bodies.createFastest(spawn, [MOVE, MOVE, CARRY, WORK, WORK, WORK, CARRY, CARRY]), memory = {
       role: 'upgrader'
     });
   }
