@@ -13,12 +13,12 @@ module.exports = {
 
     rolesNum = _.countBy(rolesNum, arg => arg);
 
-     if(spawn.room.energyAvailable < 0.65 * spawn.room.energyCapacityAvailable) {
+    if(spawn.room.energyAvailable < 0.65 * spawn.room.energyCapacityAvailable) {
          return;
      }
 
 
-    if(spawn.room.energyAvailable < 0.75 * spawn.room.energyCapacityAvailable &&
+    if(spawn.room.energyAvailable < 0.35 * spawn.room.energyCapacityAvailable &&
         (!rolesNum.spawnsupplier || rolesNum.spawnsupplier < 1)) {
           roles.spawnsupplier.behavior.create(spawn);
           return;
@@ -28,9 +28,9 @@ module.exports = {
       roles.miner.behavior.create(spawn);
     } else if (!rolesNum.courier || rolesNum.courier < 8) {
       roles.courier.behavior.create(spawn);
-    }else if (!rolesNum.upgrader || rolesNum.upgrader < 8) {
+    }else if (!rolesNum.upgrader || rolesNum.upgrader < 6) {
       roles.upgrader.behavior.create(spawn);
-    } else if (!rolesNum.builder || rolesNum.builder < 3) {
+    } else if (!rolesNum.builder || rolesNum.builder < 1) {
       roles.builder.behavior.create(spawn);
     } else if (!rolesNum.repairman || rolesNum.repairman < 1) {
       roles.repairman.behavior.create(spawn);

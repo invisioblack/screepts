@@ -20,6 +20,12 @@ hivemind.visualizePlans = (room) => {
   if (room.memory.plan && room.memory.plan.upgrader) {
     room.visual.text('U', room.memory.plan.upgrader);
   }
+
+  if (room.memory.plan && room.memory.plan.extensions) {
+    _.forEach(room.memory.plan.extensions, extension => {
+      room.visual.text('E', extension);
+    });
+  }
 };
 
 hivemind.planRoom = () => {
@@ -78,6 +84,18 @@ hivemind.planRoom = () => {
 
         roomInst.memory.plan.roads = roads;
 
+      }
+
+      if (!roomInst.memory.plan.extensions) {
+        roomInst.memory.plan.extensions = [];
+        var longestRoad = _.last(_.sortBy(roomInst.memory.plan.roads, road => road.length));
+
+        longestRoad = _.takeRight(longestRoad, longestRoad.length - 3);
+
+        for (var i=0; i < utils.getExtensionsAtRCL(roomInst.controller.level); i++) {
+          var extension = longestRoad[i].findNearPosition().next().value;
+          roomInst.memory.plan.extensions.push(extension);
+        }
       }
     }
   });
