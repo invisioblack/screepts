@@ -91,14 +91,13 @@ hivemind.planRoom = () => {
       if (!roomInst.memory.plan.extensions) {
         roomInst.memory.plan.extensions = [];
         var longestRoad = _.last(_.sortBy(roomInst.memory.plan.roads, road => road.length));
-
-        longestRoad = _.takeRight(longestRoad, longestRoad.length - 3);
+        var freePositions = _.flatten(_.uniq(_.map(longestRoad, rp => {return Array.from(rp.findNearPosition())})));
 
         for (var i = 0; i < utils.getExtensionsAtRCL(roomInst.controller.level); i++) {
-          var extension = longestRoad[i].findNearPosition().next().value;
-          roomInst.memory.plan.extensions.push(extension);
+          roomInst.memory.plan.extensions.push(freePositions[i]);
         }
       }
+
     }
   });
 }
