@@ -70,11 +70,11 @@ hivemind.planRoom = () => {
           var road;
           // Connect spawns to sources
 
-          for (var source in sources) {
-            road = hivemind.roadFromTo(spawns[spawn].pos, sources[source].pos);
+          _.forEach(sources, source => {
+            road = hivemind.roadFromTo(spawns[spawn].pos, source.pos);
             roads.push(road.path);
             roomInst.memory.plan.taken.push(...road.path);
-          }
+          });
 
           // Connect spawns to room controller
           road = hivemind.roadFromTo(spawns[spawn].pos, roomInst.controller.pos);
@@ -84,13 +84,13 @@ hivemind.planRoom = () => {
           // Connect spawns to exits
           var exits = [spawns[spawn].pos.findClosestByPath(FIND_EXIT_TOP), spawns[spawn].pos.findClosestByPath(FIND_EXIT_BOTTOM), spawns[spawn].pos.findClosestByPath(FIND_EXIT_RIGHT), spawns[spawn].pos.findClosestByPath(FIND_EXIT_LEFT)];
 
-          for (var exit in exits) {
-            if (exits[exit]) {
-              road = hivemind.roadFromTo(spawns[spawn].pos, exits[exit]);
+          _.forEach(exits, exit => {
+            if (exit) {
+              road = hivemind.roadFromTo(spawns[spawn].pos, exit);
               roads.push(road.path);
               roomInst.memory.plan.taken.push(...road.path);
             }
-          }
+          });
         }
 
         roomInst.memory.plan.roads = roads;
@@ -100,6 +100,7 @@ hivemind.planRoom = () => {
       if (!roomInst.memory.plan.extensions) {
         roomInst.memory.plan.extensions = [];
         var longestRoad = _.last(_.sortBy(roomInst.memory.plan.roads, road => road.length));
+        longestRoad = _.takeRight(longestRoad, longestRoad.length-3);
         var freePositions = _.flatten(_.map(longestRoad, rp => {
           return Array.from(rp.findNearPosition())
         }));
@@ -134,12 +135,11 @@ hivemind.roadFromTo = (from, to) => {
   });
 }
 
-hivemind.restoreRoads = () => {
+hivemind.buildRoads = () => {
   _.forEach(Game.rooms, roomInst => {
-
     if (roomInst.controller && roomInst.controller.my && roomInst.executeEveryTicks(200) && roomInst.memory.plan) {
-      _.map(roomInst.memory.plan.roads, road => {
-        _.map(road, point => {
+      _.forEach(roomInst.memory.plan.roads, road => {
+        _.forEach(road, point => {
           roomInst.createConstructionSite(point.x, point.y, STRUCTURE_ROAD);
         });
       });
@@ -147,10 +147,30 @@ hivemind.restoreRoads = () => {
   });
 };
 
+hivemind.buildStructures = () => {
+  _.forEach(Game.rooms, roomInst => {
+    if (roomInst.controller && roomInst.controller.my && roomInst.executeEveryTicks(200) && roomInst.memory.plan) {
+      roomInst.createConstructionSite(roomInst.memory.plan.storage.x, roomInst.memory.plan.storage.y, STRUCTURE_STORAGE);
+
+      _.forEach(roomInst.memory.plan.extensions, extension => {
+        roomInst.createConstructionSite(extension.x, extension.y, STRUCTURE_EXTENSION);
+      });
+    }
+  });
+}
+
 hivemind.regenerateRoomPlans = () => {
   _.map(Game.rooms, room => {
     room.memory.plan = {};
   });
+}
+
+hivemind.cleanUpCreepMemory = () => {
+  for (let name in Memory.creeps) {
+    if (!Game.creeps[name]) {
+      delete Memory.creeps[name];
+    }
+  }
 }
 
 hivemind.interpretFlags = () => {
@@ -205,6 +225,8 @@ hivemind.interpretFlags = () => {
 
 hivemind.think = () => {
   hivemind.planRoom();
-  hivemind.restoreRoads();
+  hivemind.buildRoads();
+  hivemind.buildStructures();
   hivemind.interpretFlags();
+  hivemind.cleanUpCreepMemory();
 }
