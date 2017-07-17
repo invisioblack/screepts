@@ -4,10 +4,11 @@ const bodies = require('creeps.bodies');
 module.exports = {
   run: function(creep) {
 
-    if (creep.carry.energy > 0) {
+    if (creep.carry.energy == creep.carryCapacity) {
       actions.buildNearestConstructionSite(creep);
     } else {
-      if (!(creep.room.memory.plan && creep.room.memory.plan.dismantle && creep.room.memory.plan.dismantle.length > 0)) {
+
+      if (creep.room.find(FIND_CONSTRUCTION_SITES).length > 0) {
         if (!actions.withdrawFromNearestContainer(creep)) {
           actions.withdrawFromNearestStorage(creep);
         }

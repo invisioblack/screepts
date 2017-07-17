@@ -135,6 +135,10 @@ function dismantleNearestStructure(creep) {
     var target = creep.room.lookAt(closest[0].x, closest[0].y);
     target = _.find(target, {'type': 'structure'});
 
+    if (target && (target.structure.structureType == STRUCTURE_TOWER || target.structure.structureType == STRUCTURE_SPAWN)) {
+      target = null;
+    }
+
     if (target && creep.dismantle(target.structure) == ERR_NOT_IN_RANGE) {
       creep.moveTo(target.structure, {
         visualizePathStyle: {
