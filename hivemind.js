@@ -23,7 +23,9 @@ hivemind.visualizePlans = (room) => {
 
   if (room.memory.plan && room.memory.plan.extensions) {
     _.forEach(room.memory.plan.extensions, extension => {
-      room.visual.text('E', extension);
+      if (extension) {
+        room.visual.text('E', extension);
+      }
     });
   }
 };
@@ -92,7 +94,7 @@ hivemind.planRoom = () => {
 
         longestRoad = _.takeRight(longestRoad, longestRoad.length - 3);
 
-        for (var i=0; i < utils.getExtensionsAtRCL(roomInst.controller.level); i++) {
+        for (var i = 0; i < utils.getExtensionsAtRCL(roomInst.controller.level); i++) {
           var extension = longestRoad[i].findNearPosition().next().value;
           roomInst.memory.plan.extensions.push(extension);
         }
@@ -135,7 +137,7 @@ hivemind.interpretFlags = () => {
   _.forEach(Game.flags, flag => {
     switch (flag.color) {
       case COLOR_RED:
-        if (flag.room==undefined || !flag.room.controller.my) {
+        if (flag.room == undefined || !flag.room.controller.my) {
           _.map(_.filter(Game.creeps, creep => {
             return creep.memory.role === 'scout'
           }), creep => {
@@ -145,7 +147,7 @@ hivemind.interpretFlags = () => {
         flag.remove();
         break;
       case COLOR_BLUE:
-        if (flag.room==undefined || !flag.room.controller.my) {
+        if (flag.room == undefined || !flag.room.controller.my) {
           _.map(_.filter(Game.creeps, creep => {
             return creep.memory.role === 'reserver'
           }), creep => {
@@ -154,7 +156,7 @@ hivemind.interpretFlags = () => {
         }
         break;
       case COLOR_YELLOW:
-        if (flag.room==undefined || !flag.room.controller.my) {
+        if (flag.room == undefined || !flag.room.controller.my) {
           _.map(_.filter(Game.creeps, creep => {
             return creep.memory.role === 'remoteminer'
           }), creep => {
@@ -163,8 +165,12 @@ hivemind.interpretFlags = () => {
         }
         break;
       case COLOR_ORANGE:
-        if(flag.room && flag.room.controller.my) {
-          var spawns = flag.room.find(FIND_STRUCTURES, {filter: {structureType: STRUCTURE_SPAWN}});
+        if (flag.room && flag.room.controller.my) {
+          var spawns = flag.room.find(FIND_STRUCTURES, {
+            filter: {
+              structureType: STRUCTURE_SPAWN
+            }
+          });
           _.forEach(spawns, spawn => {
             var road = hivemind.roadFromTo(spawn.pos, flag.pos);
             flag.room.memory.plan.roads.push(road.path);
