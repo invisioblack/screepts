@@ -129,7 +129,7 @@ function buildNearestConstructionSite(creep) {
 */
 function dismantleNearestStructure(creep) {
   var closest = _.sortBy(creep.room.memory.plan.dismantle, dismantle => {
-    creep.pos.findPathTo(dismantle.x, dismantle.y).length
+    creep.pos.getRangeTo(dismantle.x, dismantle.y)
   });
   if (closest.length > 0) {
     var target = creep.room.lookAt(closest[0].x, closest[0].y);
