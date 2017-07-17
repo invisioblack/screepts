@@ -4,26 +4,19 @@ const bodies = require('creeps.bodies');
 module.exports = {
   run: function(creep) {
 
-    if (creep.memory.building === undefined) {
-      creep.memory.building = true;
-    }
-
-    if (creep.memory.building && creep.carry.energy == 0) {
-      creep.memory.building = false;
-      creep.say('harvest');
-    }
-    if (!creep.memory.building && creep.carry.energy == creep.carryCapacity) {
-      creep.memory.building = true;
-      creep.say('build');
-    }
-
-    if (creep.memory.building) {
+    if (creep.carry.energy > 0) {
       actions.buildNearestConstructionSite(creep);
     } else {
-      if (!actions.withdrawFromNearestContainer(creep)) {
-        actions.withdrawFromNearestStorage(creep);
+      if (!(creep.room.memory.plan && creep.room.memory.plan.dismantle && creep.room.memory.plan.dismantle.length > 0)) {
+        if (!actions.withdrawFromNearestContainer(creep)) {
+          actions.withdrawFromNearestStorage(creep);
+        }
+      } else {
+        actions.dismantleNearestStructure(creep);
       }
     }
+
+
   },
 
   /** @param {StructureSpawn} spawn **/

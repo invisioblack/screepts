@@ -36,7 +36,7 @@ function collectBiggestDroppedEnergy(creep) {
     if (creep.pickup(_.last(dropped)) == ERR_NOT_IN_RANGE) {
       creep.moveTo(_.last(dropped), {
         visualizePathStyle: {
-          stroke: '#ff5500'
+          stroke: '#ffff00'
         }
       });
     }
@@ -122,6 +122,30 @@ function buildNearestConstructionSite(creep) {
     return false;
   }
 
+}
+
+/*
+  Attempts to dismantle the nearest structures schedule for dismantling
+*/
+function dismantleNearestStructure(creep) {
+  var closest = _.sortBy(creep.room.memory.plan.dismantle, dismantle => {
+    creep.pos.findPathTo(dismantle.x, dismantle.y).length
+  });
+  if (closest.length > 0) {
+    var target = creep.room.lookAt(closest[0].x, closest[0].y);
+    target = _.find(target, {'type': 'structure'});
+
+    if (target && creep.dismantle(target.structure) == ERR_NOT_IN_RANGE) {
+      creep.moveTo(target.structure, {
+        visualizePathStyle: {
+          stroke: '#0000ff',
+          opacity: 0.75
+        }
+      });
+    } else {
+      _.remove(creep.room.memory.plan.dismantle, dismantle => dismantle.x == closest[0].x && dismantle.y == closest[0].y);
+    }
+  }
 }
 
 /*
@@ -219,5 +243,6 @@ module.exports = {
   dumpEnergyAt,
   repairNearest,
   rallyAtFlag,
-  recycleSelf
+  recycleSelf,
+  dismantleNearestStructure
 };

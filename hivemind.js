@@ -186,6 +186,13 @@ hivemind.scheduleDeconstructions = () => {
   });
 }
 
+hivemind.cleanUpDeconstructions = () => {
+  var newDeconstructions = [];
+  _forEach(Game.rooms, room => {
+
+  });
+}
+
 hivemind.regenerateRoomPlans = () => {
   _.map(Game.rooms, room => {
     room.memory.plan = {};
