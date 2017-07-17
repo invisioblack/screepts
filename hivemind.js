@@ -257,6 +257,22 @@ hivemind.interpretFlags = () => {
   });
 }
 
+hivemind.createJobs = () => {
+  if (!Memory.jobs) {
+    Memory.jobs = [];
+  }
+
+  _.forEach(Game.constructionSites, cs => {
+    Memory.jobs.push({
+      creepType: 'worker',
+      action: 'build',
+      priority: 10,
+      room: cs.room,
+      target: cs.id
+    });
+  });
+}
+
 hivemind.think = () => {
   hivemind.planRoom();
   hivemind.buildRoads();
@@ -264,4 +280,5 @@ hivemind.think = () => {
   hivemind.interpretFlags();
   hivemind.cleanUpCreepMemory();
   hivemind.scheduleDeconstructions();
+  hivemind.createJobs();
 }
