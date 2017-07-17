@@ -37,6 +37,7 @@ hivemind.planRoom = () => {
 
       if (!roomInst.memory.plan) {
         roomInst.memory.plan = {};
+        roomInst.memory.plan.dismantle = [];
       }
 
       if (!roomInst.memory.plan.taken) {
@@ -148,12 +149,25 @@ hivemind.buildRoads = () => {
 };
 
 hivemind.buildStructures = () => {
-  _.forEach(Game.rooms, roomInst => {
-    if (roomInst.controller && roomInst.controller.my && roomInst.executeEveryTicks(200) && roomInst.memory.plan) {
-      roomInst.createConstructionSite(roomInst.memory.plan.storage.x, roomInst.memory.plan.storage.y, STRUCTURE_STORAGE);
+  _.forEach(Game.rooms, room => {
+    if (room.controller && room.controller.my && room.executeEveryTicks(200) && room.memory.plan) {
+      room.createConstructionSite(room.memory.plan.storage.x, room.memory.plan.storage.y, STRUCTURE_STORAGE);
 
-      _.forEach(roomInst.memory.plan.extensions, extension => {
-        roomInst.createConstructionSite(extension.x, extension.y, STRUCTURE_EXTENSION);
+      _.forEach(room.memory.plan.extensions, extension => {
+        room.createConstructionSite(extension.x, extension.y, STRUCTURE_EXTENSION);
+      });
+    }
+  });
+}
+
+hivemind.scheduleDeconstructions = () => {
+  _.forEach(Game.rooms, room => {
+    if (room.controller && room.controller.my && room.executeEveryTicks(200) && room.memory.plan) {
+      _.forEach(room.find(FIND_STRUCTURES, {filter: {structureType: STRUCTURE_EXTENSION}}), extension => {
+        if (!_.some(room.memory.plan.extensions, plannedExt => plannedExt.x == extension.pos.x && plannedExt.y == extension.pos.y) &&
+            !_.some(room.memory.plan.dismantle, toDismantle => toDismantle.x == extension.pos.x && toDismantle.y == extension.pos.y)) {
+              room.memory.plan.dismantle.push(extension.pos);
+        }
       });
     }
   });
@@ -229,4 +243,5 @@ hivemind.think = () => {
   hivemind.buildStructures();
   hivemind.interpretFlags();
   hivemind.cleanUpCreepMemory();
+  hivemind.scheduleDeconstructions();
 }
