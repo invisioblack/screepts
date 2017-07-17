@@ -22,6 +22,9 @@ RoomPosition.prototype.validPosition = function() {
   if (this.checkForWall()) {
     return false;
   }
+  if (this.checkForStructures()) {
+    return false;
+  }
   return true;
 };
 
@@ -35,6 +38,10 @@ RoomPosition.prototype.isBorder = function(offset) {
 
 RoomPosition.prototype.checkForWall = function() {
   return this.lookFor(LOOK_TERRAIN)[0] === 'wall';
+};
+
+RoomPosition.prototype.checkForStructures = function() {
+  return !this.lookFor(LOOK_STRUCTURES);
 };
 
 RoomPosition.prototype.getRoom = function() {
