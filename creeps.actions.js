@@ -142,7 +142,7 @@ function dismantleNearestStructure(creep) {
           opacity: 0.75
         }
       });
-    } else {
+    } else if (!target) {
       _.remove(creep.room.memory.plan.dismantle, dismantle => dismantle.x == closest[0].x && dismantle.y == closest[0].y);
     }
   }
