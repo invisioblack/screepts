@@ -1,5 +1,5 @@
 const utils = require('utils');
-const priorities = require('jobs/priorities');
+const priorities = require('jobs.priorities');
 
 hivemind = {};
 
