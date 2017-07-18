@@ -292,6 +292,20 @@ hivemind.interpretFlags = () => {
   });
 }
 
+hivemind.isJobEqual = job1 => job2 => {
+  if (!job1 || !job2) {
+    return false;
+  }
+
+  return (
+    job1.creepType == job2.creepType &&
+    job1.action == job2.action &&
+    job1.priority == job2.priority &&
+    job1.room == job2.room &&
+    job1.target == job2.target
+  );
+}
+
 hivemind.createJobs = () => {
 
   _.forEach(Game.rooms, room => {
@@ -313,6 +327,11 @@ hivemind.createJobs = () => {
           target: cs.id
         });
       });
+
+      let workers = room.find(FIND_MY_CREEPS, {filter: creep => creep.memory.role=='builder'});
+      _.forEach(workers, worker => {
+        _.remove(room.memory.jobs, hivemind.isJobEqual(worker.memory.job))
+      });
     }
   });
 
@@ -322,17 +341,14 @@ hivemind.assignJobs = () => {
   _.forEach(Game.rooms, room => {
     if (room.controller && room.controller.my) {
       let jobs = _.sortBy(room.memory.jobs, job => job.priority);
-      _.forEach(jobs, job => {
-        var target = Game.getObjectById(job.target);
-        if (target) {
-          var worker = target.pos.findClosestByPath(FIND_MY_CREEPS, {filter: creep => creep.memory.role=='builder'});
-          if(worker) {
-            worker.memory.job = job;
-          }
-        } else {
-          delete job;
+      let workers = room.find(FIND_MY_CREEPS, {filter: creep => creep.memory.role=='builder'});
+      _.forEach(workers, worker => {
+        if (!worker.memory.job) {
+          worker.memory.job = _.head(jobs);
+          jobs = _.tail(jobs);
         }
       });
+
     }
   });
 }
