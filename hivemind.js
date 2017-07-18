@@ -1,4 +1,5 @@
 const utils = require('utils');
+const priorities = require('jobs/priorities');
 
 hivemind = {};
 
@@ -284,10 +285,14 @@ hivemind.createJobs = () => {
   Memory.jobs = [];
 
   _.forEach(Game.constructionSites, cs => {
+    var priority = cs.structureType in priorities.CONSTRUCTION_PRIORITIES ? priorities.CONSTRUCTION_PRIORITIES[cs.structureType] : 100;
+    var secondaryPriority = (cs.progressTotal-cs.progress)/cs.progressTotal;
+
     Memory.jobs.push({
       creepType: 'worker',
       action: 'build',
-      priority: 10,
+      priority: priority,
+      secondaryPriority: secondaryPriority,
       room: cs.pos.roomName,
       target: cs.id
     });
