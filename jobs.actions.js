@@ -14,3 +14,7 @@ function buildAction(creep, job) {
     return true;
   }
 }
+
+module.exports = {
+  build: buildAction
+};

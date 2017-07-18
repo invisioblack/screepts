@@ -30,7 +30,7 @@ module.exports = {
       roles.courier.behavior.create(spawn);
     }else if (!rolesNum.upgrader || rolesNum.upgrader < 6) {
       roles.upgrader.behavior.create(spawn);
-    } else if (!rolesNum.builder || rolesNum.builder < 1) {
+    } else if (!rolesNum.builder || rolesNum.builder < 3) {
       roles.builder.behavior.create(spawn);
     } else if (!rolesNum.repairman || rolesNum.repairman < 1) {
       roles.repairman.behavior.create(spawn);
