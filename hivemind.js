@@ -180,10 +180,13 @@ hivemind.buildStructures = () => {
   _.forEach(Game.rooms, room => {
     if (room.controller && room.controller.my && room.executeEveryTicks(200) && room.memory.plan) {
       room.createConstructionSite(room.memory.plan.storage.x, room.memory.plan.storage.y, STRUCTURE_STORAGE);
+      room.createConstructionSite(room.memory.plan.tower.x, room.memory.plan.tower.y, STRUCTURE_TOWER);
 
       _.forEach(room.memory.plan.extensions, extension => {
         room.createConstructionSite(extension.x, extension.y, STRUCTURE_EXTENSION);
       });
+
+
     }
   });
 }
