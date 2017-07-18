@@ -1,4 +1,6 @@
 const utils = require('utils');
+
+const actions = require('jobs.actions');
 const priorities = require('jobs.priorities');
 
 hivemind = {};
@@ -299,6 +301,19 @@ hivemind.createJobs = () => {
   });
 }
 
+hivemind.assignJobs = () => {
+  let jobs = _.sortBy(Memory.jobs, job => job.priority);
+  _.forEach(jobs, job => {
+    var target = Game.getObjectById(job.target);
+    if (target) {
+      var worker = target.pos.findClosestByPath(FIND_MY_CREEPS, {filter: creep => creep.memory.role=='builder'});
+      if (worker) {
+        worker.memory.job = job;
+      }
+    }
+  });
+}
+
 hivemind.think = () => {
   hivemind.planRoom();
   hivemind.buildRoads();
@@ -307,4 +322,5 @@ hivemind.think = () => {
   hivemind.cleanUpCreepMemory();
   hivemind.scheduleDeconstructions();
   hivemind.createJobs();
+  hivemind.assignJobs();
 }
