@@ -22,9 +22,6 @@ RoomPosition.prototype.validPosition = function() {
   if (this.checkForWall()) {
     return false;
   }
-  if (this.checkForStructures()) {
-    return false;
-  }
 
   return true;
 };

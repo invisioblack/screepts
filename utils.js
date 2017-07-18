@@ -2,50 +2,6 @@ function calculateBodyCost(body) {
   return _.reduce(body, (sum, part) => sum + BODYPART_COST[part], 0);
 }
 
-function freeSpaces(roomPosition) {
-  let freeSpaceCount = 0;
-
-  [
-    roomPosition.x - 1,
-    roomPosition.x,
-    roomPosition.x + 1
-  ].forEach(x => {
-    [
-      roomPosition.y - 1,
-      roomPosition.y,
-      roomPosition.y + 1
-    ].forEach(y => {
-      if (Game.map.getTerrainAt(x, y, roomPosition.roomName) != 'wall') {
-        freeSpaceCount++;
-      }
-    });
-  });
-
-  return freeSpaceCount;
-}
-
-function findFreeSpaces(roomPosition) {
-  var freeSpaces = [];
-
-  [
-    roomPosition.x - 1,
-    roomPosition.x,
-    roomPosition.x + 1
-  ].forEach(x => {
-    [
-      roomPosition.y - 1,
-      roomPosition.y,
-      roomPosition.y + 1
-    ].forEach(y => {
-      if (Game.map.getTerrainAt(x, y, roomPosition.roomName) != 'wall') {
-        freeSpaces.push(new RoomPosition(x, y, roomPosition.roomName));
-      }
-    });
-  });
-
-  return freeSpaces;
-}
-
 function getExtensionsAtRCL(rcl) {
   switch (rcl) {
     case 1:
@@ -57,9 +13,25 @@ function getExtensionsAtRCL(rcl) {
   }
 }
 
+function getTowersAtRCL(rcl) {
+  switch (rcl) {
+    case 3:
+    case 4:
+      return 1;
+    case 5:
+    case 6:
+      return 2;
+    case 7:
+      return 3;
+    case 8:
+      return 6;
+    default:
+      return 0;
+  }
+}
+
 module.exports = {
   calculateBodyCost,
-  freeSpaces,
-  findFreeSpaces,
-  getExtensionsAtRCL
+  getExtensionsAtRCL,
+  getTowersAtRCL
 }

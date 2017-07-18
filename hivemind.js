@@ -24,8 +24,12 @@ hivemind.visualizePlans = (room) => {
     room.visual.text('U', room.memory.plan.upgrader);
   }
 
-  if (room.memory.plan && room.memory.plan.tower) {
-    room.visual.text('T', room.memory.plan.tower);
+  if (room.memory.plan && room.memory.plan.towers) {
+    _.forEach(room.memory.plan.towers, tower => {
+      if (tower) {
+        room.visual.text('T', tower);
+      }
+    });
   }
 
   if (room.memory.plan && room.memory.plan.extensions) {
@@ -54,12 +58,10 @@ hivemind.planRoom = () => {
         roomInst.memory.plan = {};
       }
 
+      roomInst.memory.plan.taken = [];
+
       if (!roomInst.memory.plan.dismantle) {
         roomInst.memory.plan.dismantle = [];
-      }
-
-      if (!roomInst.memory.plan.taken) {
-        roomInst.memory.plan.taken = [];
       }
 
       if (!roomInst.memory.plan.storage) {
@@ -88,7 +90,6 @@ hivemind.planRoom = () => {
 
           var road;
           // Connect spawns to sources
-
           _.forEach(sources, source => {
             road = hivemind.roadFromTo(spawns[spawn].pos, source.pos);
             roads.push(road.path);
@@ -130,10 +131,15 @@ hivemind.planRoom = () => {
         }
       }
 
-      if (!roomInst.memory.plan.tower) {
+      if (!roomInst.memory.plan.towers) {
+        roomInst.memory.plan.towers = [];
+
         var freePositions = hivemind.getFreePositionsNear(longestRoad, roomInst);
-        roomInst.memory.plan.tower = freePositions[0];
-        roomInst.memory.plan.taken.push(freePositions[0]);
+
+        for (var i = 0; i < utils.getTowersAtRCL(roomInst.controller.level); i++) {
+          roomInst.memory.plan.towers.push(freePositions[i]);
+          roomInst.memory.plan.taken.push(freePositions[i]);
+        }
       }
 
     }
@@ -183,7 +189,10 @@ hivemind.buildStructures = () => {
   _.forEach(Game.rooms, room => {
     if (room.controller && room.controller.my && room.executeEveryTicks(200) && room.memory.plan) {
       room.createConstructionSite(room.memory.plan.storage.x, room.memory.plan.storage.y, STRUCTURE_STORAGE);
-      room.createConstructionSite(room.memory.plan.tower.x, room.memory.plan.tower.y, STRUCTURE_TOWER);
+
+      _.forEach(room.memory.plan.towers, tower => {
+        room.createConstructionSite(tower.x, tower.y, STRUCTURE_EXTENSION);
+      });
 
       _.forEach(room.memory.plan.extensions, extension => {
         room.createConstructionSite(extension.x, extension.y, STRUCTURE_EXTENSION);
