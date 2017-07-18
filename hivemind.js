@@ -49,6 +49,9 @@ hivemind.planRoom = () => {
 
       if (!roomInst.memory.plan) {
         roomInst.memory.plan = {};
+      }
+
+      if (!roomInst.memory.plan.dismantle) {
         roomInst.memory.plan.dismantle = [];
       }
 
