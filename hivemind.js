@@ -21,6 +21,10 @@ hivemind.visualizePlans = (room) => {
     room.visual.text('U', room.memory.plan.upgrader);
   }
 
+  if (room.memory.plan && room.memory.plan.tower) {
+    room.visual.text('T', room.memory.plan.tower);
+  }
+
   if (room.memory.plan && room.memory.plan.extensions) {
     _.forEach(room.memory.plan.extensions, extension => {
       if (extension) {
@@ -106,31 +110,44 @@ hivemind.planRoom = () => {
 
       }
 
+      var longestRoad = _.last(_.sortBy(roomInst.memory.plan.roads, road => road.length));
+      longestRoad = _.takeRight(longestRoad, longestRoad.length-2);
+
       if (!roomInst.memory.plan.extensions) {
         roomInst.memory.plan.extensions = [];
-        var longestRoad = _.last(_.sortBy(roomInst.memory.plan.roads, road => road.length));
-        longestRoad = _.takeRight(longestRoad, longestRoad.length-3);
-        var freePositions = _.flatten(_.map(longestRoad, rp => {
-          return Array.from(rp.findNearPosition())
-        }));
 
-        // Remove duplicate positions and taken positions
-        var cleaned = [];
-        freePositions = _.forEach(freePositions, position => {
-          if (!_.some(cleaned, dupe => dupe.x == position.x && dupe.y == position.y) && !_.some(roomInst.memory.plan.taken, dupe => dupe.x == position.x && dupe.y == position.y)) {
-            cleaned.push(position);
-            roomInst.memory.plan.taken.push(position);
-          }
-        });
-        freePositions = cleaned;
+        var freePositions = hivemind.getFreePositionsNear(longestRoad);
 
         for (var i = 0; i < utils.getExtensionsAtRCL(roomInst.controller.level); i++) {
           roomInst.memory.plan.extensions.push(freePositions[i]);
+          roomInst.memory.plan.taken.push(freePositions[i]);
         }
+      }
+
+      if (!roomInst.memory.plan.tower) {
+        var freePositions = hivemind.getFreePositionsNear(longestRoad);
+        roomInst.memory.plan.tower = freePositions[0];
+        roomInst.memory.plan.taken.push(freePositions[0]);
       }
 
     }
   });
+}
+
+hivemind.getFreePositionsNear(road) {
+  var freePositions = _.flatten(_.map(positions, rp => {
+    return Array.from(rp.findNearPosition())
+  }));
+
+  // Remove duplicate positions and taken positions
+  var cleaned = [];
+  freePositions = _.forEach(freePositions, position => {
+    if (!_.some(cleaned, dupe => dupe.x == position.x && dupe.y == position.y) && !_.some(roomInst.memory.plan.taken, dupe => dupe.x == position.x && dupe.y == position.y)) {
+      cleaned.push(position);
+    }
+  });
+
+  return cleaned;
 }
 
 hivemind.roadFromTo = (from, to) => {
