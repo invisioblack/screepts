@@ -281,9 +281,7 @@ hivemind.interpretFlags = () => {
 }
 
 hivemind.createJobs = () => {
-  if (!Memory.jobs) {
-    Memory.jobs = [];
-  }
+  Memory.jobs = [];
 
   _.forEach(Game.constructionSites, cs => {
     Memory.jobs.push({
@@ -303,5 +301,5 @@ hivemind.think = () => {
   hivemind.interpretFlags();
   hivemind.cleanUpCreepMemory();
   hivemind.scheduleDeconstructions();
-  //hivemind.createJobs();
+  hivemind.createJobs();
 }
