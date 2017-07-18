@@ -1,13 +1,13 @@
 CONSTRUCTION_PRIORITIES = {
-  STRUCTURE_SPAWN: 1,
-  STRUCTURE_EXTENSION: 2,
-  STRUCTURE_TOWER: 5,
-  STRUCTURE_STORAGE: 10,
-  STRUCTURE_CONTAINER: 20,
+  spawn: 1,
+  extension: 2,
+  tower: 5,
+  storage: 10,
+  container: 20,
 
-  STRUCTURE_RAMPART: 45,
-  STRUCTURE_WALL: 50,
-  STRUCTURE_ROAD: 100
+  rampart: 45,
+  constructedWall: 50,
+  road: 100
 };
 
 

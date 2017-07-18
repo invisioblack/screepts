@@ -293,32 +293,46 @@ hivemind.interpretFlags = () => {
 }
 
 hivemind.createJobs = () => {
-  Memory.jobs = [];
 
-  _.forEach(Game.constructionSites, cs => {
-    var priority = cs.structureType in priorities.CONSTRUCTION_PRIORITIES ? priorities.CONSTRUCTION_PRIORITIES[cs.structureType] : 100;
-    var secondaryPriority = (cs.progressTotal-cs.progress)/cs.progressTotal;
+  _.forEach(Game.rooms, room => {
+    if (room.controller && room.controller.my) {
+      room.memory.jobs = [];
 
-    Memory.jobs.push({
-      creepType: 'worker',
-      action: 'build',
-      priority: priority,
-      secondaryPriority: secondaryPriority,
-      room: cs.pos.roomName,
-      target: cs.id
-    });
+      _.forEach(room.find(FIND_CONSTRUCTION_SITES), cs => {
+        var priority = _.includes(Object.keys(priorities.CONSTRUCTION_PRIORITIES), cs.structureType)
+        ? priorities.CONSTRUCTION_PRIORITIES[cs.structureType]
+        : 100;
+        var secondaryPriority = (cs.progressTotal - cs.progress) / cs.progressTotal;
+
+        room.memory.jobs.push({
+          creepType: 'worker',
+          action: 'build',
+          priority: priority,
+          secondaryPriority: secondaryPriority,
+          room: cs.pos.roomName,
+          target: cs.id
+        });
+      });
+    }
   });
+
 }
 
 hivemind.assignJobs = () => {
-  let jobs = _.sortBy(Memory.jobs, job => job.priority);
-  _.forEach(jobs, job => {
-    var target = Game.getObjectById(job.target);
-    if (target) {
-      var worker = target.pos.findClosestByPath(FIND_MY_CREEPS, {filter: creep => creep.memory.role=='builder'});
-      if (worker) {
-        worker.memory.job = job;
-      }
+  _.forEach(Game.rooms, room => {
+    if (room.controller && room.controller.my) {
+      let jobs = _.sortBy(room.memory.jobs, job => job.priority);
+      _.forEach(jobs, job => {
+        var target = Game.getObjectById(job.target);
+        if (target) {
+          var worker = target.pos.findClosestByPath(FIND_MY_CREEPS, {filter: creep => creep.memory.role=='builder'});
+          if(worker) {
+            worker.memory.job = job;
+          }
+        } else {
+          delete job;
+        }
+      });
     }
   });
 }
