@@ -280,5 +280,5 @@ hivemind.think = () => {
   hivemind.interpretFlags();
   hivemind.cleanUpCreepMemory();
   hivemind.scheduleDeconstructions();
-  hivemind.createJobs();
+  //hivemind.createJobs();
 }
