@@ -6,7 +6,6 @@ module.exports = {
   /** @param {Creep} creep **/
   run: function(creep) {
 
-    // While there's still room for energy
     if (creep.carry.energy < creep.carryCapacity) {
 
       if(!creep.memory.energyTarget || Game.getObjectById(creep.memory.energyTarget.id) == null){
@@ -34,8 +33,6 @@ module.exports = {
       if (!actions.dumpEnergyAt(creep, STRUCTURE_SPAWN)) {
         if (!actions.dumpEnergyAt(creep, STRUCTURE_EXTENSION)) {
          actions.dumpEnergyAt(creep, STRUCTURE_STORAGE);
-
-
         }
       }
 

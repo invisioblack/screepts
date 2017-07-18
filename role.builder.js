@@ -9,14 +9,13 @@ module.exports = {
     } else {
 
       if (creep.room.find(FIND_CONSTRUCTION_SITES).length > 0) {
-        if (!actions.withdrawFromNearestContainer(creep)) {
-          actions.withdrawFromNearestStorage(creep);
+        if (!actions.withdrawFromNearestStorage(creep)) {
+          actions.withdrawFromNearestContainer(creep);
         }
       } else {
         actions.dismantleNearestStructure(creep);
       }
     }
-
 
   },
 

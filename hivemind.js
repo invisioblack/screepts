@@ -288,7 +288,7 @@ hivemind.createJobs = () => {
       creepType: 'worker',
       action: 'build',
       priority: 10,
-      room: cs.room,
+      room: cs.pos.roomName,
       target: cs.id
     });
   });
