@@ -28,7 +28,7 @@ module.exports = {
     }
 
     for(var i=0; i < spawn.room.find(FIND_CONSTRUCTION_SITES).length - (rolesNum.builder || 0); i++) {
-      if(spawn.room.storage.store[RESOURCE_ENERGY]/spawn.room.storage.storeCapacity > 0.001) {
+      if(spawn.room.storage.store[RESOURCE_ENERGY]/spawn.room.storage.storeCapacity > 0.004) {
         spawn.room.memory.spawnQueue.push('builder');
       }
     }
@@ -42,7 +42,7 @@ module.exports = {
     }
 
     if (!rolesNum.upgrader || rolesNum.upgrader < 6) {
-      if(spawn.room.storage.store[RESOURCE_ENERGY]/spawn.room.storage.storeCapacity > 0.001) {
+      if(spawn.room.storage.store[RESOURCE_ENERGY]/spawn.room.storage.storeCapacity > 0.004) {
         roles.upgrader.behavior.create(spawn);
       }
     } else if (!rolesNum.repairman || rolesNum.repairman < 1) {

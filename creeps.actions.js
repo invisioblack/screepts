@@ -74,7 +74,7 @@ function findBiggestDroppedEnergy(creep) {
 function withdrawFromNearestEnergyStructure(creep, structureType) {
   var target = creep.pos.findClosestByPath(FIND_STRUCTURES, {
     filter: structure => {
-      return structure.structureType == structureType
+      return structure.structureType == structureType && structure.store[RESOURCE_ENERGY] > 0
     }
   });
 
