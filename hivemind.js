@@ -347,7 +347,7 @@ _.forEach(Game.rooms, room => {
       }
     }), dropped => {
 
-      for (var i=0; i<Math.floor(dropped.amount/300); i++) {
+      for (var i=0; i<1+Math.floor(dropped.amount/300); i++) {
 
         room.memory.jobs.push({
           creepType: 'courier',
@@ -362,11 +362,9 @@ _.forEach(Game.rooms, room => {
 
     });
 
-    let builders = room.find(FIND_MY_CREEPS, {
-      filter: creep => creep.memory.role == 'builder'
-    });
+    let creeps = room.find(FIND_MY_CREEPS);
 
-    _.forEach(builders, creep => {
+    _.forEach(creeps, creep => {
       _.remove(room.memory.jobs, hivemind.isJobEqual(creep.memory.job))
     });
 
@@ -379,13 +377,9 @@ hivemind.assignJobs = () => {
   _.forEach(Game.rooms, room => {
     if (room.controller && room.controller.my) {
       let jobs = _.sortBy(room.memory.jobs, job => job.priority);
-
-      let builders = room.find(FIND_MY_CREEPS, {
-        filter: creep => creep.memory.role == 'builder'
-      });
-      let couriers = room.find(FIND_MY_CREEPS, {
-        filter: creep => creep.memory.role == 'courier'
-      });
+      let creeps = room.find(FIND_MY_CREEPS);
+      let builders = _.filter(creeps, creep => creep.memory.role=='builder');
+      let couriers = _.filter(creeps, creep => creep.memory.role=='courier');
 
       _.forEach(jobs, job => {
         switch (job.creepType) {

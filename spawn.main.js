@@ -27,7 +27,7 @@ module.exports = {
       spawn.room.memory.spawnQueue.push('courier');
     }
 
-    for(var i=0; i < spawn.room.find(FIND_CONSTRUCTION_SITES).length - (rolesNum.builder || 0); i++) {
+    for(var i=0; i < (spawn.room.find(FIND_CONSTRUCTION_SITES).length/3) - (rolesNum.builder || 0); i++) {
       if(spawn.room.storage.store[RESOURCE_ENERGY]/spawn.room.storage.storeCapacity > 0.005) {
         spawn.room.memory.spawnQueue.push('builder');
       }
@@ -38,7 +38,7 @@ module.exports = {
         spawn.room.memory.spawnQueue.push('upgrader');
       }
     } else if (!rolesNum.repairman || rolesNum.repairman < 1) {
-      spawn.room.memory.spawnQueue.push('repariman');
+      spawn.room.memory.spawnQueue.push('repairman');
     } else if (!rolesNum.towerfiller || rolesNum.towerfiller < 1) {
       spawn.room.memory.spawnQueue.push('towerfiller');
     } else if (!rolesNum.sentinel || rolesNum.sentinel < 1) {
