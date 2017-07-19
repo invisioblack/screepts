@@ -16,20 +16,20 @@ module.exports = {
           return;
     }
 
-    for (var i=0; i < spawn.room.memory.sources.length - rolesNum.miner; i++) {
+    for (var i=0; i < spawn.room.memory.sources.length - (rolesNum.miner || 0); i++) {
       spawn.room.memory.spawnQueue.push('miner');
     }
 
     _.forEach(spawn.room.find(FIND_DROPPED_RESOURCES, {
       filter: {resourceType: RESOURCE_ENERGY}
     }), dropped => {
-      var requiredCouriers = Math.floor(amount/100);
+      var requiredCouriers = Math.floor(dropped.amount/100);
       for (var i=0; i<requiredCouriers; i++) {
         spawn.room.memory.spawnQueue.push('courier');
       }
     });
 
-    for(var i=0; i < spawn.room.find(FIND_CONSTRUCTION_SITES) - rolesNum.builder; i++) {
+    for(var i=0; i < spawn.room.find(FIND_CONSTRUCTION_SITES) - (rolesNum.builder || 0); i++) {
       spawn.room.memory.spawnQueue.push('builder');
     }
 
