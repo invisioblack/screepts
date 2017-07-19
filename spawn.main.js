@@ -16,7 +16,7 @@ module.exports = {
           return;
     }
 
-    for (var i=0; i < spawn.room.memory.sources.length - (rolesNum.miner || 0); i++) {
+    if (spawn.room.memory.sources.length - (rolesNum.miner || 0) > 0) {
       spawn.room.memory.spawnQueue.push('miner');
     }
 
@@ -25,21 +25,27 @@ module.exports = {
       spawn.room.memory.spawnQueue.push('courier');
     }
 
-    for(var i=0; i < (spawn.room.memory.constructionSites.length/3) - (rolesNum.builder || 0); i++) {
+    if((spawn.room.memory.constructionSites.length/3) - (rolesNum.builder || 0) > 0) {
       if(spawn.room.storage.store[RESOURCE_ENERGY]/spawn.room.storage.storeCapacity > 0.005) {
         spawn.room.memory.spawnQueue.push('builder');
       }
     }
 
     if (!rolesNum.upgrader || rolesNum.upgrader < 6) {
-      if(spawn.room.storage.store[RESOURCE_ENERGY]/spawn.room.storage.storeCapacity > 0.005) {
+      if(spawn.room.storage.store[RESOURCE_ENERGY]/spawn.room.storage.storeCapacity > 0.0045) {
         spawn.room.memory.spawnQueue.push('upgrader');
       }
-    } else if (!rolesNum.repairman || rolesNum.repairman < 1) {
+    }
+
+    if (!rolesNum.repairman || rolesNum.repairman < 1) {
       spawn.room.memory.spawnQueue.push('repairman');
-    } else if (!rolesNum.towerfiller || rolesNum.towerfiller < 1) {
+    }
+
+    if (!rolesNum.towerfiller || rolesNum.towerfiller < 1) {
       spawn.room.memory.spawnQueue.push('towerfiller');
-    } else if (!rolesNum.sentinel || rolesNum.sentinel < 1) {
+    }
+
+    if (!rolesNum.sentinel || rolesNum.sentinel < 1) {
       spawn.room.memory.spawnQueue.push('sentinel');
     }
 
