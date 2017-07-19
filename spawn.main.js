@@ -23,7 +23,7 @@ module.exports = {
     _.forEach(spawn.room.find(FIND_DROPPED_RESOURCES, {
       filter: {resourceType: RESOURCE_ENERGY}
     }), dropped => {
-      var requiredCouriers = Math.floor(dropped.amount/100);
+      var requiredCouriers = Math.floor(dropped.amount/100) - (rolesNum.courier || 0);
       for (var i=0; i<requiredCouriers; i++) {
         spawn.room.memory.spawnQueue.push('courier');
       }
