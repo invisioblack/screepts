@@ -191,7 +191,7 @@ hivemind.buildStructures = () => {
       room.createConstructionSite(room.memory.plan.storage.x, room.memory.plan.storage.y, STRUCTURE_STORAGE);
 
       _.forEach(room.memory.plan.towers, tower => {
-        room.createConstructionSite(tower.x, tower.y, STRUCTURE_EXTENSION);
+        room.createConstructionSite(tower.x, tower.y, STRUCTURE_TOWER);
       });
 
       _.forEach(room.memory.plan.extensions, extension => {

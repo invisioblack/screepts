@@ -23,7 +23,9 @@ module.exports = {
           });
         }
       } else {
-          actions.withdrawFromNearestContainer(creep);
+          if (!actions.withdrawFromNearestContainer(creep)) {
+            actions.recycleSelf(creep);
+          }
       }
 
     } else {

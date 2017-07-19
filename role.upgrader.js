@@ -25,14 +25,14 @@ module.exports = {
     } else {
       // Find a container or storage and get energy from it
       if (!actions.withdrawFromNearestStorage(creep)) {
-        actions.withdrawFromNearestContainer(creep);
+        actions.recycleSelf(creep);
       }
     }
   },
 
   /** @param {StructureSpawn} spawn**/
   create: function(spawn) {
-    return spawn.createCreep(bodies.createFastest(spawn, [MOVE, MOVE, CARRY, WORK, WORK, WORK, CARRY, CARRY]), memory = {
+    return spawn.createCreep([MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, CARRY, WORK, WORK, WORK, CARRY, CARRY], memory = {
       role: 'upgrader'
     });
   }

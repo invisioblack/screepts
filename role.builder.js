@@ -20,7 +20,7 @@ module.exports = {
 
       if (creep.room.find(FIND_CONSTRUCTION_SITES).length > 0) {
         if (!actions.withdrawFromNearestStorage(creep)) {
-          actions.withdrawFromNearestContainer(creep);
+          actions.recycleSelf(creep);
         }
       } else {
         actions.dismantleNearestStructure(creep);
@@ -32,7 +32,7 @@ module.exports = {
 
   /** @param {StructureSpawn} spawn **/
   create: function(spawn) {
-    return spawn.createCreep(bodies.createFastest(spawn, base=[MOVE, MOVE, WORK, WORK, WORK, CARRY, CARRY]), memory = {
+    return spawn.createCreep([MOVE, MOVE, MOVE, MOVE, MOVE, WORK, WORK, WORK, CARRY, CARRY], memory = {
       role: 'builder'
     });
   }
