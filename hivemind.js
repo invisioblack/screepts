@@ -220,11 +220,7 @@ _.forEach(Game.rooms, room => {
 }
 
 hivemind.scheduleDismantling = (room, plannedList, structureType) => {
-_.forEach(room.find(FIND_STRUCTURES, {
-  filter: {
-    structureType: structureType
-  }
-}), structure => {
+_.forEach(_.filter(room.memory.structures, {structureType: structureType}), structure => {
   if (!_.some(plannedList, plannedStruct => plannedStruct.x == structure.pos.x && plannedStruct.y == structure.pos.y) && !_.some(room.memory.plan.dismantle, toDismantle => toDismantle.x == structure.pos.x && toDismantle.y == structure.pos.y)) {
     room.memory.plan.dismantle.push(structure.pos);
   }
@@ -292,11 +288,7 @@ _.forEach(Game.flags, flag => {
       break;
     case COLOR_ORANGE:
       if (flag.room && flag.room.controller.my) {
-        var spawns = flag.room.find(FIND_STRUCTURES, {
-          filter: {
-            structureType: STRUCTURE_SPAWN
-          }
-        });
+        var spawns = _.filter(flag.room.memory.structures, { structureType: STRUCTURE_SPAWN });
         _.forEach(spawns, spawn => {
           var road = hivemind.roadFromTo(spawn.pos, flag.pos);
           flag.room.memory.plan.roads.push(road.path);
@@ -324,7 +316,7 @@ _.forEach(Game.rooms, room => {
     room.memory.jobs = [];
 
     // Create building jobs
-    _.forEach(room.find(FIND_CONSTRUCTION_SITES), cs => {
+    _.forEach(room.memory.constructionSites, cs => {
       var priority = _.includes(Object.keys(priorities.CONSTRUCTION_PRIORITIES), cs.structureType)
         ? priorities.CONSTRUCTION_PRIORITIES[cs.structureType]
         : 100;
@@ -358,7 +350,7 @@ _.forEach(Game.rooms, room => {
 
     });
 
-    let creeps = room.find(FIND_MY_CREEPS);
+    let creeps = room.memory.myCreeps;
 
     _.forEach(creeps, creep => {
       _.remove(room.memory.jobs, hivemind.isJobEqual(creep.memory.job))
@@ -373,7 +365,7 @@ hivemind.assignJobs = () => {
   _.forEach(Game.rooms, room => {
     if (room.controller && room.controller.my) {
       let jobs = _.sortBy(room.memory.jobs, job => job.priority);
-      let creeps = room.find(FIND_MY_CREEPS);
+      let creeps = room.memory.myCreeps;
       let builders = _.filter(creeps, creep => creep.memory.role=='builder');
       let couriers = _.filter(creeps, creep => creep.memory.role=='courier');
 

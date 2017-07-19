@@ -8,7 +8,7 @@ module.exports = {
         actions.withdrawFromNearestStorage(creep);
       }
     } else {
-      var towers = creep.room.find(FIND_STRUCTURES, {filter: {structureType: STRUCTURE_TOWER}});
+      var towers = _.filter(creep.room.memory.structures, {structureType: STRUCTURE_TOWER});
       if (towers.length > 0 && towers[0].energy < towers[0].energyCapacity) {
         actions.dumpEnergyAt(creep, STRUCTURE_TOWER);
       } else {

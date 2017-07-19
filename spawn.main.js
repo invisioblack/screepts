@@ -25,7 +25,7 @@ module.exports = {
       spawn.room.memory.spawnQueue.push('courier');
     }
 
-    for(var i=0; i < (spawn.room.find(FIND_CONSTRUCTION_SITES).length/3) - (rolesNum.builder || 0); i++) {
+    for(var i=0; i < (spawn.room.memory.constructionSites.length/3) - (rolesNum.builder || 0); i++) {
       if(spawn.room.storage.store[RESOURCE_ENERGY]/spawn.room.storage.storeCapacity > 0.005) {
         spawn.room.memory.spawnQueue.push('builder');
       }

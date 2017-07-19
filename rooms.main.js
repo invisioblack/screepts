@@ -19,7 +19,13 @@ module.exports = {
   },
 
   roomBehavior: (room) => {
-    room.memory.droppedEnergy = room.find(FIND_DROPPED_RESOURCES, {filter: {resourceType: RESOURCE_ENERGY}});
+    if (room.controller && room.controller.my) {
+      room.memory.droppedEnergy = room.find(FIND_DROPPED_RESOURCES, {filter: {resourceType: RESOURCE_ENERGY}});
+      room.memory.structures = room.find(FIND_STRUCTURES);
+      room.memory.constructionSites = room.find(FIND_CONSTRUCTION_SITES);
+      room.memory.myCreeps = room.find(FIND_MY_CREEPS);
+    }
+
 
     if (room.executeEveryTicks(50)) {
       for (var source in room.memory.sourcesToMiners) {
