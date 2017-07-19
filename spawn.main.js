@@ -23,14 +23,26 @@ module.exports = {
     var totalDropped = _.sum(_.map(spawn.room.find(FIND_DROPPED_RESOURCES, {
       filter: {resourceType: RESOURCE_ENERGY}
     }), dropped => dropped.amount));
-    for (var i=0; i<Math.floor(totalDropped.amount/300) - (rolesNum.courier || 0); i++) {
+    for (var i=0; i<Math.floor(totalDropped/300) - (rolesNum.courier || 0); i++) {
       spawn.room.memory.spawnQueue.push('courier');
     }
 
     for(var i=0; i < spawn.room.find(FIND_CONSTRUCTION_SITES).length - (rolesNum.builder || 0); i++) {
-      if(spawn.room.storage.store[RESOURCE_ENERGY]/spawn.room.storage.storeCapacity > 0.004) {
+      if(spawn.room.storage.store[RESOURCE_ENERGY]/spawn.room.storage.storeCapacity > 0.005) {
         spawn.room.memory.spawnQueue.push('builder');
       }
+    }
+
+    if (!rolesNum.upgrader || rolesNum.upgrader < 6) {
+      if(spawn.room.storage.store[RESOURCE_ENERGY]/spawn.room.storage.storeCapacity > 0.005) {
+        spawn.room.memory.spawnQueue.push('upgrader');
+      }
+    } else if (!rolesNum.repairman || rolesNum.repairman < 1) {
+      spawn.room.memory.spawnQueue.push('repariman');
+    } else if (!rolesNum.towerfiller || rolesNum.towerfiller < 1) {
+      spawn.room.memory.spawnQueue.push('towerfiller');
+    } else if (!rolesNum.sentinel || rolesNum.sentinel < 1) {
+      spawn.room.memory.spawnQueue.push('sentinel');
     }
 
     if (spawn.room.memory.spawnQueue.length > 0) {
@@ -39,18 +51,6 @@ module.exports = {
 
       roles[creepToSpawn].behavior.create(spawn);
       return;
-    }
-
-    if (!rolesNum.upgrader || rolesNum.upgrader < 6) {
-      if(spawn.room.storage.store[RESOURCE_ENERGY]/spawn.room.storage.storeCapacity > 0.004) {
-        roles.upgrader.behavior.create(spawn);
-      }
-    } else if (!rolesNum.repairman || rolesNum.repairman < 1) {
-      roles.repairman.behavior.create(spawn);
-    } else if (!rolesNum.towerfiller || rolesNum.towerfiller < 1) {
-      roles.towerfiller.behavior.create(spawn);
-    }else if (!rolesNum.sentinel || rolesNum.sentinel < 1) {
-      roles.sentinel.behavior.create(spawn);
     }
 
   }
