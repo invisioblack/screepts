@@ -1,3 +1,3 @@
 config = {
-  allies: ['WaltonSimons', 'nekonee']
+  allies: ['WaltonSimons', 'DeathScrips']
 };
