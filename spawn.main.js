@@ -20,17 +20,15 @@ module.exports = {
       spawn.room.memory.spawnQueue.push('miner');
     }
 
-    _.forEach(spawn.room.find(FIND_DROPPED_RESOURCES, {
+    var totalDropped = _.sum(_.map(spawn.room.find(FIND_DROPPED_RESOURCES, {
       filter: {resourceType: RESOURCE_ENERGY}
-    }), dropped => {
-      var requiredCouriers = Math.floor(dropped.amount/100) - (rolesNum.courier || 0);
-      for (var i=0; i<requiredCouriers; i++) {
-        spawn.room.memory.spawnQueue.push('courier');
-      }
-    });
+    }), dropped => dropped.amount));
+    for (var i=0; i<Math.floor(totalDropped.amount/300) - (rolesNum.courier || 0); i++) {
+      spawn.room.memory.spawnQueue.push('courier');
+    }
 
     for(var i=0; i < spawn.room.find(FIND_CONSTRUCTION_SITES).length - (rolesNum.builder || 0); i++) {
-      if(spawn.room.storage.store[RESOURCE_ENERGY]/spawn.room.storage.storeCapacity > 0.01) {
+      if(spawn.room.storage.store[RESOURCE_ENERGY]/spawn.room.storage.storeCapacity > 0.001) {
         spawn.room.memory.spawnQueue.push('builder');
       }
     }
@@ -44,7 +42,7 @@ module.exports = {
     }
 
     if (!rolesNum.upgrader || rolesNum.upgrader < 6) {
-      if(spawn.room.storage.store[RESOURCE_ENERGY]/spawn.room.storage.storeCapacity > 0.01) {
+      if(spawn.room.storage.store[RESOURCE_ENERGY]/spawn.room.storage.storeCapacity > 0.001) {
         roles.upgrader.behavior.create(spawn);
       }
     } else if (!rolesNum.repairman || rolesNum.repairman < 1) {

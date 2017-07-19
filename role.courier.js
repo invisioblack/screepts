@@ -43,7 +43,7 @@ module.exports = {
 
   /** @param {StructureSpawn} spawn**/
   create: function(spawn) {
-    return spawn.createCreep([CARRY, CARRY, MOVE, MOVE, MOVE, MOVE], memory = {
+    return spawn.createCreep([CARRY, CARRY, CARRY, MOVE, MOVE, MOVE], memory = {
       role: 'courier'
     });
   }
