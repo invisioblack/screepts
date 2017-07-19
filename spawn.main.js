@@ -29,7 +29,7 @@ module.exports = {
       }
     });
 
-    for(var i=0; i < spawn.room.find(FIND_CONSTRUCTION_SITES) - (rolesNum.builder || 0); i++) {
+    for(var i=0; i < spawn.room.find(FIND_CONSTRUCTION_SITES).length - (rolesNum.builder || 0); i++) {
       spawn.room.memory.spawnQueue.push('builder');
     }
 
