@@ -323,6 +323,7 @@ _.forEach(Game.rooms, room => {
   if (room.controller && room.controller.my) {
     room.memory.jobs = [];
 
+    // Create building jobs
     _.forEach(room.find(FIND_CONSTRUCTION_SITES), cs => {
       var priority = _.includes(Object.keys(priorities.CONSTRUCTION_PRIORITIES), cs.structureType)
         ? priorities.CONSTRUCTION_PRIORITIES[cs.structureType]
@@ -330,7 +331,7 @@ _.forEach(Game.rooms, room => {
       var secondaryPriority = (cs.progressTotal - cs.progress) / cs.progressTotal;
 
       room.memory.jobs.push({
-        creepType: 'worker',
+        creepType: 'builder',
         action: 'build',
         priority: priority,
         secondaryPriority: secondaryPriority,
@@ -339,33 +340,72 @@ _.forEach(Game.rooms, room => {
       });
     });
 
-    let workers = room.find(FIND_MY_CREEPS, {
+    // Create energy collection jobs
+    _.forEach(room.find(FIND_DROPPED_RESOURCES, {
+      filter: {
+        resourceType: RESOURCE_ENERGY
+      }
+    }), dropped => {
+
+      for (var i=0; i<Math.floor(dropped.amount/300); i++) {
+
+        room.memory.jobs.push({
+          creepType: 'courier',
+          action: 'collectEnergy',
+          priority: 1,
+          secondaryPriority: 1,
+          room: dropped.pos.roomName,
+          target: dropped.id
+        });
+
+      }
+
+    });
+
+    let builders = room.find(FIND_MY_CREEPS, {
       filter: creep => creep.memory.role == 'builder'
     });
-    _.forEach(workers, worker => {
-      _.remove(room.memory.jobs, hivemind.isJobEqual(worker.memory.job))
+
+    _.forEach(builders, creep => {
+      _.remove(room.memory.jobs, hivemind.isJobEqual(creep.memory.job))
     });
+
   }
 });
 
 }
 
 hivemind.assignJobs = () => {
-_.forEach(Game.rooms, room => {
-  if (room.controller && room.controller.my) {
-    let jobs = _.sortBy(room.memory.jobs, job => job.priority);
-    let workers = room.find(FIND_MY_CREEPS, {
-      filter: creep => creep.memory.role == 'builder'
-    });
-    _.forEach(workers, worker => {
-      if (!worker.memory.job) {
-        worker.memory.job = _.head(jobs);
-        jobs = _.tail(jobs);
-      }
-    });
+  _.forEach(Game.rooms, room => {
+    if (room.controller && room.controller.my) {
+      let jobs = _.sortBy(room.memory.jobs, job => job.priority);
 
-  }
-});
+      let builders = room.find(FIND_MY_CREEPS, {
+        filter: creep => creep.memory.role == 'builder'
+      });
+      let couriers = room.find(FIND_MY_CREEPS, {
+        filter: creep => creep.memory.role == 'courier'
+      });
+
+      _.forEach(jobs, job => {
+        switch (job.creepType) {
+          case 'builder':
+            if (builders.length < 1)
+              return;
+            _.head(builders).memory.job = job;
+            builders = _.tail(builders);
+            break;
+          case 'courier':
+            if (couriers.length < 1)
+              return;
+            _.head(couriers).memory.job = job;
+            couriers = _.tail(couriers);
+            break;
+        }
+      });
+
+    }
+  });
 }
 
 hivemind.think = () => {

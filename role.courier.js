@@ -1,5 +1,6 @@
 const actions = require('creeps.actions');
 const bodies = require('creeps.bodies');
+const jobActions = require('jobs.actions');
 
 module.exports = {
 
@@ -8,20 +9,9 @@ module.exports = {
 
     if (creep.carry.energy < creep.carryCapacity) {
 
-      if(!creep.memory.energyTarget || Game.getObjectById(creep.memory.energyTarget.id) == null){
-        creep.memory.energyTarget = actions.findBiggestDroppedEnergy(creep);
-      }
-
-      if (creep.memory.energyTarget) {
-        var target = Game.getObjectById(creep.memory.energyTarget.id);
-
-        if (creep.pickup(target) == ERR_NOT_IN_RANGE) {
-          creep.moveTo(target, {
-            visualizePathStyle: {
-              stroke: '#ff5500'
-            }
-          });
-        }
+      if (creep.memory.job) {
+        let job = creep.memory.job;
+        jobActions[job.action](creep, job);
       } else {
           if (!actions.withdrawFromNearestContainer(creep)) {
             actions.recycleSelf(creep);

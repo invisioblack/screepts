@@ -35,6 +35,34 @@ function dumpEnergyAction(creep, job) {
   }
 }
 
+function recycleSelfAction(creep, job) {
+  let target = Game.getObjectById(job.target);
+  if (target) {
+    let result = target.recycleCreep(creep);
+    if (result == ERR_NOT_IN_RANGE) {
+      creep.moveTo(target);
+    }
+  }
+}
+
+function collectEnergyAction(creep, job) {
+  let target = Game.getObjectById(job.target);
+  if (target) {
+    let result = creep.pickup(target);
+    if (result == ERR_NOT_IN_RANGE) {
+      creep.moveTo(target);
+    } else if (result == OK) {
+      delete creep.memory.job;
+    }
+  } else {
+    delete creep.memory.job;
+  }
+}
+
 module.exports = {
-  build: buildAction
+  build: buildAction,
+  upgrade: upgradeAction,
+  dumpEnergy: dumpEnergyAction,
+  recycleSelf: recycleSelfAction,
+  collectEnergy: collectEnergyAction
 };
