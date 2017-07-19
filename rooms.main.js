@@ -19,6 +19,8 @@ module.exports = {
   },
 
   roomBehavior: (room) => {
+    room.memory.droppedEnergy = room.find(FIND_DROPPED_RESOURCES, {filter: {resourceType: RESOURCE_ENERGY}});
+
     if (room.executeEveryTicks(50)) {
       for (var source in room.memory.sourcesToMiners) {
         if (Game.getObjectById(room.memory.sourcesToMiners[source]) === null) {

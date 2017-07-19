@@ -23,18 +23,14 @@ function collectNearestDroppedEnergy(creep) {
   Attempts to pick up a piece of dropped energy from the biggest pile in the room.
 */
 function collectBiggestDroppedEnergy(creep) {
-  var dropped = creep.room.find(FIND_DROPPED_RESOURCES, {
-    filter: {
-      resourceType: RESOURCE_ENERGY
-    }
-  });
+  var dropped = creep.room.memory.droppedEnergy;
 
   if (dropped.length) {
-    dropped = _.sortBy(dropped, e => {
+    sortedDropped = _.sortBy(dropped, e => {
       return e.amount
     });
-    if (creep.pickup(_.last(dropped)) == ERR_NOT_IN_RANGE) {
-      creep.moveTo(_.last(dropped), {
+    if (creep.pickup(_.last(sortedDropped)) == ERR_NOT_IN_RANGE) {
+      creep.moveTo(_.last(sortedDropped), {
         visualizePathStyle: {
           stroke: '#ffff00'
         }
@@ -50,17 +46,13 @@ function collectBiggestDroppedEnergy(creep) {
   Finds the biggest pile of dropped energy in the room
 */
 function findBiggestDroppedEnergy(creep) {
-  var dropped = creep.room.find(FIND_DROPPED_RESOURCES, {
-    filter: {
-      resourceType: RESOURCE_ENERGY
-    }
-  });
+  var dropped = creep.room.memory.droppedEnergy;
 
   if (dropped.length) {
-    dropped = _.sortBy(dropped, e => {
+    sortedDropped = _.sortBy(sortedDropped, e => {
       return e.amount
     });
-    return _.last(dropped);
+    return _.last(sortedDropped);
   } else {
     return null;
   }

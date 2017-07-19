@@ -20,9 +20,7 @@ module.exports = {
       spawn.room.memory.spawnQueue.push('miner');
     }
 
-    var totalDropped = _.sum(_.map(spawn.room.find(FIND_DROPPED_RESOURCES, {
-      filter: {resourceType: RESOURCE_ENERGY}
-    }), dropped => dropped.amount));
+    var totalDropped = _.sum(_.map(spawn.room.memory.droppedEnergy, dropped => dropped.amount));
     if (Math.floor(totalDropped/300) - (rolesNum.courier || 0) > 0) {
       spawn.room.memory.spawnQueue.push('courier');
     }

@@ -341,11 +341,7 @@ _.forEach(Game.rooms, room => {
     });
 
     // Create energy collection jobs
-    _.forEach(room.find(FIND_DROPPED_RESOURCES, {
-      filter: {
-        resourceType: RESOURCE_ENERGY
-      }
-    }), dropped => {
+    _.forEach(room.memory.droppedEnergy, dropped => {
 
       for (var i=0; i<1+Math.floor(dropped.amount/300); i++) {
 
