@@ -352,7 +352,7 @@ _.forEach(Game.rooms, room => {
     var containers = room.memory.structuresByType.container;
     _.forEach(containers, container => {
       let realContainer = Game.getObjectById(container.id);
-      for (var i=0; i<Math.floor(realContainer.store[RESOURCE_ENERGY/300]); i++) {
+      for (var i=0; i<Math.floor(realContainer.store[RESOURCE_ENERGY]/300); i++) {
         room.memory.jobs.push({
           creepType: 'courier',
           action: 'withdrawEnergy',
@@ -363,6 +363,11 @@ _.forEach(Game.rooms, room => {
         });
       }
     });
+
+    // Create energy withdrawal jobs for upgraders
+    for (var i=0; i<Math.floor(room.storage.store[RESOURCE_ENERGY]/300; i++)) {
+      
+    }
 
     let creeps = room.memory.myCreeps;
 
