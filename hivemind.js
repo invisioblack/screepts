@@ -391,12 +391,25 @@ hivemind.assignJobs = () => {
 }
 
 hivemind.think = () => {
+let profiler = {};
+profiler.init = Game.cpu.getUsed();
+
 hivemind.planRoom();
+profiler.planRooms = Game.cpu.getUsed() - _.sum(profiler);
 hivemind.buildRoads();
+profiler.buildRoads = Game.cpu.getUsed() - _.sum(profiler);
 hivemind.buildStructures();
+profiler.buildStructures = Game.cpu.getUsed() - _.sum(profiler);
 hivemind.interpretFlags();
+profiler.interpretFlags = Game.cpu.getUsed() - _.sum(profiler);
 hivemind.cleanUpCreepMemory();
+profiler.cleanUpCreepMemory = Game.cpu.getUsed() - _.sum(profiler);
 hivemind.scheduleDeconstructions();
+profiler.scheduleDeconstructions = Game.cpu.getUsed() - _.sum(profiler);
 hivemind.createJobs();
+profiler.createJobs = Game.cpu.getUsed() - _.sum(profiler);
 hivemind.assignJobs();
+profiler.assignJobs = Game.cpu.getUsed() - _.sum(profiler);
+
+Memory.stats.hivemindProfiler = profiler;
 }
