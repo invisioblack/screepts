@@ -11,9 +11,10 @@ module.exports = {
       _.forEach(towers, tower => {
         if (tower.energy < tower.energyCapacity) {
 
-          let result = creep.transfer(tower, RESOURCE_ENERGY);
+          let target = Game.getObjectById(tower.id);
+          let result = creep.transfer(target, RESOURCE_ENERGY);
           if (result == ERR_NOT_IN_RANGE) {
-            creep.moveTo(tower);
+            creep.moveTo(target);
           }
           supplied = true;
 
