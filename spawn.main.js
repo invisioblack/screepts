@@ -22,7 +22,10 @@ module.exports = {
 
     var totalDropped = _.sum(_.map(spawn.room.memory.droppedEnergy, dropped => dropped.amount));
     if (Math.floor(totalDropped/300) - (rolesNum.courier || 0) > 0) {
-      spawn.room.memory.spawnQueue.push('courier');
+      if (!(rolesNum.courier && rolesNum.courier > 10)) {
+        spawn.room.memory.spawnQueue.push('courier');
+      }
+
     }
 
     if((spawn.room.memory.constructionSites.length/3) - (rolesNum.builder || 0) > 0) {

@@ -7,13 +7,17 @@ module.exports = {
   /** @param {Creep} creep **/
   run: function(creep) {
 
-    if (creep.carry.energy < creep.carryCapacity) {
+    if (creep.carry.energy == 0) {
 
-      if (creep.memory.job) {
+       if (creep.memory.job) {
         let job = creep.memory.job;
         jobActions[job.action](creep, job);
       } else {
-        actions.recycleSelf(creep);
+        if (!actions.collectBiggestDroppedEnergy(creep)) {
+         if (!actions.withdrawFromNearestContainer(creep)) {
+            actions.recycleSelf(creep);
+         }
+       }
       }
 
     } else {

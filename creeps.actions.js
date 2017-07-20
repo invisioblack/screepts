@@ -29,8 +29,10 @@ function collectBiggestDroppedEnergy(creep) {
     sortedDropped = _.sortBy(dropped, e => {
       return e.amount
     });
-    if (creep.pickup(_.last(sortedDropped)) == ERR_NOT_IN_RANGE) {
-      creep.moveTo(_.last(sortedDropped), {
+    let biggestDropped = Game.getObjectById(_.last(sortedDropped).id);
+
+    if (creep.pickup(biggestDropped) == ERR_NOT_IN_RANGE) {
+      creep.moveTo(biggestDropped, {
         visualizePathStyle: {
           stroke: '#ffff00'
         }
