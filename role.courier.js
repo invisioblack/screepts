@@ -13,9 +13,7 @@ module.exports = {
         let job = creep.memory.job;
         jobActions[job.action](creep, job);
       } else {
-          if (!actions.withdrawFromNearestContainer(creep)) {
-            actions.recycleSelf(creep);
-          }
+        actions.recycleSelf(creep);
       }
 
     } else {
