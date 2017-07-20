@@ -19,15 +19,26 @@ module.exports.loop = function() {
 
   stats.clearStats();
 
+  var roleProfiler = {};
+
   for (var name in Game.creeps) {
     var creep = Game.creeps[name];
 
     for (var role in roles) {
+      if (!roleProfiler[role]) {
+        roleProfiler[role] = 0;
+      }
+      var cpuBefore = Game.cpu.getUsed();
+
       if (creep.memory.role == role) {
         roles[role].behavior.run(creep);
         creep.room.visual.text(role, creep.pos);
+
+        var cpuAfter = Game.cpu.getUsed();
+        roleProfiler[role] += cpuAfter-cpuBefore;
       }
     }
+
   }
 
   profiler.creeps = Game.cpu.getUsed() - _.sum(profiler);
@@ -66,4 +77,5 @@ module.exports.loop = function() {
   Memory.stats['profiler.rooms'] = profiler.rooms;
   Memory.stats['profiler.towers'] = profiler.towers;
   Memory.stats['profiler.hivemind'] = profiler.hivemind;
+  Memory.stats.roleProfiler = roleProfiler;
 }
