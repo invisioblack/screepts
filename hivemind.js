@@ -399,20 +399,35 @@ hivemind.assignJobs = () => {
       _.forEach(jobs, job => {
         switch (job.creepType) {
           case 'builder':
-            if (builders.length < 1 || _.head(builders).memory.job)
-              return;
+            if (builders.length < 1)
+              break;
+
+            while (_.head(builders).memory.job){
+              builders = _.tail(builders);
+            }
+
             _.head(builders).memory.job = job;
             builders = _.tail(builders);
             break;
           case 'courier':
             if (couriers.length < 1 || _.head(couriers).memory.job)
-              return;
+              break;
+
+            while (_.head(couriers).memory.job){
+              couriers = _.tail(couriers);
+            }
+
             _.head(couriers).memory.job = job;
             couriers = _.tail(couriers);
             break;
           case 'upgrader':
-            if (upgraders.length < 1 || _.head(upgraders).memory.job)
-              return;
+            if (upgraders.length < 1)
+              break;
+
+            while (_.head(upgraders).memory.job){
+              upgraders = _.tail(upgraders);
+            }
+
             _.head(upgraders).memory.job = job;
             upgraders = _.tail(upgraders);
             break;
