@@ -365,8 +365,15 @@ _.forEach(Game.rooms, room => {
     });
 
     // Create energy withdrawal jobs for upgraders
-    for (var i=0; i<Math.floor(room.storage.store[RESOURCE_ENERGY]/300; i++)) {
-      
+    for (var i=0; i<Math.floor(room.storage.store[RESOURCE_ENERGY]/300); i++) {
+      room.memory.jobs.push({
+        creepType: 'upgrader',
+        action: 'withdrawEnergy',
+        priority: 2,
+        secondaryPriority: 1,
+        room: room.name,
+        target: room.storage.id
+      });
     }
 
     let creeps = room.memory.myCreeps;
@@ -384,9 +391,10 @@ hivemind.assignJobs = () => {
   _.forEach(Game.rooms, room => {
     if (room.controller && room.controller.my) {
       let jobs = _.sortBy(room.memory.jobs, job => job.priority);
-      let creeps = room.memory.myCreeps;
+      let creeps = _.map(room.memory.myCreeps, creep => Game.getObjectById(creep.id));
       let builders = _.filter(creeps, creep => creep.memory.role=='builder');
       let couriers = _.filter(creeps, creep => creep.memory.role=='courier');
+      let upgraders = _.filter(creeps, creep => creep.memory.role=='upgrader');
 
       _.forEach(jobs, job => {
         switch (job.creepType) {
@@ -401,6 +409,12 @@ hivemind.assignJobs = () => {
               return;
             _.head(couriers).memory.job = job;
             couriers = _.tail(couriers);
+            break;
+          case 'upgrader':
+            if (upgraders.length < 1)
+              return;
+            _.head(upgraders).memory.job = job;
+            upgraders = _.tail(upgraders);
             break;
         }
       });

@@ -22,9 +22,11 @@ module.exports = {
     if (room.controller && room.controller.my) {
       room.memory.droppedEnergy = room.find(FIND_DROPPED_RESOURCES, {filter: {resourceType: RESOURCE_ENERGY}});
       room.memory.structures = room.find(FIND_STRUCTURES);
-      room.memory.structuresByType = _.groupBy(room.find(FIND_STRUCTURES), 'structureType');
+      room.memory.structuresByType = _.groupBy(room.memory.structures, 'structureType');
       room.memory.constructionSites = room.find(FIND_CONSTRUCTION_SITES);
       room.memory.myCreeps = room.find(FIND_MY_CREEPS);
+      room.memory.myCreepsByRole = _.groupBy(room.memory.myCreeps, creep => creep.memory.role);
+
     }
 
 
