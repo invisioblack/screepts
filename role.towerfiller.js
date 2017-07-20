@@ -9,9 +9,20 @@ module.exports = {
       }
     } else {
       var towers = _.filter(creep.room.memory.structures, {structureType: STRUCTURE_TOWER});
-      if (towers.length > 0 && towers[0].energy < towers[0].energyCapacity) {
-        actions.dumpEnergyAt(creep, STRUCTURE_TOWER);
-      } else {
+      var supplied = false;
+      _.forEach(towers, tower => {
+        if (tower.energy < tower.energyCapacity) {
+
+          let result = creep.transfer(tower, RESOURCE_ENERGY);
+          if (result == ERR_NOT_IN_RANGE) {
+            creep.moveTo(tower);
+          }
+          supplied = true;
+
+        }
+      });
+
+      if (!supplied) {
         actions.recycleSelf(creep);
       }
 

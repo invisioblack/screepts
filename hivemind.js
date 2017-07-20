@@ -192,7 +192,7 @@ return PathFinder.search(from, {
 
 hivemind.buildRoads = () => {
 _.forEach(Game.rooms, roomInst => {
-  if (roomInst.controller && roomInst.controller.my && roomInst.executeEveryTicks(200) && roomInst.memory.plan) {
+  if (roomInst.controller && roomInst.controller.my && roomInst.memory.constructionSites.length < 1 && roomInst.executeEveryTicks(200) && roomInst.memory.plan) {
     _.forEach(roomInst.memory.plan.roads, road => {
       _.forEach(road, point => {
         roomInst.createConstructionSite(point.x, point.y, STRUCTURE_ROAD);
