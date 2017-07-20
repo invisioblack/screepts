@@ -59,10 +59,25 @@ function collectEnergyAction(creep, job) {
   }
 }
 
+function withdrawEnergyAction(creep, job) {
+  let target = Game.getObjectById(job.target);
+  if (target) {
+    let result = creep.withdraw(job.target, RESOURCE_ENERGY);
+    if (result == ERR_NOT_IN_RANGE) {
+      creep.moveTo(target);
+    } else if (result == OK) {
+      delete creep.memory.job;
+    }
+  } else {
+    delete creep.memory.job;
+  }
+}
+
 module.exports = {
   build: buildAction,
   upgrade: upgradeAction,
   dumpEnergy: dumpEnergyAction,
   recycleSelf: recycleSelfAction,
-  collectEnergy: collectEnergyAction
+  collectEnergy: collectEnergyAction,
+  withdrawEnergy: withdrawEnergyAction
 };
