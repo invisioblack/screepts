@@ -62,7 +62,8 @@ function collectEnergyAction(creep, job) {
 function withdrawEnergyAction(creep, job) {
   let target = Game.getObjectById(job.target);
   if (target) {
-    let result = creep.withdraw(job.target, RESOURCE_ENERGY);
+    let result = creep.withdraw(target, RESOURCE_ENERGY);
+    console.log(result);
     if (result == ERR_NOT_IN_RANGE) {
       creep.moveTo(target);
     } else if (result == OK) {
