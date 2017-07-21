@@ -65,19 +65,15 @@ function findBiggestDroppedEnergy(creep) {
   Returns true if there is a structure with non-zero energy reserves anywhere
   in the room, false otherwise
 */
-function withdrawFromNearestEnergyStructure(creep, structureType) {
-  var target = creep.pos.findClosestByPath(FIND_STRUCTURES, {
-    filter: structure => {
-      return structure.structureType == structureType && structure.store[RESOURCE_ENERGY] > 0
-    }
-  });
-
+function withdrawFromNearestEnergyStructure(creep, target) {
   if (target && creep.withdraw(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
     creep.moveTo(target, {
       visualizePathStyle: {
         stroke: '#ffff00'
       }
     });
+  } else {
+    return false;
   }
 
   if (target) {
@@ -89,11 +85,17 @@ function withdrawFromNearestEnergyStructure(creep, structureType) {
 }
 
 function withdrawFromNearestContainer(creep) {
-  return withdrawFromNearestEnergyStructure(creep, STRUCTURE_CONTAINER);
+  var target = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+    filter: structure => {
+      return structure.structureType == STRUCTURE_CONTAINER && structure.store[RESOURCE_ENERGY] > 0
+    }
+  });
+
+  return withdrawFromNearestEnergyStructure(creep, target);
 }
 
 function withdrawFromNearestStorage(creep) {
-  return withdrawFromNearestEnergyStructure(creep, STRUCTURE_STORAGE);
+  return withdrawFromNearestEnergyStructure(creep, creep.room.storage);
 }
 
 /*
