@@ -220,20 +220,20 @@ _.forEach(Game.rooms, room => {
 }
 
 hivemind.scheduleDismantling = (room, plannedList, structureType) => {
-_.forEach(_.filter(room.memory.structures, {structureType: structureType}), structure => {
-  if (!_.some(plannedList, plannedStruct => plannedStruct.x == structure.pos.x && plannedStruct.y == structure.pos.y) && !_.some(room.memory.plan.dismantle, toDismantle => toDismantle.x == structure.pos.x && toDismantle.y == structure.pos.y)) {
-    room.memory.plan.dismantle.push(structure.pos);
-  }
-});
+  _.forEach(room.memory.structuresByType.spawn, structure => {
+    if (!_.some(plannedList, plannedStruct => plannedStruct.x == structure.pos.x && plannedStruct.y == structure.pos.y) && !_.some(room.memory.plan.dismantle, toDismantle => toDismantle.x == structure.pos.x && toDismantle.y == structure.pos.y)) {
+      room.memory.plan.dismantle.push(structure.pos);
+    }
+  });
 }
 
 hivemind.scheduleDeconstructions = () => {
-_.forEach(Game.rooms, room => {
-  if (room.controller && room.controller.my && room.executeEveryTicks(200) && room.memory.plan) {
-    hivemind.scheduleDismantling(room, room.memory.plan.extensions, STRUCTURE_EXTENSION);
-    hivemind.scheduleDismantling(room, _.flatten(room.memory.plan.roads), STRUCTURE_ROAD);
-  }
-});
+  _.forEach(Game.rooms, room => {
+    if (room.controller && room.controller.my && room.executeEveryTicks(200) && room.memory.plan) {
+      hivemind.scheduleDismantling(room, room.memory.plan.extensions, STRUCTURE_EXTENSION);
+      hivemind.scheduleDismantling(room, _.flatten(room.memory.plan.roads), STRUCTURE_ROAD);
+    }
+  });
 }
 
 hivemind.cleanUpDeconstructions = () => {
@@ -288,7 +288,7 @@ _.forEach(Game.flags, flag => {
       break;
     case COLOR_ORANGE:
       if (flag.room && flag.room.controller.my) {
-        var spawns = _.filter(flag.room.memory.structures, { structureType: STRUCTURE_SPAWN });
+        var spawns = flag.room.memory.structuresByType.spawn;
         _.forEach(spawns, spawn => {
           var road = hivemind.roadFromTo(spawn.pos, flag.pos);
           flag.room.memory.plan.roads.push(road.path);

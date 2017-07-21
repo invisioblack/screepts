@@ -7,7 +7,7 @@ module.exports = {
     // Init source assignments if there are none
     if (!creep.room.memory.sourcesToMiners) {
       creep.room.memory.sourcesToMiners = {};
-      var sources = creep.room.find(FIND_SOURCES);
+      var sources = creep.room.memory.sources;
 
       for (var source in sources) {
         creep.room.memory.sourcesToMiners[sources[source].id] = null;
@@ -16,7 +16,7 @@ module.exports = {
 
     // Find first unclaimed source and claim it
     if (!creep.memory.mySource) {
-      var sources = creep.room.find(FIND_SOURCES);
+      var sources = creep.room.memory.sources;
 
       for (var source in creep.room.memory.sourcesToMiners) {
         if (creep.room.memory.sourcesToMiners[source] == null) {

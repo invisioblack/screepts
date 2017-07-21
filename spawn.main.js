@@ -34,7 +34,7 @@ module.exports = {
       }
     }
 
-    var towers = _.filter(spawn.room.memory.structures, struct => struct.structureType == STRUCTURE_TOWER && struct.energy > struct.energyCapacity);
+    var towers = _.filter(spawn.room.memory.structuresByType.tower, struct => struct.energy > struct.energyCapacity);
     for(var i=0; i<towers.length - (spawn.room.memory.myCreepsByRole.towerfiller || 0); i++) {
       spawn.room.memory.spawnQueue.push({role: 'towerfiller', memory: { target: towers[i].id }});
     }

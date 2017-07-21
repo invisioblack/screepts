@@ -192,7 +192,7 @@ function dumpEnergyAt(creep, structureType) {
 */
 function repairNearest(creep) {
   var target = creep.pos.findClosestByPath(FIND_STRUCTURES, {
-    filter: object => object.hits < object.hitsMax
+    filter: object => object.structureType != STRUCTURE_ROAD && object.hits < object.hitsMax
   });
 
   if (target && creep.repair(target) == ERR_NOT_IN_RANGE) {
