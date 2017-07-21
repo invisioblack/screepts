@@ -392,9 +392,9 @@ hivemind.assignJobs = () => {
     if (room.controller && room.controller.my) {
       let jobs = _.sortBy(room.memory.jobs, job => job.priority);
       let creeps = _.map(room.memory.myCreeps, creep => Game.getObjectById(creep.id));
-      let builders = _.filter(creeps, creep => creep.memory.role=='builder');
-      let couriers = _.filter(creeps, creep => creep.memory.role=='courier');
-      let upgraders = _.filter(creeps, creep => creep.memory.role=='upgrader');
+      let builders = _.filter(creeps, creep => creep.memory.role == 'builder');
+      let couriers = _.filter(creeps, creep => creep.memory.role == 'courier');
+      let upgraders = _.filter(creeps, creep => creep.memory.role == 'upgrader');
 
       _.forEach(jobs, job => {
         switch (job.creepType) {
@@ -402,34 +402,40 @@ hivemind.assignJobs = () => {
             if (builders.length < 1)
               break;
 
-            while (_.head(builders).memory.job){
+            while (_.head(builders) && _.head(builders).memory.job) {
               builders = _.tail(builders);
             }
 
-            _.head(builders).memory.job = job;
-            builders = _.tail(builders);
+            if (_.head(builders)) {
+              _.head(builders).memory.job = job;
+              builders = _.tail(builders);
+            }
             break;
           case 'courier':
             if (couriers.length < 1 || _.head(couriers).memory.job)
               break;
 
-            while (_.head(couriers).memory.job){
+            while (_.head(couriers) && _.head(couriers).memory.job) {
               couriers = _.tail(couriers);
             }
 
-            _.head(couriers).memory.job = job;
-            couriers = _.tail(couriers);
+            if (_.head(couriers)) {
+              _.head(couriers).memory.job = job;
+              couriers = _.tail(couriers);
+            }
             break;
           case 'upgrader':
             if (upgraders.length < 1)
               break;
 
-            while (_.head(upgraders).memory.job){
+            while (_.head(upgraders).memory.job) {
               upgraders = _.tail(upgraders);
             }
 
-            _.head(upgraders).memory.job = job;
-            upgraders = _.tail(upgraders);
+            if (_.head(upgraders)) {
+              _.head(upgraders).memory.job = job;
+              upgraders = _.tail(upgraders);
+            }
             break;
         }
       });
