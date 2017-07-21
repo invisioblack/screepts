@@ -6,31 +6,21 @@ module.exports = {
     if(creep.carry.energy < creep.carryCapacity) {
       actions.withdrawFromNearestStorage(creep);
     } else {
-      var towers = _.filter(creep.room.memory.structures, {structureType: STRUCTURE_TOWER});
-      var supplied = false;
-      _.forEach(towers, tower => {
-        if (tower.energy < tower.energyCapacity) {
 
-          let target = Game.getObjectById(tower.id);
-          let result = creep.transfer(target, RESOURCE_ENERGY);
-          if (result == ERR_NOT_IN_RANGE) {
-            creep.moveTo(target);
-          }
-          supplied = true;
+      let tower = Game.getObjectById(creep.memory.target);
+      if (tower.energy < tower.energyCapacity) {
 
+        let target = Game.getObjectById(tower.id);
+        let result = creep.transfer(target, RESOURCE_ENERGY);
+        if (result == ERR_NOT_IN_RANGE) {
+          creep.moveTo(target);
         }
-      });
-
-      if (!supplied) {
-        actions.recycleSelf(creep);
       }
 
     }
   },
 
-  create: function(spawn) {
-    return spawn.createCreep(bodies.createBasic(), memory = {
-      role: 'towerfiller'
-    });
+  create: function(spawn, memory) {
+    return spawn.createCreep(bodies.createBasic(), memory = Object.assign({}, {role: 'towerfiller'}, memory));
   }
 }
