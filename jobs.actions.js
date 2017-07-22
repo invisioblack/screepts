@@ -51,7 +51,7 @@ function collectEnergyAction(creep, job) {
     let result = creep.pickup(target);
     if (result == ERR_NOT_IN_RANGE) {
       creep.moveTo(target);
-    } else if (result == OK) {
+    } else if (result == OK && (!target || target.amount <= 0 || _.sum(creep.carry) === creep.carryCapacity)) {
       delete creep.memory.job;
     }
   } else {
@@ -65,7 +65,7 @@ function withdrawEnergyAction(creep, job) {
     let result = creep.withdraw(target, RESOURCE_ENERGY);
     if (result == ERR_NOT_IN_RANGE) {
       creep.moveTo(target);
-    } else if (result == OK) {
+    } else if (result == OK && (!target || target.store[RESOURCE_ENERGY] <= 0) || _.sum(creep.carry) === creep.carryCapacity) {
       delete creep.memory.job;
     }
   } else {
