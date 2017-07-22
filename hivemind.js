@@ -4,6 +4,7 @@ const actions = require('jobs.actions');
 const priorities = require('jobs.priorities');
 
 const courierJobs = require('jobs.courier');
+const upgraderJobs = require('jobs.upgrader');
 
 hivemind = {};
 
@@ -368,6 +369,7 @@ hivemind.assignJobs = () => {
 
 
       courierJobs.assignJobs(room, couriers);
+      upgraderJobs.assignJobs(room, upgraders);
 
       _.forEach(jobs, job => {
         switch (job.creepType) {

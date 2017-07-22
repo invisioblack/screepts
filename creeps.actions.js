@@ -76,7 +76,7 @@ function withdrawFromNearestEnergyStructure(creep, target) {
     return false;
   }
 
-  if (target) {
+  if (target && target.store[RESOURCE_ENERGY] > 0 ) {
     return true;
   } else {
     return false;
