@@ -11,6 +11,12 @@ function getOppositeDirection(direction) {
 */
 module.exports = {
   run: function(creep) {
+
+    if (creep.ticksToLive < 200) {
+      actions.recycleSelf(creep);
+      return;
+    }
+
     var target = creep.pos.findClosestByPath(FIND_HOSTILE_CREEPS, {
       filter: c => {
         return !_.includes(config.allies, c.owner);
@@ -30,7 +36,7 @@ module.exports = {
   },
 
   create: function(spawn) {
-    return spawn.createCreep(bodies.createStrongestMelee(spawn, [TOUGH, MOVE]), memory = {
+    return spawn.createCreep(bodies.createStrongestMelee(spawn, [TOUGH, MOVE, MOVE, MOVE, MOVE, MOVE]), memory = {
       role: 'sentinel'
     });
   }

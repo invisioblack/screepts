@@ -25,7 +25,6 @@ module.exports = {
       if (!(rolesNum.courier && rolesNum.courier > 10)) {
         spawn.room.memory.spawnQueue.push({role: 'courier'});
       }
-
     }
 
     if((spawn.room.memory.constructionSites.length/3) - (rolesNum.builder || 0) > 0) {
@@ -39,10 +38,8 @@ module.exports = {
       spawn.room.memory.spawnQueue.push({role: 'towerfiller', memory: { target: towers[i].id }});
     }
 
-    if (!rolesNum.upgrader || rolesNum.upgrader < 6) {
-      if(spawn.room.storage.store[RESOURCE_ENERGY]/spawn.room.storage.storeCapacity > 0.0045) {
-        spawn.room.memory.spawnQueue.push({role: 'upgrader'});
-      }
+    if(spawn.room.storage.store[RESOURCE_ENERGY]/spawn.room.storage.storeCapacity > 0.0045) {
+      spawn.room.memory.spawnQueue.push({role: 'upgrader'});
     }
 
     if (!rolesNum.repairman || rolesNum.repairman < 1) {

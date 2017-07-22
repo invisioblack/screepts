@@ -332,38 +332,6 @@ _.forEach(Game.rooms, room => {
       });
     });
 
-    // Create energy collection jobs
-    _.forEach(room.memory.droppedEnergy, dropped => {
-
-      for (var i=0; i<1+Math.floor(dropped.amount/300); i++) {
-        room.memory.jobs.push({
-          creepType: 'courier',
-          action: 'collectEnergy',
-          priority: 1,
-          secondaryPriority: 1,
-          room: dropped.pos.roomName,
-          target: dropped.id
-        });
-      }
-
-    });
-
-    // Create energy withdrawal jobs
-    var containers = room.memory.structuresByType.container;
-    _.forEach(containers, container => {
-      let realContainer = Game.getObjectById(container.id);
-      for (var i=0; i<Math.floor(realContainer.store[RESOURCE_ENERGY]/300); i++) {
-        room.memory.jobs.push({
-          creepType: 'courier',
-          action: 'withdrawEnergy',
-          priority: 2,
-          secondaryPriority: 1,
-          room: container.pos.roomName,
-          target: container.id
-        });
-      }
-    });
-
     // Create energy withdrawal jobs for upgraders
     for (var i=0; i<Math.floor(room.storage.store[RESOURCE_ENERGY]/300); i++) {
       room.memory.jobs.push({
@@ -393,8 +361,54 @@ hivemind.assignJobs = () => {
       let jobs = _.sortBy(room.memory.jobs, job => job.priority);
       let creeps = _.map(room.memory.myCreeps, creep => Game.getObjectById(creep.id));
       let builders = _.filter(creeps, creep => creep.memory.role == 'builder');
-      let couriers = _.filter(creeps, creep => creep.memory.role == 'courier');
+      let couriers = _.filter(creeps, creep => creep.memory.role == 'courier' && !creep.memory.job);
       let upgraders = _.filter(creeps, creep => creep.memory.role == 'upgrader');
+
+
+      var containers = _.map(_.filter(room.memory.structuresByType.container, container => container.store[RESOURCE_ENERGY] > 0), container => Game.getObjectById(container.id));
+      var droppedEnergy = _.map(room.memory.droppedEnergy, de => Game.getObjectById(de.id));
+      _.forEach(couriers, courier => {
+        if (courier.carry.energy > 0) {
+          return;
+        }
+
+        let target = courier.pos.findClosestByPath(droppedEnergy);
+        if (target) {
+          courier.memory.job = {
+            action: 'collectEnergy',
+            room: courier.pos.roomName,
+            target: target.id
+          };
+
+          target.amount -= 300;
+          if (target.amount <= 0) {
+            _.remove(droppedEnergy, dropped => dropped.id == target.id);
+          }
+        } else {
+          target = courier.pos.findClosestByPath(containers);
+          if(target) {
+            courier.memory.job = {
+              action: 'withdrawEnergy',
+              room: courier.pos.roomName,
+              target: target.id
+            }
+
+            target.store[RESOURCE_ENERGY] -= 300;
+            if (target.amount <= 0) {
+              _.remove(containers, container => container.id == target.id);
+            }
+          } else {
+            target = courier.pos.findClosestByPath(room.memory.structuresByType.spawn);
+            if (target) {
+              courier.memory.job = {
+                action: 'recycleSelf',
+                target: target.id
+              }
+            }
+          }
+        }
+      });
+
 
       _.forEach(jobs, job => {
         switch (job.creepType) {
@@ -409,19 +423,6 @@ hivemind.assignJobs = () => {
             if (_.head(builders)) {
               _.head(builders).memory.job = job;
               builders = _.tail(builders);
-            }
-            break;
-          case 'courier':
-            if (couriers.length < 1 || _.head(couriers).memory.job)
-              break;
-
-            while (_.head(couriers) && _.head(couriers).memory.job) {
-              couriers = _.tail(couriers);
-            }
-
-            if (_.head(couriers)) {
-              _.head(couriers).memory.job = job;
-              couriers = _.tail(couriers);
             }
             break;
           case 'upgrader':
