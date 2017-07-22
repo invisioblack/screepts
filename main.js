@@ -45,7 +45,7 @@ module.exports.loop = function() {
 
   _.forEach(Game.spawns, spawn => {
     spawnModule.spawnBehavior(spawn);
-  })
+  });
 
   profiler.spawns = Game.cpu.getUsed() - _.sum(profiler);
 
@@ -56,7 +56,7 @@ module.exports.loop = function() {
     }
 
     hivemind.visualizePlans(room);
-  })
+  });
 
   profiler.rooms = Game.cpu.getUsed() - _.sum(profiler);
 
