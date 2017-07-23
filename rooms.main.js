@@ -6,8 +6,6 @@ module.exports = {
     }
 
     room.memory.initialized = true;
-    console.log(room.controller);
-    console.log(room.controller.my);
     room.memory.my = room.controller && room.controller.my;
 
     if(!room.memory.my){

@@ -6,6 +6,7 @@ const priorities = require('jobs.priorities');
 const courierJobs = require('jobs.courier');
 const upgraderJobs = require('jobs.upgrader');
 const reclaimerJobs = require('jobs.reclaimer');
+const nextroomerJobs = require('jobs.nextroomer');
 
 hivemind = {};
 
@@ -86,7 +87,7 @@ hivemind.designRoom = room => {
     _.forEach(room.memory.exits, exit => {
       if (exit) {
         let closestExit = plan.storage.findClosestByPath(_.map(exit, e => room.getPositionAt(e.x, e.y)));
-        let road = hivemind.roadFromTo(plan.storage, closestExit);
+        let road = hivemind.roadFromTo(plan.storage, closestExit, range=0);
         roads.push(road.path);
       }
     });
@@ -231,10 +232,10 @@ freePositions = _.forEach(freePositions, position => {
 return cleaned;
 }
 
-hivemind.roadFromTo = (from, to) => {
+hivemind.roadFromTo = (from, to, range=1) => {
 return PathFinder.search(from, {
   pos: to,
-  range: 1
+  range: range
 }, {
   plainCost: 1,
   swampCost: 1,
@@ -274,28 +275,6 @@ _.forEach(Game.rooms, room => {
 
   }
 });
-}
-
-hivemind.scheduleDismantling = (room, plannedList, structureType) => {
-  _.forEach(room.memory.structuresByType.spawn, structure => {
-    if (!_.some(plannedList, plannedStruct => plannedStruct.x == structure.pos.x && plannedStruct.y == structure.pos.y) && !_.some(room.memory.plan.dismantle, toDismantle => toDismantle.x == structure.pos.x && toDismantle.y == structure.pos.y)) {
-      room.memory.plan.dismantle.push(structure.pos);
-    }
-  });
-}
-
-hivemind.scheduleDeconstructions = () => {
-  _.forEach(Game.rooms, room => {
-    if (room.controller && room.controller.my && room.executeEveryTicks(200) && room.memory.plan) {
-      hivemind.scheduleDismantling(room, room.memory.plan.extensions, STRUCTURE_EXTENSION);
-      hivemind.scheduleDismantling(room, _.flatten(room.memory.plan.roads), STRUCTURE_ROAD);
-    }
-  });
-}
-
-hivemind.cleanUpDeconstructions = () => {
-var newDeconstructions = [];
-_forEach(Game.rooms, room => {});
 }
 
 hivemind.regenerateRoomPlans = () => {
@@ -382,12 +361,41 @@ _.forEach(Game.flags, flag => {
 });
 }
 
-hivemind.isJobEqual = job1 => job2 => {
-if (!job1 || !job2) {
-  return false;
+hivemind.manageNextRooms = () => {
+  _.forEach(Game.rooms, room => {
+    if(!room.memory.my) {
+      return;
+    } else if (!room.memory.structuresByType.spawn) {
+      let myRooms = _.filter(Game.rooms, otherRoom => otherRoom.memory.my && otherRoom.name != room.name);
+      let sortedRooms = _.sortBy(myRooms, otherRoom => Game.map.getRoomLinearDistance(room.name, otherRoom.name));
+      let closestRoom = _.head(sortedRooms);
+
+      let totalNextroomersAlreadySent =
+      _.filter(Game.creeps, creep => creep.memory.role == 'nextroomer' && creep.memory.originRoom == closestRoom.name).length +
+      _.filter(closestRoom.memory.spawnQueue, item => item.role == 'nextroomer' && item.memory.originRoom == closestRoom.name).length;
+
+      if (totalNextroomersAlreadySent < 6) {
+        closestRoom.memory.spawnQueue.push({role: 'nextroomer', memory: {originRoom: closestRoom.name, targetRoom: room.name}});
+      }
+
+      let creeps = _.map(closestRoom.memory.myCreeps, creep => Game.getObjectById(creep.id));
+      let nextroomers = _.filter(creeps, creep => creep.memory.role == 'nextroomer' && !creep.memory.job && creep.memory.originRoom == closestRoom.name);
+      nextroomerJobs.assignJobs(closestRoom, nextroomers);
+
+      creeps = _.map(room.memory.myCreeps, creep => Game.getObjectById(creep.id));
+      nextroomers = _.filter(creeps, creep => creep.memory.role == 'nextroomer' && !creep.memory.job);
+      nextroomerJobs.assignJobs(room, nextroomers);
+
+    }
+  });
 }
 
-return (job1.creepType == job2.creepType && job1.action == job2.action && job1.priority == job2.priority && job1.room == job2.room && job1.target == job2.target);
+hivemind.isJobEqual = job1 => job2 => {
+  if (!job1 || !job2) {
+    return false;
+  }
+
+  return (job1.creepType == job2.creepType && job1.action == job2.action && job1.priority == job2.priority && job1.room == job2.room && job1.target == job2.target);
 }
 
 hivemind.createJobs = () => {
@@ -463,20 +471,19 @@ hivemind.think = () => {
 let profiler = {};
 profiler.init = Game.cpu.getUsed();
 
-hivemind.buildRoads();
-profiler.buildRoads = Game.cpu.getUsed() - _.sum(profiler);
-hivemind.buildStructures();
-profiler.buildStructures = Game.cpu.getUsed() - _.sum(profiler);
+// hivemind.buildRoads();
+// profiler.buildRoads = Game.cpu.getUsed() - _.sum(profiler);
+// hivemind.buildStructures();
+// profiler.buildStructures = Game.cpu.getUsed() - _.sum(profiler);
 hivemind.interpretFlags();
 profiler.interpretFlags = Game.cpu.getUsed() - _.sum(profiler);
 hivemind.cleanUpCreepMemory();
 profiler.cleanUpCreepMemory = Game.cpu.getUsed() - _.sum(profiler);
-hivemind.scheduleDeconstructions();
-profiler.scheduleDeconstructions = Game.cpu.getUsed() - _.sum(profiler);
 hivemind.createJobs();
 profiler.createJobs = Game.cpu.getUsed() - _.sum(profiler);
 hivemind.assignJobs();
 profiler.assignJobs = Game.cpu.getUsed() - _.sum(profiler);
+hivemind.manageNextRooms();
 
 Memory.stats.hivemindProfiler = profiler;
 }

@@ -80,6 +80,29 @@ function claimRoomAction(creep, job) {
   }
 }
 
+function buildUpRoomAction(creep, job) {
+  if (creep.pos.roomName == job.room) {
+    if (creep.carry.energy == 0) {
+
+    } else {
+      let cs = creep.room.memory.constructionSites;
+      if (creep.room.controller.ticksToDowngrade <= 10000 || !cs || cs.length == 0) {
+        creep.memory.job = {
+          action: 'upgrade',
+          target: creep.room.controller.id
+        };
+      } else {
+        let toBuild = _.head(cs);
+        creep.memory.job = {
+          action: 'build',
+          room: job.room,
+          target: toBuild.id
+        };
+      }
+    }
+  }
+}
+
 function moveToTargetRoom(creep, job){
   let targetRoom = job.room;
 
@@ -101,5 +124,6 @@ module.exports = {
   collectEnergy: collectEnergyAction,
   withdrawEnergy: withdrawEnergyAction,
   claimRoom: claimRoomAction,
+  buildUp: buildUpRoomAction,
   moveToTargetRoom: moveToTargetRoom
 };
