@@ -57,6 +57,51 @@ hivemind.visualizePlans = (room) => {
   }
 };
 
+hivemind.designRoom = room => {
+  if (room.memory.my) {
+    let plan = {};
+
+    // Place spawn
+    plan.spawn = room.controller.pos.findNearPosition().next().value
+                                    .findNearPosition().next().value
+                                    .findNearPosition().next().value
+                                    .findNearPosition().next().value;
+
+    // Place storage
+    plan.storage = room.controller.pos.findNearPosition().next().value
+                                      .findNearPosition().next().value;
+
+    // Place roads
+    let roads = [];
+
+    let sources = room.memory.sources;
+
+    // Connect sources to storage
+    _.forEach(sources, source => {
+      let road = hivemind.roadFromTo(plan.storage, source.pos);
+      roads.push(road.path);
+    });
+
+    // Connect exits to storage
+    _.forEach(room.memory.exits, exit => {
+      if (exit) {
+        let closestExit = plan.storage.findClosestByPath(_.map(exit, e => room.getPositionAt(e.x, e.y)));
+        let road = hivemind.roadFromTo(plan.storage, closestExit);
+        roads.push(road.path);
+      }
+    });
+
+    //Connect mineral to storage
+    let mineral = room.memory.minerals[0].pos;
+    let road = hivemind.roadFromTo(plan.storage, room.getPositionAt(mineral.x, mineral.y));
+    roads.push(road.path);
+
+    plan.roads = roads;
+
+    room.memory.plan = plan;
+  }
+}
+
 hivemind.planRoom = () => {
   _.forEach(Game.rooms, roomInst => {
 
@@ -140,6 +185,9 @@ hivemind.planRoom = () => {
     }
 
     var longestRoad = _.last(_.sortBy(roomInst.memory.plan.roads, road => road.length));
+    if (!longestRoad) {
+      return;
+    }
     longestRoad = _.takeRight(longestRoad, longestRoad.length - 2);
 
     if (!roomInst.memory.plan.extensions) {
@@ -196,7 +244,12 @@ return PathFinder.search(from, {
 
 hivemind.buildRoads = () => {
 _.forEach(Game.rooms, roomInst => {
-  if (roomInst.controller && roomInst.controller.my && roomInst.memory.constructionSites.length < 1 && roomInst.executeEveryTicks(200) && roomInst.memory.plan) {
+  if (roomInst.controller &&
+      roomInst.controller.my &&
+      roomInst.memory.constructionSites &&
+      roomInst.memory.constructionSites.length < 1 &&
+      roomInst.executeEveryTicks(200) &&
+      roomInst.memory.plan) {
     _.forEach(roomInst.memory.plan.roads, road => {
       _.forEach(road, point => {
         roomInst.createConstructionSite(point.x, point.y, STRUCTURE_ROAD);
@@ -410,8 +463,6 @@ hivemind.think = () => {
 let profiler = {};
 profiler.init = Game.cpu.getUsed();
 
-hivemind.planRoom();
-profiler.planRooms = Game.cpu.getUsed() - _.sum(profiler);
 hivemind.buildRoads();
 profiler.buildRoads = Game.cpu.getUsed() - _.sum(profiler);
 hivemind.buildStructures();

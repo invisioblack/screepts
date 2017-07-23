@@ -58,7 +58,7 @@ module.exports = {
 
     if (spawnQueue.length > 0) {
       let creepToSpawn = _.head(spawnQueue);
-      spawnQueue = _.tail(spawnQueue);
+      spawn.room.memory.spawnQueue = _.tail(spawnQueue);
 
       roles[creepToSpawn.role].behavior.create(spawn, memory=creepToSpawn.memory);
       return;

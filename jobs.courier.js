@@ -1,6 +1,9 @@
 module.exports = {
   assignJobs: (room, creeps) => {
     // Couriers
+    if (!room.memory.structuresByType || ! room.memory.structuresByType.container || !room.memory.droppedEnergy) {
+      return;
+    }
     var containers = _.map(_.filter(room.memory.structuresByType.container, container => container.store[RESOURCE_ENERGY] > 0), container => Game.getObjectById(container.id));
     var droppedEnergy = _.map(room.memory.droppedEnergy, de => Game.getObjectById(de.id));
     _.forEach(creeps, courier => {

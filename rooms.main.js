@@ -6,6 +6,8 @@ module.exports = {
     }
 
     room.memory.initialized = true;
+    console.log(room.controller);
+    console.log(room.controller.my);
     room.memory.my = room.controller && room.controller.my;
 
     if(!room.memory.my){
@@ -14,12 +16,17 @@ module.exports = {
 
     room.memory.sources = room.find(FIND_SOURCES);
     room.memory.minerals = room.find(FIND_MINERALS);
-    room.memory.exits = room.find(FIND_EXIT);
+    room.memory.exits = [
+      room.find(FIND_EXIT_TOP),
+      room.find(FIND_EXIT_BOTTOM),
+      room.find(FIND_EXIT_RIGHT),
+      room.find(FIND_EXIT_LEFT),
+    ];
 
   },
 
   roomBehavior: (room) => {
-    if (room.controller && room.controller.my) {
+    if (room.memory.my) {
       room.memory.droppedEnergy = room.find(FIND_DROPPED_RESOURCES, {filter: {resourceType: RESOURCE_ENERGY}});
       room.memory.structuresByType = _.groupBy(room.find(FIND_STRUCTURES), 'structureType');
       room.memory.constructionSites = room.find(FIND_CONSTRUCTION_SITES);
