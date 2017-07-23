@@ -5,6 +5,7 @@ const priorities = require('jobs.priorities');
 
 const courierJobs = require('jobs.courier');
 const upgraderJobs = require('jobs.upgrader');
+const reclaimerJobs = require('jobs.reclaimer');
 
 hivemind = {};
 
@@ -299,6 +300,30 @@ _.forEach(Game.flags, flag => {
       }
       flag.remove();
       break;
+    case COLOR_PURPLE:
+       if (flag.room == undefined || !flag.room.controller.my) {
+         let myRooms = _.filter(Game.rooms, room => room.controller && room.controller.my);
+         let sortedRooms = _.sortBy(myRooms, room => Game.map.getRoomLinearDistance(flag.pos.roomName, room.name));
+         let closestRoom = _.head(sortedRooms);
+
+         if (!_.any(Game.creeps, creep => creep.memory.role == 'reclaimer' && creep.memory.originRoom == closestRoom.name) &&
+             !_.any(closestRoom.memory.spawnQueue, item => item.role == 'reclaimer' && item.memory.originRoom == closestRoom.name)) {
+               closestRoom.memory.spawnQueue.push({role: 'reclaimer', memory: {originRoom: closestRoom.name}});
+         }
+
+         if (!Memory.claimRooms) {
+           Memory.claimRooms = [];
+         }
+
+         if (!_.includes(Memory.claimRooms, flag.pos.roomName)) {
+           Memory.claimRooms.push(flag.pos.roomName);
+         }
+
+         let creeps = _.map(closestRoom.memory.myCreeps, creep => Game.getObjectById(creep.id));
+         let reclaimers = _.filter(creeps, creep => creep.memory.role == 'reclaimer' && !creep.memory.job);
+         reclaimerJobs.assignJobs(closestRoom, reclaimers);
+         break;
+       }
   }
 
 });
@@ -351,7 +376,7 @@ hivemind.assignJobs = () => {
     if (room.controller && room.controller.my) {
       let jobs = _.sortBy(room.memory.jobs, job => job.priority);
       let creeps = _.map(room.memory.myCreeps, creep => Game.getObjectById(creep.id));
-      let builders = _.filter(creeps, creep => creep.memory.role == 'builder');
+      let builders = _.filter(creeps, creep => creep.memory.role == 'builder' && !creep.memory.job);
       let couriers = _.filter(creeps, creep => creep.memory.role == 'courier' && !creep.memory.job);
       let upgraders = _.filter(creeps, creep => creep.memory.role == 'upgrader' && !creep.memory.job);
 

@@ -48,10 +48,6 @@ const createStrongestMelee = (spawn, base = null) => {
 module.exports = {
   reclaimer: [
     CLAIM,
-    CLAIM,
-    CLAIM,
-    CLAIM,
-    CLAIM,
     MOVE
   ],
   reserver: [

@@ -24,6 +24,7 @@ module.exports = {
             return !_.includes(config.allies, spawn.owner.username);
           }
         });
+
         if (target && creep.attack(target) == ERR_NOT_IN_RANGE) {
           creep.moveTo(target);
         }
@@ -47,7 +48,7 @@ module.exports = {
   },
 
   create: function(spawn) {
-    return spawn.createCreep(bodies.createStrongestMelee(spawn, [MOVE, MOVE, MOVE]), memory = {
+    return spawn.createCreep([MOVE, MOVE, MOVE, MOVE, ATTACK, ATTACK, ATTACK, ATTACK], memory = {
       role: 'scout'
     });
   }

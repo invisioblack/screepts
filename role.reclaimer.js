@@ -1,23 +1,26 @@
 const actions = require('creeps.actions');
 const bodies = require('creeps.bodies');
+const jobActions = require('jobs.actions');
 
 
 module.exports = {
   run: function(creep) {
-    if(creep.room.controller.my) {
-      var target = creep.pos.findClosestByPath(FIND_EXIT);
-      if(target) {
-        creep.moveTo(target);
+
+    if (creep.memory.job) {
+      let job = creep.memory.job;
+      if (creep.pos.roomName != creep.memory.job.room) {
+        jobActions.moveToTargetRoom(creep, job);
+      } else {
+        let job = creep.memory.job;
+        jobActions[job.action](creep, job);
       }
+
     } else {
-      var target = creep.room.controller;
-      if(creep.attackController(target) == ERR_NOT_IN_RANGE) {
-        creep.moveTo(target);
-      }
+      creep.say('no job');
     }
   },
 
-  create: function(spawn) {
-    return spawn.createCreep(bodies.reclaimer, memory={role: 'reclaimer'});
+  create: function(spawn, memory) {
+    return spawn.createCreep(bodies.reclaimer, memory = Object.assign({}, {role: 'reclaimer'}, memory));
   }
 }
