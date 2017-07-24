@@ -31,8 +31,12 @@ module.exports = {
 
   spawnCondition: function(spawn) {
     let totalDropped = _.sum(_.map(spawn.room.memory.droppedEnergy, dropped => dropped.amount));
-    let numCouriers = spawn.room.memory.myCreepsByRole.courier.length;
-    let enoughEnergy = Math.floor(totalDropped/300) - (numCouriers || 0) > 0;
+    let numCouriers = 0;
+    if (spawn.room.memory.myCreepsByRole.courier) {
+      numCouriers = spawn.room.memory.myCreepsByRole.courier.length;
+    }
+
+    let enoughEnergy = Math.floor(totalDropped/300) - numCouriers > 0;
 
     let structs = spawn.room.memory.structuresByType;
     let unfilledStructures = _.filter(_.union(structs.spawn, structs.extension, structs.storage),

@@ -21,11 +21,11 @@ module.exports = {
             return;
     }
 
-    if (roles.courier.behavior.spawnCondition(spawn)) {
+    if (roles.courier.behavior.spawnCondition(spawn) && checkIfQueued((spawnQueue, 'courier'))) {
       spawnQueue.push({role: 'courier'});
     }
 
-    if((!spawn.room.storage || spawn.room.storage.store[RESOURCE_ENERGY]/spawn.room.storage.storeCapacity > 0.0065) && checkIfQueued(spawnQueue, 'upgrader')) {
+    if(roles.upgrader.behavior.spawnCondition(spawn) && checkIfQueued(spawnQueue, 'upgrader')) {
       spawnQueue.push({role: 'upgrader'});
     }
 
