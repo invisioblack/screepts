@@ -19,17 +19,11 @@ function buildAction(creep, job) {
 }
 
 function upgradeAction(creep, job) {
-  if (creep.carry.energy == 0) {
-    delete creep.memory.job;
-  }
-
   let result = creep.upgradeController(creep.room.controller);
   if (result == ERR_NOT_IN_RANGE) {
     creep.moveTo(creep.room.controller);
-  } else if (result == OK) {
-    if (creep.carry.energy == 0) {
-      delete creep.memory.job;
-    }
+  } else if (result == OK || creep.carry.energy == 0) {
+    delete creep.memory.job;
   }
 }
 
@@ -87,14 +81,14 @@ function withdrawEnergyAction(creep, job) {
 
 function claimRoomAction(creep, job) {
   let target = creep.room.controller;
-  if(creep.claimController(target) == ERR_NOT_IN_RANGE) {
+  if (creep.claimController(target) == ERR_NOT_IN_RANGE) {
     creep.moveTo(target);
   }
 }
 
 function mineAction(creep, job) {
   let target = Game.getObjectById(job.target);
-  if(target) {
+  if (target) {
     let result = creep.harvest(target);
     if (result == ERR_NOT_IN_RANGE) {
       creep.moveTo(target);
@@ -111,13 +105,16 @@ function buildUpRoomAction(creep, job) {
     if (creep.carry.energy < creep.carryCapacity) {
 
       if (creep.room.memory.droppedEnergy.length > 0) {
-        var droppedEnergy = _.map(creep.room.memory.droppedEnergy, de => Game.getObjectById(de.id));
+        var droppedEnergy = _.compact(_.map(creep.room.memory.droppedEnergy, de => Game.getObjectById(de.id)));
         let closest = creep.pos.findClosestByPath(droppedEnergy);
-        creep.memory.job = {
-          action: 'collectEnergy',
-          room: creep.pos.roomName,
-          target: closest.id
-        };
+        if (closest) {
+          creep.memory.job = {
+            action: 'collectEnergy',
+            room: creep.pos.roomName,
+            target: closest.id
+          };
+        }
+
       } else {
         var sources = _.map(creep.room.memory.sources, s => Game.getObjectById(s.id));
         let closest = creep.pos.findClosestByPath(sources);
@@ -127,7 +124,6 @@ function buildUpRoomAction(creep, job) {
           target: closest.id
         }
       }
-
 
     } else {
       let cs = creep.room.memory.constructionSites;
@@ -149,7 +145,7 @@ function buildUpRoomAction(creep, job) {
   }
 }
 
-function moveToTargetRoom(creep, job){
+function moveToTargetRoom(creep, job) {
   let targetRoom = job.room;
 
   if (job.targetExit && job.targetExit.roomName == creep.pos.roomName) {
