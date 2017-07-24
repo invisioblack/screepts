@@ -118,11 +118,14 @@ function buildUpRoomAction(creep, job) {
       } else {
         var sources = _.map(creep.room.memory.sources, s => Game.getObjectById(s.id));
         let closest = creep.pos.findClosestByPath(sources);
-        creep.memory.job = {
-          action: 'mine',
-          room: creep.pos.roomName,
-          target: closest.id
+        if (closest) {
+          creep.memory.job = {
+            action: 'mine',
+            room: creep.pos.roomName,
+            target: closest.id
+          }
         }
+
       }
 
     } else {
