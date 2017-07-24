@@ -13,19 +13,12 @@ module.exports = {
     }
     let spawnQueue = spawn.room.memory.spawnQueue;
 
-    var rolesNum = _.map(Game.creeps, creep => {
-      return creep.memory.role;
-    });
-    rolesNum = _.countBy(rolesNum, arg => arg);
+    var rolesNum = _.countBy(_.map(spawn.room.memory.myCreeps, creep => Game.getObjectById(creep.id)), creep => creep.memory.role);
 
     if(spawn.room.energyAvailable < 0.35 * spawn.room.energyCapacityAvailable &&
         (!rolesNum.spawnsupplier || rolesNum.spawnsupplier < 1)) {
           roles.spawnsupplier.behavior.create(spawn);
           return;
-    }
-
-    if (spawn.room.memory.sources.length - (rolesNum.miner || 0) > 0 && checkIfQueued(spawnQueue, 'miner')) {
-      spawnQueue.push({role: 'miner'});
     }
 
     var totalDropped = _.sum(_.map(spawn.room.memory.droppedEnergy, dropped => dropped.amount));
@@ -48,12 +41,16 @@ module.exports = {
       }
     }
 
-    if(spawn.room.storage.store[RESOURCE_ENERGY]/spawn.room.storage.storeCapacity > 0.0065 && checkIfQueued(spawnQueue, 'upgrader')) {
+    if(spawn.room.storage && spawn.room.storage.store[RESOURCE_ENERGY]/spawn.room.storage.storeCapacity > 0.0065 && checkIfQueued(spawnQueue, 'upgrader')) {
       spawnQueue.push({role: 'upgrader'});
     }
 
     if ((!rolesNum.repairman || rolesNum.repairman < 1) && checkIfQueued(spawnQueue, 'repairman')) {
       spawnQueue.push({role: 'repairman'});
+    }
+
+    if (spawn.room.memory.sources.length - (rolesNum.miner || 0) > 0 && checkIfQueued(spawnQueue, 'miner')) {
+      spawnQueue.push({role: 'miner'});
     }
 
     if (spawnQueue.length > 0) {
