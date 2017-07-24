@@ -9,7 +9,9 @@ function buildAction(creep, job) {
     if (result == ERR_NOT_IN_RANGE) {
       creep.moveTo(constructionSite);
     } else if (result == OK) {
-      delete creep.memory.job;
+      if (creep.carry.energy == 0) {
+        delete creep.memory.job;
+      }
     }
   } else {
     delete creep.memory.job;
