@@ -98,8 +98,8 @@ function buildUpRoomAction(creep, job) {
   if (creep.pos.roomName == job.room) {
     if (creep.carry.energy == 0) {
 
-      if (room.memory.droppedEnergy.length > 0) {
-        var droppedEnergy = _.map(room.memory.droppedEnergy, de => Game.getObjectById(de.id));
+      if (creep.room.memory.droppedEnergy.length > 0) {
+        var droppedEnergy = _.map(creep.room.memory.droppedEnergy, de => Game.getObjectById(de.id));
         let closest = creep.pos.findClosestByPath(droppedEnergy);
         creep.memory.job = {
           action: 'collectEnergy',
@@ -107,7 +107,7 @@ function buildUpRoomAction(creep, job) {
           target: closest.id
         };
       } else {
-        var sources = _.map(room.memory.sources, s => Game.getObjectById(s.id));
+        var sources = _.map(creep.room.memory.sources, s => Game.getObjectById(s.id));
         let closest = creep.pos.findClosestByPath(sources);
         creep.memory.job = {
           action: 'mine',
