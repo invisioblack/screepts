@@ -19,6 +19,17 @@ module.exports.loop = function() {
 
   stats.clearStats();
 
+  _.forEach(Game.rooms, room => {
+    roomModule.initRoom(room);
+    if (room.memory.my) {
+      roomModule.roomBehavior(room);
+    }
+
+    hivemind.visualizePlans(room);
+  });
+
+  profiler.rooms = Game.cpu.getUsed() - _.sum(profiler);
+
   var roleProfiler = {};
 
   for (var name in Game.creeps) {
@@ -48,17 +59,6 @@ module.exports.loop = function() {
   });
 
   profiler.spawns = Game.cpu.getUsed() - _.sum(profiler);
-
-  _.forEach(Game.rooms, room => {
-    roomModule.initRoom(room);
-    if (room.memory.my) {
-      roomModule.roomBehavior(room);
-    }
-
-    hivemind.visualizePlans(room);
-  });
-
-  profiler.rooms = Game.cpu.getUsed() - _.sum(profiler);
 
   towerModule.towerBehavior(_.filter(Game.structures, structure => {
     return (structure.structureType == STRUCTURE_TOWER);

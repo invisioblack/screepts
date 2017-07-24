@@ -20,7 +20,19 @@ module.exports = {
     }
   },
 
+  sizes: [
+    [WORK, CARRY, MOVE],
+    [WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE],
+    [WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE]
+  ],
+
   create: function(spawn, memory) {
-    return spawn.createCreep([WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE], memory = Object.assign({}, {role: 'nextroomer'}, memory));
+    let body = bodies.chooseLargestAffordable(spawn, this.sizes);
+    if (body) {
+      return spawn.createCreep(body, memory = Object.assign({}, {role: 'nextroomer'}, memory));
+    } else {
+      return ERR_NOT_ENOUGH_ENERGY;
+    }
+
   }
 }

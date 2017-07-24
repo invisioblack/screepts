@@ -45,6 +45,19 @@ const createStrongestMelee = (spawn, base = null) => {
   return body;
 };
 
+const chooseLargestAffordable = (spawn, bodies) => {
+    let costs = _.map(bodies, body => {return {body: body, cost: utils.calculateBodyCost(body)}; } )
+    costs = _.filter(costs, cost => cost.cost <= spawn.room.energyAvailable);
+    costs = _.sortBy(costs, 'cost');
+
+    let body = _.last(costs);
+    if (body) {
+      return body.body;
+    } else {
+      return null;
+    }
+}
+
 module.exports = {
   reclaimer: [
     CLAIM,
@@ -58,5 +71,6 @@ module.exports = {
   createBasic,
   createLargestWorker,
   createFastest,
-  createStrongestMelee
+  createStrongestMelee,
+  chooseLargestAffordable
 };

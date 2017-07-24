@@ -31,13 +31,25 @@ module.exports = {
         creep.moveTo(mySource);
       }
     }
-
   },
+
+  sizes: [
+    [WORK, MOVE],
+    [WORK, WORK, WORK, MOVE],
+    [WORK, WORK, WORK, WORK, WORK, MOVE]
+  ],
 
   /** @param {StructureSpawn} spawn**/
   create: function(spawn) {
-    return spawn.createCreep(bodies.createLargestWorker(spawn, base=[WORK, WORK, WORK, WORK, WORK, MOVE]), memory = {
-      role: 'miner'
-    });
+    let body = bodies.chooseLargestAffordable(spawn, this.sizes);
+    if (body) {
+      return spawn.createCreep(body, memory = {
+        role: 'miner'
+      });
+    } else {
+      return ERR_NOT_ENOUGH_ENERGY;
+    }
+
+
   }
 }

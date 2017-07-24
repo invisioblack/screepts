@@ -29,11 +29,22 @@ module.exports = {
 
   },
 
+  sizes: [
+    [WORK, CARRY, MOVE],
+    [WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE],
+    [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, CARRY, WORK, WORK, WORK, CARRY, CARRY]
+  ],
+
 
   /** @param {StructureSpawn} spawn **/
   create: function(spawn) {
-    return spawn.createCreep([MOVE, MOVE, MOVE, MOVE, MOVE, WORK, WORK, WORK, CARRY, CARRY], memory = {
-      role: 'builder'
-    });
+    let body = bodies.chooseLargestAffordable(spawn, this.sizes);
+    if (body) {
+      return spawn.createCreep(body, memory = {
+        role: 'builder'
+      });
+    } else {
+      return ERR_NOT_ENOUGH_ENERGY;
+    }
   }
 }

@@ -17,19 +17,16 @@ module.exports = {
 
     if(spawn.room.energyAvailable < 0.35 * spawn.room.energyCapacityAvailable &&
         (!rolesNum.spawnsupplier || rolesNum.spawnsupplier < 1)) {
-          roles.spawnsupplier.behavior.create(spawn);
-          return;
+          if (roles.spawnsupplier.behavior.create(spawn) == OK)
+            return;
     }
 
-    var totalDropped = _.sum(_.map(spawn.room.memory.droppedEnergy, dropped => dropped.amount));
-    if (Math.floor(totalDropped/300) - (rolesNum.courier || 0) > 0 && checkIfQueued(spawnQueue, 'courier')) {
-      if (!(rolesNum.courier && rolesNum.courier > 10)) {
-        spawnQueue.push({role: 'courier'});
-      }
+    if (roles.courier.behavior.spawnCondition(spawn)) {
+      spawnQueue.push({role: 'courier'});
     }
 
     if((spawn.room.memory.constructionSites.length/3) - (rolesNum.builder || 0) > 0  && checkIfQueued(spawnQueue, 'builder')) {
-      if(spawn.room.storage.store[RESOURCE_ENERGY]/spawn.room.storage.storeCapacity > 0.005) {
+      if(!spawn.room.storage || spawn.room.storage.store[RESOURCE_ENERGY]/spawn.room.storage.storeCapacity > 0.005) {
         spawnQueue.push({role: 'builder'});
       }
     }
@@ -45,7 +42,8 @@ module.exports = {
       spawnQueue.push({role: 'upgrader'});
     }
 
-    if ((!rolesNum.repairman || rolesNum.repairman < 1) && checkIfQueued(spawnQueue, 'repairman')) {
+    let damaged = _.filter(spawn.room.memory.structures, s => s.structureType != STRUCTURE_ROAD && s.hits < s.hitsMax*0.75);
+    if ((!rolesNum.repairman || rolesNum.repairman < 1) && damaged.length > 0 && checkIfQueued(spawnQueue, 'repairman')) {
       spawnQueue.push({role: 'repairman'});
     }
 

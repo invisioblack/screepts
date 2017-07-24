@@ -29,10 +29,41 @@ module.exports = {
     }
   },
 
+  spawnCondition: function(spawn) {
+    let totalDropped = _.sum(_.map(spawn.room.memory.droppedEnergy, dropped => dropped.amount));
+    let numCouriers = spawn.room.memory.myCreepsByRole.courier.length;
+    let enoughEnergy = Math.floor(totalDropped/300) - (numCouriers || 0) > 0;
+
+    let structs = spawn.room.memory.structuresByType;
+    let unfilledStructures = _.filter(_.union(structs.spawn, structs.extension, structs.storage),
+                              struct => {
+                                if (struct.store) {
+                                  return struct.store[RESOURCE_ENERGY] < struct.storeCapacity;
+                                } else {
+                                  return struct.energy < struct.energyCapacity;
+                                }
+                              });
+
+    return enoughEnergy && unfilledStructures.length > 0;
+
+  },
+
+  sizes: [
+    [CARRY, MOVE],
+    [CARRY, CARRY, MOVE, MOVE],
+    [CARRY, CARRY, CARRY, MOVE, MOVE, MOVE]
+  ],
+
   /** @param {StructureSpawn} spawn**/
   create: function(spawn) {
-    return spawn.createCreep([CARRY, CARRY, CARRY, MOVE, MOVE, MOVE], memory = {
-      role: 'courier'
-    });
+    let body = bodies.chooseLargestAffordable(spawn, this.sizes);
+    if (body) {
+      return spawn.createCreep(body, memory = {
+        role: 'courier'
+      });
+    } else {
+      return ERR_NOT_ENOUGH_ENERGY;
+    }
+
   }
 }
