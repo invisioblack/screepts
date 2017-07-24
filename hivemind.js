@@ -374,7 +374,7 @@ hivemind.manageNextRooms = () => {
       _.filter(Game.creeps, creep => creep.memory.role == 'nextroomer' && creep.memory.originRoom == closestRoom.name).length +
       _.filter(closestRoom.memory.spawnQueue, item => item.role == 'nextroomer' && item.memory.originRoom == closestRoom.name).length;
 
-      if (totalNextroomersAlreadySent < 6) {
+      if (totalNextroomersAlreadySent < 3) {
         closestRoom.memory.spawnQueue.push({role: 'nextroomer', memory: {originRoom: closestRoom.name, targetRoom: room.name}});
       }
 

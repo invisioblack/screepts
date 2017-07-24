@@ -89,6 +89,7 @@ function buildUpRoomAction(creep, job) {
       if (creep.room.controller.ticksToDowngrade <= 10000 || !cs || cs.length == 0) {
         creep.memory.job = {
           action: 'upgrade',
+          room: job.room,
           target: creep.room.controller.id
         };
       } else {
@@ -110,8 +111,10 @@ function moveToTargetRoom(creep, job){
     creep.moveTo(job.targetExit.x, job.targetExit.y);
   } else {
     let route = Game.map.findRoute(creep.room, targetRoom);
+    console.log(creep.name, creep.pos, creep.room.name);
     job.targetExit = creep.pos.findClosestByPath(route[0].exit);
     creep.moveTo(job.targetExit);
+
   }
 
 }

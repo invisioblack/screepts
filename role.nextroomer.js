@@ -21,6 +21,6 @@ module.exports = {
   },
 
   create: function(spawn, memory) {
-    return spawn.createCreep([WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE], memory = Object.assign({}, {role: 'nextroomer'}, memory));
+    return spawn.createCreep([WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE], memory = Object.assign({}, {role: 'nextroomer'}, memory));
   }
 }
