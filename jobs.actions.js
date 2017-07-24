@@ -1,4 +1,8 @@
 function buildAction(creep, job) {
+  if (creep.carry.energy == 0) {
+    delete creep.memory.job;
+  }
+
   let constructionSite = Game.getObjectById(job.target);
   if (constructionSite) {
     let result = creep.build(constructionSite);
@@ -96,7 +100,7 @@ function mineAction(creep, job) {
 
 function buildUpRoomAction(creep, job) {
   if (creep.pos.roomName == job.room) {
-    if (creep.carry.energy == 0) {
+    if (creep.carry.energy < creep.carryCapacity) {
 
       if (creep.room.memory.droppedEnergy.length > 0) {
         var droppedEnergy = _.map(creep.room.memory.droppedEnergy, de => Game.getObjectById(de.id));
