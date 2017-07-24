@@ -99,6 +99,14 @@ hivemind.designRoom = room => {
 
     plan.roads = roads;
 
+    // Place extensions
+    plan.extensions = [];
+    let longestRoad = _.last(_.sortBy(plan.roads, road.length));
+    longestRoad = _.takeRight(longestRoad, longestRoad.length - 2);
+    for(var i=0; i< utils.getExtensionsAtRCL(room.controller.level); i++) {
+      plan.extensions.push(longestRoad[i].findNearPosition().next().value);
+    }
+
     room.memory.plan = plan;
   }
 }

@@ -21,6 +21,7 @@ module.exports = {
               target: target.id
             };
           } else {
+            target = upgrader.pos.findClosestByPath(room.memory.structuresByType.spawn);
             upgrader.memory.job = {
               action: 'recycleSelf',
               target: target.id

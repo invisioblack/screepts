@@ -21,6 +21,10 @@ module.exports = {
             return;
     }
 
+    if (spawn.room.memory.sources.length - (rolesNum.miner || 0) > 0 && checkIfQueued(spawnQueue, 'miner')) {
+      spawnQueue.push({role: 'miner'});
+    }
+
     if (roles.courier.behavior.spawnCondition(spawn) && checkIfQueued((spawnQueue, 'courier'))) {
       spawnQueue.push({role: 'courier'});
     }
@@ -42,15 +46,9 @@ module.exports = {
       }
     }
 
-
-
     let damaged = _.filter(spawn.room.memory.structures, s => s.structureType != STRUCTURE_ROAD && s.hits < s.hitsMax*0.75);
     if ((!rolesNum.repairman || rolesNum.repairman < 1) && damaged.length > 0 && checkIfQueued(spawnQueue, 'repairman')) {
       spawnQueue.push({role: 'repairman'});
-    }
-
-    if (spawn.room.memory.sources.length - (rolesNum.miner || 0) > 0 && checkIfQueued(spawnQueue, 'miner')) {
-      spawnQueue.push({role: 'miner'});
     }
 
     if (spawnQueue.length > 0) {
