@@ -19,11 +19,17 @@ function buildAction(creep, job) {
 }
 
 function upgradeAction(creep, job) {
+  if (creep.carry.energy == 0) {
+    delete creep.memory.job;
+  }
+
   let result = creep.upgradeController(creep.room.controller);
   if (result == ERR_NOT_IN_RANGE) {
     creep.moveTo(creep.room.controller);
-  } else if (result == OK || creep.carry.energy == 0) {
-    delete creep.memory.job;
+  } else if (result == OK) {
+    if (creep.carry.energy == 0) {
+      delete creep.memory.job;
+    }
   }
 }
 
