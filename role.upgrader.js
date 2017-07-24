@@ -19,6 +19,10 @@ module.exports = {
 
   },
 
+  spawnCondition: function(spawn) {
+
+  },
+
   sizes: [
     [WORK, CARRY, MOVE],
     [WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE],

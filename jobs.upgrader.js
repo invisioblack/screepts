@@ -11,11 +11,22 @@ module.exports = {
             target: target.id
           };
         } else {
-          let target = upgrader.pos.findClosestByPath(room.memory.structuresByType.spawn);
-          upgrader.memory.job = {
-            action: 'recycleSelf',
-            target: target.id
+
+          let droppedEnergy = _.map(room.memory.droppedEnergy, de => Game.getObjectById(de.id));
+          let target = upgrader.pos.findClosestByPath(droppedEnergy);
+          if(target) {
+            upgrader.memory.job = {
+              action: 'collectEnergy',
+              room: upgrader.pos.roomName,
+              target: target.id
+            };
+          } else {
+            upgrader.memory.job = {
+              action: 'recycleSelf',
+              target: target.id
+            };
           }
+
         }
       } else {
         let target = room.controller;

@@ -25,6 +25,10 @@ module.exports = {
       spawnQueue.push({role: 'courier'});
     }
 
+    if((!spawn.room.storage || spawn.room.storage.store[RESOURCE_ENERGY]/spawn.room.storage.storeCapacity > 0.0065) && checkIfQueued(spawnQueue, 'upgrader')) {
+      spawnQueue.push({role: 'upgrader'});
+    }
+
     if((spawn.room.memory.constructionSites.length/3) - (rolesNum.builder || 0) > 0  && checkIfQueued(spawnQueue, 'builder')) {
       if(!spawn.room.storage || spawn.room.storage.store[RESOURCE_ENERGY]/spawn.room.storage.storeCapacity > 0.005) {
         spawnQueue.push({role: 'builder'});
@@ -38,9 +42,7 @@ module.exports = {
       }
     }
 
-    if(spawn.room.storage && spawn.room.storage.store[RESOURCE_ENERGY]/spawn.room.storage.storeCapacity > 0.0065 && checkIfQueued(spawnQueue, 'upgrader')) {
-      spawnQueue.push({role: 'upgrader'});
-    }
+
 
     let damaged = _.filter(spawn.room.memory.structures, s => s.structureType != STRUCTURE_ROAD && s.hits < s.hitsMax*0.75);
     if ((!rolesNum.repairman || rolesNum.repairman < 1) && damaged.length > 0 && checkIfQueued(spawnQueue, 'repairman')) {
