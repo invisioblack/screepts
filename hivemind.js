@@ -111,6 +111,7 @@ hivemind.designRoom = room => {
       }
     }
 
+    // Place towers
     plan.towers = [];
     for (var i = utils.getTowersAtRCL(room.controller.level); i > 0;) {
       let newTower;
@@ -129,6 +130,7 @@ hivemind.designRoom = room => {
       i--;
     }
 
+    // Place extensions
     plan.extensions = [];
     for (var i = utils.getExtensionsAtRCL(room.controller.level); i > 0;) {
       let newExt;
@@ -150,135 +152,6 @@ hivemind.designRoom = room => {
 
     room.memory.plan = plan;
   }
-}
-
-hivemind.planRoom = () => {
-  _.forEach(Game.rooms, roomInst => {
-
-    if (roomInst.controller && roomInst.controller.my) {
-
-      if (!roomInst.memory.plan) {
-        roomInst.memory.plan = {};
-      }
-
-      roomInst.memory.plan.taken = [];
-
-      if (!roomInst.memory.plan.dismantle) {
-        roomInst.memory.plan.dismantle = [];
-      }
-
-      if (!roomInst.memory.plan.spawn) {
-        roomInst.memory.plan.spawn = roomInst.controller.pos.findNearPosition().next().value
-                                                            .findNearPosition().next().value
-                                                            .findNearPosition().next().value
-                                                            .findNearPosition().next().value;
-      }
-
-      if (!roomInst.memory.plan.storage) {
-        roomInst.memory.plan.storage = roomInst.controller.pos.findNearPosition().next().value
-                                                              .findNearPosition().next().value;
-        roomInst.memory.plan.taken.push(roomInst.memory.plan.storage);
-      }
-
-      if (!roomInst.memory.plan.upgrader) {
-        roomInst.memory.plan.upgrader = new RoomPosition(
-          roomInst.memory.plan.storage.x,
-          roomInst.memory.plan.storage.y,
-          roomInst.memory.plan.storage.roomName
-        ).findNearPosition().next().value;
-        roomInst.memory.plan.taken.push(roomInst.memory.plan.upgrader);
-      }
-
-      if (!roomInst.memory.plan.roads) {
-        var roads = [];
-
-        // Connect spawns
-        var spawns = roomInst.find(FIND_MY_SPAWNS);
-        var sources = roomInst.find(FIND_SOURCES);
-        var extensions = roomInst.find(FIND_MY_STRUCTURES, {
-          filter: {
-            structureType: STRUCTURE_EXTENSION
-          }
-        });
-
-        _.forEach(spawns, spawn => {
-          var road;
-          // Connect spawns to sources
-          _.forEach(sources, source => {
-            road = hivemind.roadFromTo(spawn.pos, source.pos);
-            roads.push(road.path);
-            roomInst.memory.plan.taken.push(...road.path);
-          });
-
-          // Connect spawns to room controller
-          road = hivemind.roadFromTo(spawn.pos, roomInst.controller.pos);
-          roads.push(road.path);
-          roomInst.memory.plan.taken.push(...road.path);
-
-          // Connect spawns to exits
-          var exits = [spawn.pos.findClosestByPath(FIND_EXIT_TOP),
-            spawn.pos.findClosestByPath(FIND_EXIT_BOTTOM),
-            spawn.pos.findClosestByPath(FIND_EXIT_RIGHT),
-            spawn.pos.findClosestByPath(FIND_EXIT_LEFT)];
-
-        _.forEach(exits, exit => {
-          if (exit) {
-            road = hivemind.roadFromTo(spawn.pos, exit);
-            roads.push(road.path);
-            roomInst.memory.plan.taken.push(...road.path);
-          }
-        });
-      });
-
-      roomInst.memory.plan.roads = roads;
-
-    }
-
-    var longestRoad = _.last(_.sortBy(roomInst.memory.plan.roads, road => road.length));
-    if (!longestRoad) {
-      return;
-    }
-    longestRoad = _.takeRight(longestRoad, longestRoad.length - 2);
-
-    if (!roomInst.memory.plan.extensions) {
-      roomInst.memory.plan.extensions = [];
-
-      var freePositions = hivemind.getFreePositionsNear(longestRoad, roomInst);
-
-      for (var i = 0; i < utils.getExtensionsAtRCL(roomInst.controller.level); i++) {
-        roomInst.memory.plan.extensions.push(freePositions[i]);
-        roomInst.memory.plan.taken.push(freePositions[i]);
-      }
-    }
-
-    if (!roomInst.memory.plan.towers) {
-      roomInst.memory.plan.towers = [];
-
-      var freePositions = hivemind.getFreePositionsNear(longestRoad, roomInst);
-
-      for (var i = 0; i < utils.getTowersAtRCL(roomInst.controller.level); i++) {
-        roomInst.memory.plan.towers.push(freePositions[i]);
-        roomInst.memory.plan.taken.push(freePositions[i]);
-      }
-    }
-
-  }});
-}
-
-hivemind.getFreePositionsNear = (road, room) => {
-var freePositions = _.flatten(_.map(road, rp => {
-  return Array.from(new RoomPosition(rp.x, rp.y, rp.roomName).findNearPosition())
-}));
-
-// Remove duplicate positions and taken positions
-var cleaned = [];
-freePositions = _.forEach(freePositions, position => {
-  if (!_.some(cleaned, dupe => dupe.x == position.x && dupe.y == position.y) && !_.some(room.memory.plan.taken, dupe => dupe.x == position.x && dupe.y == position.y)) {
-    cleaned.push(position);
-  }
-});
-
-return cleaned;
 }
 
 hivemind.roadFromTo = (from, to, range = 1) => {
