@@ -5,27 +5,12 @@ const jobActions = require('jobs.actions');
 module.exports = {
 
   /** @param {Creep} creep **/
-  run: function(creep) {
-
-    if (creep.carry.energy == 0) {
-
-       if (creep.memory.job) {
-        let job = creep.memory.job;
-        jobActions[job.action](creep, job);
-      } else {
-        creep.say('no job');
-      }
-
+  run : function(creep) {
+    if (creep.memory.job) {
+      let job = creep.memory.job;
+      jobActions[job.action](creep, job);
     } else {
-      // Proceed to the nearest building that needs energy and dump it
-      // Prioritize spawns, then containers
-
-      if (!actions.dumpEnergyAt(creep, STRUCTURE_SPAWN)) {
-        if (!actions.dumpEnergyAt(creep, STRUCTURE_EXTENSION)) {
-         actions.dumpEnergyAt(creep, STRUCTURE_STORAGE);
-        }
-      }
-
+      creep.say('no job');
     }
   },
 
