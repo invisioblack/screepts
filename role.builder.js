@@ -36,8 +36,8 @@ module.exports = {
       numBuilders = spawn.room.memory.myCreepsByRole.builder.length;
     }
 
-    let storageCondition = storage && storage.store[RESOURCE_ENERGY] > numBuilders * 1000;
-    let csCondition = Math.floor(spawn.room.memory.constructionSites.length/5) - numBuilders > 0;
+    let storageCondition = storage && storage.store[RESOURCE_ENERGY] > numBuilders.length * 1000;
+    let csCondition = Math.floor(spawn.room.memory.constructionSites.length/5) - numBuilders.length > 0;
 
     if (storage) {
       return storageCondition && csCondition;
