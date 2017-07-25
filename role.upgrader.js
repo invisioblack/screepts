@@ -25,8 +25,8 @@ module.exports = {
       numUpgraders = spawn.room.memory.myCreepsByRole.upgrader;
     }
 
-    let storageCondition = storage && storage.store[RESOURCE_ENERGY] > numUpgraders.length * 1000;
-    let numberCondition = spawn.room.energyCapacityAvailable > 200*numUpgraders.length;
+    let storageCondition = storage && storage.store[RESOURCE_ENERGY] > (numUpgraders.length || 0) * 1000;
+    let numberCondition = spawn.room.energyCapacityAvailable > 200*(numUpgraders.length || 0);
 
     if (storage) {
       return storageCondition;
