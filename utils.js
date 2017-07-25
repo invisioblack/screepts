@@ -35,7 +35,7 @@ function getLabsAtRCL(rcl) {
     case 6:
       return 3;
     case 7:
-      return 6:
+      return 6;
     case 8:
       return 10;
     default:

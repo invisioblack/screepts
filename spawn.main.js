@@ -29,14 +29,12 @@ module.exports = {
       spawnQueue.push({role: 'courier'});
     }
 
-    if(roles.upgrader.behavior.spawnCondition(spawn) && !isQueued(spawnQueue, 'upgrader')) {
+    if (roles.upgrader.behavior.spawnCondition(spawn) && !isQueued(spawnQueue, 'upgrader')) {
       spawnQueue.push({role: 'upgrader'});
     }
 
-    if((spawn.room.memory.constructionSites.length/3) - (rolesNum.builder || 0) > 0  && !isQueued(spawnQueue, 'builder')) {
-      if(!spawn.room.storage || spawn.room.storage.store[RESOURCE_ENERGY]/spawn.room.storage.storeCapacity > 0.005) {
-        spawnQueue.push({role: 'builder'});
-      }
+    if (roles.builder.behavior.spawnCondition(spawn) && !isQueued(spawnQueue, 'builder')) {
+      spawnQueue.push({role: 'builder'});
     }
 
     var towers = _.filter(spawn.room.memory.structuresByType.tower, struct => struct.energy > struct.energyCapacity);

@@ -29,6 +29,23 @@ module.exports = {
 
   },
 
+  spawnCondition: function(spawn) {
+    let storage = spawn.room.storage;
+    let numBuilders = 0;
+    if (spawn.room.memory.myCreepsByRole.builder) {
+      numBuilders = spawn.room.memory.myCreepsByRole.builder.length;
+    }
+
+    let storageCondition = storage && storage.store[RESOURCE_ENERGY] > numBuilders * 1000;
+    let csCondition = Math.floor(spawn.room.memory.constructionSites.length/5) - numBuilders > 0;
+
+    if (storage) {
+      return storageCondition && csCondition;
+    } else {
+      return csCondition;
+    }
+  },
+
   sizes: [
     [WORK, CARRY, MOVE],
     [WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE],

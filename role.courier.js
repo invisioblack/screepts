@@ -36,7 +36,7 @@ module.exports = {
       numCouriers = spawn.room.memory.myCreepsByRole.courier.length;
     }
 
-    let enoughEnergy = Math.floor(totalDropped/300) - numCouriers > 0;
+    let enoughEnergy = Math.floor(totalDropped/1200) - numCouriers > 0;
 
     let structs = spawn.room.memory.structuresByType;
     let unfilledStructures = _.filter(_.union(structs.spawn, structs.extension, structs.storage),
@@ -48,7 +48,7 @@ module.exports = {
                                 }
                               });
 
-    return enoughEnergy && unfilledStructures.length > 0;
+    return enoughEnergy && Math.floor(unfilledStructures.length/numCouriers) > 5;
 
   },
 
