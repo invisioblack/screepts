@@ -4,20 +4,12 @@ const jobActions = require('jobs.actions');
 
 module.exports = {
   run : function(creep) {
-
-    if (creep.carry.energy > 0) {
-
       if (creep.memory.job) {
-
         let job = creep.memory.job;
         jobActions[job.action](creep, job);
-
       } else {
         creep.say('no job');
       }
-
-    }
-
   },
 
   spawnCondition: function(spawn) {

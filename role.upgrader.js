@@ -16,7 +16,6 @@ module.exports = {
       actions.recycleSelf(creep);
       return;
     }
-
   },
 
   spawnCondition: function(spawn) {
