@@ -52,6 +52,10 @@ function recycleSelfAction(creep, job) {
 }
 
 function collectEnergyAction(creep, job) {
+  if (_.sum(creep.carry) === creep.carryCapacity) {
+       delete creep.memory.job;
+   }
+
   let target = Game.getObjectById(job.target);
   if (target) {
     let result = creep.pickup(target);
@@ -66,6 +70,10 @@ function collectEnergyAction(creep, job) {
 }
 
 function withdrawEnergyAction(creep, job) {
+  if (_.sum(creep.carry) === creep.carryCapacity) {
+       delete creep.memory.job;
+   }
+
   let target = Game.getObjectById(job.target);
   if (target) {
     let result = creep.withdraw(target, RESOURCE_ENERGY);
