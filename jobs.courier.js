@@ -8,7 +8,34 @@ module.exports = {
     var droppedEnergy = _.map(room.memory.droppedEnergy, de => Game.getObjectById(de.id));
     _.forEach(creeps, courier => {
       if (courier.carry.energy > 0) {
-        return;
+
+        let target = courier.pos.findClosestByPath(courier.room.memory.structuresByType.spawn);
+        if (target) {
+          courier.memory.job = {
+            action: 'dumpEnergy',
+            room: courier.pos.roomName,
+            target: target.id
+          };
+        } else {
+          target = courier.pos.findClosestByPath(courier.room.memory.structuresByType.extension);
+          if (target) {
+            courier.memory.job = {
+              action: 'dumpEnergy',
+              room: courier.pos.roomName,
+              target: target.id
+            };
+          } else {
+            target = courier.room.storage;
+            if (target) {
+              courier.memory.job = {
+                action = 'dumpEnergy',
+                room: courier.pos.roomName,
+                target: target.id
+              }
+            }
+          }
+        }
+
       }
 
       let target = courier.pos.findClosestByPath(droppedEnergy);
