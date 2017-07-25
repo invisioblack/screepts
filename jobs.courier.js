@@ -8,7 +8,9 @@ module.exports = {
     var droppedEnergy = _.map(room.memory.droppedEnergy, de => Game.getObjectById(de.id));
     _.forEach(creeps, courier => {
       if (courier.carry.energy > 0) {
-        let target = courier.pos.findClosestByPath(courier.room.memory.structuresByType.spawn);
+        let target = courier.pos.findClosestByPath(courier.room.memory.structuresByType.spawn, {
+          filter: spawn => spawn.energy < spawn.energyCapacity
+        });
         if (target) {
           courier.memory.job = {
             action: 'dumpEnergy',
@@ -16,7 +18,9 @@ module.exports = {
             target: target.id
           };
         } else {
-          target = courier.pos.findClosestByPath(courier.room.memory.structuresByType.extension);
+          target = courier.pos.findClosestByPath(courier.room.memory.structuresByType.extension, {
+            filter: ext => ext.energy < ext.energyCapacity
+          });
           if (target) {
             courier.memory.job = {
               action: 'dumpEnergy',

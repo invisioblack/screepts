@@ -33,6 +33,8 @@ function dumpEnergyAction(creep, job) {
     let result = creep.transfer(target, RESOURCE_ENERGY);
     if (result == ERR_NOT_IN_RANGE) {
       creep.moveTo(target);
+    } else if(result == ERR_FULL) {
+      delete creep.memory.job;
     } else if (result == OK && creep.carry.energy == 0) {
       delete creep.memory.job;
     }
