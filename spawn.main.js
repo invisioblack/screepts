@@ -1,12 +1,12 @@
 const bodies = require('creeps.bodies');
 const roles = require('creeps.roles');
 
-function checkIfQueued(spawnQueue, role) {
-  return !_.some(spawnQueue, item => item.role == role);
+function isQueued(spawnQueue, role) {
+  return _.some(spawnQueue, item => item.role == role);
 }
 
 module.exports = {
-  checkIfQueued: checkIfQueued,
+  isQueued: isQueued,
   spawnBehavior: (spawn) => {
     if (!spawn.room.memory.spawnQueue) {
       spawn.room.memory.spawnQueue = [];
@@ -21,19 +21,19 @@ module.exports = {
             return;
     }
 
-    if (spawn.room.memory.sources.length - (rolesNum.miner || 0) > 0 && !checkIfQueued(spawnQueue, 'miner')) {
+    if (spawn.room.memory.sources.length - (rolesNum.miner || 0) > 0 && !isQueued(spawnQueue, 'miner')) {
       spawnQueue.push({role: 'miner'});
     }
 
-    if (roles.courier.behavior.spawnCondition(spawn) && !checkIfQueued((spawnQueue, 'courier'))) {
+    if (roles.courier.behavior.spawnCondition(spawn) && !isQueued(spawnQueue, 'courier')) {
       spawnQueue.push({role: 'courier'});
     }
 
-    if(roles.upgrader.behavior.spawnCondition(spawn) && !checkIfQueued(spawnQueue, 'upgrader')) {
+    if(roles.upgrader.behavior.spawnCondition(spawn) && !isQueued(spawnQueue, 'upgrader')) {
       spawnQueue.push({role: 'upgrader'});
     }
 
-    if((spawn.room.memory.constructionSites.length/3) - (rolesNum.builder || 0) > 0  && !checkIfQueued(spawnQueue, 'builder')) {
+    if((spawn.room.memory.constructionSites.length/3) - (rolesNum.builder || 0) > 0  && !isQueued(spawnQueue, 'builder')) {
       if(!spawn.room.storage || spawn.room.storage.store[RESOURCE_ENERGY]/spawn.room.storage.storeCapacity > 0.005) {
         spawnQueue.push({role: 'builder'});
       }
@@ -41,13 +41,13 @@ module.exports = {
 
     var towers = _.filter(spawn.room.memory.structuresByType.tower, struct => struct.energy > struct.energyCapacity);
     for(var i=0; i<towers.length - (spawn.room.memory.myCreepsByRole.towerfiller || 0); i++) {
-      if(checkIfQueued(spawnQueue, 'towerfiller')) {
+      if(isQueued(spawnQueue, 'towerfiller')) {
         spawnQueue.push({role: 'towerfiller', memory: { target: towers[i].id }});
       }
     }
 
     let damaged = _.filter(spawn.room.memory.structures, s => s.structureType != STRUCTURE_ROAD && s.hits < s.hitsMax*0.75);
-    if ((!rolesNum.repairman || rolesNum.repairman < 1) && damaged.length > 0 && !checkIfQueued(spawnQueue, 'repairman')) {
+    if ((!rolesNum.repairman || rolesNum.repairman < 1) && damaged.length > 0 && !isQueued(spawnQueue, 'repairman')) {
       spawnQueue.push({role: 'repairman'});
     }
 
