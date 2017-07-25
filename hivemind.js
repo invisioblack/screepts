@@ -321,40 +321,6 @@ hivemind.isJobEqual = job1 => job2 => {
   return (job1.creepType == job2.creepType && job1.action == job2.action && job1.priority == job2.priority && job1.room == job2.room && job1.target == job2.target);
 }
 
-hivemind.createJobs = () => {
-
-_.forEach(Game.rooms, room => {
-  if (room.controller && room.controller.my) {
-    room.memory.jobs = [];
-
-    // Create building jobs
-    _.forEach(room.memory.constructionSites, cs => {
-      var priority = _.includes(Object.keys(priorities.CONSTRUCTION_PRIORITIES), cs.structureType)
-        ? priorities.CONSTRUCTION_PRIORITIES[cs.structureType]
-        : 100;
-      var secondaryPriority = (cs.progressTotal - cs.progress) / cs.progressTotal;
-
-      room.memory.jobs.push({
-        creepType: 'builder',
-        action: 'build',
-        priority: priority,
-        secondaryPriority: secondaryPriority,
-        room: cs.pos.roomName,
-        target: cs.id
-      });
-    });
-
-    let creeps = room.memory.myCreeps;
-
-    _.forEach(creeps, creep => {
-      _.remove(room.memory.jobs, hivemind.isJobEqual(creep.memory.job))
-    });
-
-  }
-});
-
-}
-
 hivemind.assignJobs = () => {
   _.forEach(Game.rooms, room => {
     if (room.controller && room.controller.my) {
@@ -383,8 +349,6 @@ hivemind.interpretFlags();
 profiler.interpretFlags = Game.cpu.getUsed() - _.sum(profiler);
 hivemind.cleanUpCreepMemory();
 profiler.cleanUpCreepMemory = Game.cpu.getUsed() - _.sum(profiler);
-hivemind.createJobs();
-profiler.createJobs = Game.cpu.getUsed() - _.sum(profiler);
 hivemind.assignJobs();
 profiler.assignJobs = Game.cpu.getUsed() - _.sum(profiler);
 hivemind.manageNextRooms();

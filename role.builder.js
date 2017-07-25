@@ -13,18 +13,9 @@ module.exports = {
         jobActions[job.action](creep, job);
 
       } else {
-        actions.buildNearestConstructionSite(creep);
+        creep.say('no job');
       }
 
-    } else {
-
-      if (creep.room.find(FIND_CONSTRUCTION_SITES).length > 0) {
-        if (!actions.withdrawFromNearestStorage(creep)) {
-          actions.recycleSelf(creep);
-        }
-      } else {
-        actions.dismantleNearestStructure(creep);
-      }
     }
 
   },
