@@ -20,11 +20,7 @@ module.exports = {
               target: target.id
             };
           } else {
-            target = builder.pos.findClosestByPath(room.memory.structuresByType.spawn);
-            builder.memory.job = {
-              action: 'recycleSelf',
-              target: target.id
-            };
+            builder.memory.role = 'upgrader';
           }
         }
       } else {
