@@ -43,7 +43,9 @@ module.exports.loop = function() {
 
       if (creep.memory.role == role) {
         roles[role].behavior.run(creep);
-        creep.room.visual.text(role, creep.pos);
+        creep.room.visual.text(role, creep.pos, {
+          font: '0.5'
+        });
 
         var cpuAfter = Game.cpu.getUsed();
         roleProfiler[role] += cpuAfter-cpuBefore;
@@ -60,9 +62,9 @@ module.exports.loop = function() {
 
   profiler.spawns = Game.cpu.getUsed() - _.sum(profiler);
 
-  towerModule.towerBehavior(_.filter(Game.structures, structure => {
-    return (structure.structureType == STRUCTURE_TOWER);
-  })[0]);
+  _.forEach(_.filter(Game.structures, {structureType: STRUCTURE_TOWER}), tower => {
+    towerModule.towerBehavior(tower);
+  });
 
   profiler.towers = Game.cpu.getUsed() - _.sum(profiler);
 

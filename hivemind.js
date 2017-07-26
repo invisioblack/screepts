@@ -30,10 +30,6 @@ hivemind.visualizePlans = (room) => {
     room.visual.text('S', room.memory.plan.storage);
   }
 
-  if (room.memory.plan && room.memory.plan.upgrader) {
-    room.visual.text('U', room.memory.plan.upgrader);
-  }
-
   if (room.memory.plan && room.memory.plan.towers) {
     _.forEach(room.memory.plan.towers, tower => {
       if (tower) {
@@ -42,18 +38,10 @@ hivemind.visualizePlans = (room) => {
     });
   }
 
-  if (room.memory.plan && room.memory.plan.extensions) {
-    _.forEach(room.memory.plan.extensions, extension => {
-      if (extension) {
-        room.visual.text('E', extension);
-      }
-    });
-  }
-
-  if (room.memory.plan && room.memory.plan.dismantle) {
-    _.forEach(room.memory.plan.dismantle, dismantle => {
-      if (dismantle) {
-        room.visual.text('X', dismantle, {color: 'red'});
+  if (room.memory.plan && room.memory.plan.important) {
+    _.forEach(room.memory.plan.important, struct => {
+      if (struct) {
+        room.visual.text('O', struct);
       }
     });
   }
@@ -107,47 +95,33 @@ hivemind.designRoom = room => {
     for(let x=0; x<50; x++) {
       for (let y=0; y<50; y++) {
         if ((x+y) % 2 == 0) {
+
           checkerboard.push(room.getPositionAt(x, y));
         }
       }
     }
 
-    // Place towers
-    plan.towers = [];
-    for (var i = utils.getTowersAtRCL(room.controller.level); i > 0;) {
-      let newTower;
-      while (!newTower) {
-        newTower = plan.storage.findClosestByPath(checkerboard, {
-          filter: pos => !pos.inRangeTo(plan.storage, 2) && pos.validPosition() && !pos.checkForStructures()
+    // Place important structures
+    let totalStructures = utils.getTowersAtRCL(8) +
+                          utils.getExtensionsAtRCL(8) +
+                          utils.getLabsAtRCL(8) +
+                          3; // Nuker, observer, terminal
+    plan.important = [];
+    var flattened = _.flatten(plan.roads);
+    checkerboard = _.filter(checkerboard, ch => !_.find(flattened, tile => tile.isEqualTo(ch)));
+    for (var i=totalStructures; i > 0;) {
+      let struct;
+      while (!struct) {
+        struct = plan.storage.findClosestByPath(checkerboard, {
+          filter: pos => !pos.inRangeTo(plan.storage, 2) &&
+                          pos.validPosition() &&
+                         !pos.checkForWall() &&
+                         !pos.checkForConstructedWall()
         });
-        if (_.any(_.flatten(plan.roads), tile => tile.isEqualTo(newTower))) {
-          _.pull(checkerboard, newTower);
-          newTower = null;
-        }
       }
 
-      plan.towers.push(newTower);
-      _.pull(checkerboard, newTower);
-      i--;
-    }
-
-    // Place extensions
-    plan.extensions = [];
-    for (var i = utils.getExtensionsAtRCL(room.controller.level); i > 0;) {
-      let newExt;
-
-      while (!newExt) {
-        newExt = plan.storage.findClosestByPath(checkerboard, {
-          filter: pos => !pos.inRangeTo(plan.storage, 2) && pos.validPosition() && !pos.checkForStructures()
-        });
-        if (_.any(_.flatten(plan.roads), tile => tile.isEqualTo(newExt))) {
-          _.pull(checkerboard, newExt);
-          newExt = null;
-        }
-      }
-
-      plan.extensions.push(newExt);
-      _.pull(checkerboard, newExt);
+      plan.important.push(struct);
+      _.pull(checkerboard, struct);
       i--;
     }
 

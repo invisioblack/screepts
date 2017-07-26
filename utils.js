@@ -46,5 +46,6 @@ function getLabsAtRCL(rcl) {
 module.exports = {
   calculateBodyCost,
   getExtensionsAtRCL,
-  getTowersAtRCL
+  getTowersAtRCL,
+  getLabsAtRCL
 }
