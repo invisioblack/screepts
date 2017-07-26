@@ -16,6 +16,7 @@ module.exports = {
     var rolesNum = _.countBy(_.map(spawn.room.memory.myCreeps, creep => Game.getObjectById(creep.id)), creep => creep.memory.role);
 
     if(spawn.room.energyAvailable < 0.35 * spawn.room.energyCapacityAvailable &&
+        spawn.room.storage &&
         (!rolesNum.spawnsupplier || rolesNum.spawnsupplier < 1)) {
           if (roles.spawnsupplier.behavior.create(spawn) == OK)
             return;
