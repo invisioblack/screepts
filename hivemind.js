@@ -140,21 +140,20 @@ hivemind.roadFromTo = (from, to, range = 1) => {
   });
 }
 
-hivemind.buildRoads = () => {
-  _.forEach(Game.rooms, roomInst => {
-    if (roomInst.controller &&
-      roomInst.controller.my &&
-      roomInst.memory.constructionSites &&
-      roomInst.memory.constructionSites.length < 1 &&
-      roomInst.executeEveryTicks(200) &&
-      roomInst.memory.plan) {
-      _.forEach(roomInst.memory.plan.roads, road => {
-        _.forEach(road, point => {
-          roomInst.createConstructionSite(point.x, point.y, STRUCTURE_ROAD);
-        });
-      });
+hivemind.buildRoads = room => {
+  let cs = room.memory.constructionSites.length;
+  let roadCS = 0;
+  let roads = _.flatten(room.memory.plan.roads);
+  let roadTile = _.head(roads);
+  while (cs + roadCS < 100 && roadTile) {
+    roadTile = room.getPositionAt(roadTile.x, roadTile.y);
+    roads = _.tail(roads);
+    if (!roadTile.checkForConstructionSites() && !roadTile.checkForRoads()) {
+      room.createConstructionSite(roadTile, STRUCTURE_ROAD);
+      roadCS++;
     }
-  });
+    roadTile = _.head(roads);
+  }
 };
 
 hivemind.buildStructures = () => {

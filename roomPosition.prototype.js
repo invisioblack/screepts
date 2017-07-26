@@ -42,8 +42,16 @@ RoomPosition.prototype.checkForConstructedWall = function() {
   return _.filter(this.lookFor(LOOK_STRUCTURES), s => s.structureType == STRUCTURE_WALL).length > 0;
 }
 
+RoomPosition.prototype.checkForRoads = function() {
+  return _.filter(this.lookFor(LOOK_STRUCTURES), s => s.structureType == STRUCTURE_ROAD).length > 0;
+};
+
 RoomPosition.prototype.checkForStructures = function() {
   return this.lookFor(LOOK_STRUCTURES).length > 0;
+};
+
+RoomPosition.prototype.checkForConstructionSites = function() {
+  return this.lookFor(LOOK_CONSTRUCTION_SITES).length > 0;
 };
 
 RoomPosition.prototype.getRoom = function() {
