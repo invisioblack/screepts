@@ -7,11 +7,11 @@ module.exports = {
         return creep.hits < creep.hitsMax;
       }
     });
-    var damaged = tower.pos.findClosestByPath(FIND_STRUCTURES, {
-      filter: structure => {
-        return structure.hits < structure.hitsMax;
-      }
-    });
+    // var damaged = tower.pos.findClosestByPath(FIND_STRUCTURES, {
+    //   filter: structure => {
+    //     return structure.hits < structure.hitsMax;
+    //   }
+    // });
 
     if (attacker) {
       tower.attack(attacker);
