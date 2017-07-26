@@ -141,7 +141,7 @@ hivemind.roadFromTo = (from, to, range = 1) => {
 }
 
 hivemind.buildRoads = room => {
-  let cs = room.memory.constructionSites.length;
+  let cs = Object.keys(Game.constructionSites).length;
   let roadCS = 0;
   let roads = _.flatten(room.memory.plan.roads);
   let roadTile = _.head(roads);
@@ -170,12 +170,6 @@ _.forEach(Game.rooms, room => {
     });
 
   }
-});
-}
-
-hivemind.regenerateRoomPlans = () => {
-_.map(Game.rooms, room => {
-  room.memory.plan = {};
 });
 }
 
@@ -314,10 +308,6 @@ hivemind.think = () => {
 let profiler = {};
 profiler.init = Game.cpu.getUsed();
 
-// hivemind.buildRoads();
-// profiler.buildRoads = Game.cpu.getUsed() - _.sum(profiler);
-// hivemind.buildStructures();
-// profiler.buildStructures = Game.cpu.getUsed() - _.sum(profiler);
 hivemind.interpretFlags();
 profiler.interpretFlags = Game.cpu.getUsed() - _.sum(profiler);
 hivemind.cleanUpCreepMemory();
