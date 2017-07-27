@@ -3,8 +3,22 @@ const bodies = require('creeps.bodies');
 
 module.exports = {
   run: function(creep) {
+    if (!creep.memory.target) {
+      let towers = _.filter(spawn.room.memory.structuresByType.tower, struct => struct.energy < struct.energyCapacity);
+      towers = _.map(towers, 'id');
+      let towerfillerTargets = _.map(spawn.room.memory.myCreepsByRole.towerfiller, 'memory.target');
+      let availableTargets = _.filter(towers, t => _.includes(towerfillerTargets, t));
+      if (availableTargets.length > 0) {
+        creep.memory.target = _.head(availableTargets);
+      }
+    }
+
     if(creep.carry.energy < creep.carryCapacity) {
-      actions.withdrawFromNearestStorage(creep);
+      if (!actions.withdrawFromNearestStorage(creep)) {
+        if (!actions.withdrawFromNearestContainer(creep)) {
+          actions.recycleSelf(creep);
+        }
+      }
     } else {
 
       let tower = Game.getObjectById(creep.memory.target);
@@ -18,6 +32,17 @@ module.exports = {
       }
 
     }
+  },
+  spawnCondition: function(spawn) {
+    let numTowerfillers = 0;
+    if (spawn.room.memory.myCreepsByRole.towerfiller) {
+      numTowerfillers = spawn.room.memory.myCreepsByRole.towerfiller;
+    }
+    let towers = _.filter(spawn.room.memory.structuresByType.tower, struct => struct.energy < struct.energyCapacity);
+    let storage = spawn.room.storage && spawn.room.storage.store[RESOURCE_ENERGY] > 0;
+    let containers = _.filter(spawn.room.memory.structuresByType.container, struct => struct.store[RESOURCE_ENERGY] > 0);
+
+    return (towers.length > numTowerfillers) && (storage || containers.length > 0);
   },
 
   create: function(spawn, memory) {

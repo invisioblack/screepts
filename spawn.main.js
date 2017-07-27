@@ -39,12 +39,10 @@ module.exports = {
       spawnQueue.push({role: 'builder'});
     }
 
-    var towers = _.filter(spawn.room.memory.structuresByType.tower, struct => struct.energy > struct.energyCapacity);
-    for(var i=0; i<towers.length - (spawn.room.memory.myCreepsByRole.towerfiller || 0); i++) {
-      if(isQueued(spawnQueue, 'towerfiller')) {
-        spawnQueue.push({role: 'towerfiller', memory: { target: towers[i].id }});
-      }
+    if (roles.towerfiller.behavior.spawnCondition(spawn) && !isQueued(spawnQueue, 'towerfiller')) {
+      spawnQueue.push({role: 'towerfiller'});
     }
+
 
     let damaged = _.filter(spawn.room.memory.structures, s => s.structureType != STRUCTURE_ROAD && s.hits < s.hitsMax*0.75);
     if ((!rolesNum.repairman || rolesNum.repairman < 1) && damaged.length > 0 && !isQueued(spawnQueue, 'repairman')) {
