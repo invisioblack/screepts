@@ -27,8 +27,15 @@ module.exports = {
       }
     } else {
       var mySource = Game.getObjectById(creep.memory.mySource.id);
-      if (creep.harvest(mySource) == ERR_NOT_IN_RANGE) {
+      let result = creep.harvest(mySource)
+      if (result == ERR_NOT_IN_RANGE) {
         creep.moveTo(mySource);
+      } else if (result == OK) {
+        let structs = creep.pos.lookFor(LOOK_STRUCTURES);
+        let sites = creep.pos.lookFor(LOOK_CONSTRUCTION_SITES);
+        if (!_.any(_.union(structs, sites), 'structureType', 'container')) {
+          creep.room.createConstructionSite(creep.pos, STRUCTURE_CONTAINER);
+        }
       }
     }
   },

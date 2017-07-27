@@ -7,7 +7,7 @@ module.exports = {
       let towers = _.filter(creep.room.memory.structuresByType.tower, struct => struct.energy < struct.energyCapacity);
       towers = _.map(towers, 'id');
       let towerfillerTargets = _.map(creep.room.memory.myCreepsByRole.towerfiller, 'memory.target');
-      let availableTargets = _.filter(towers, t => _.includes(towerfillerTargets, t));
+      let availableTargets = _.reject(towers, t => _.includes(towerfillerTargets, t));
       if (availableTargets.length > 0) {
         creep.memory.target = _.head(availableTargets);
       }
@@ -16,15 +16,13 @@ module.exports = {
     if(creep.carry.energy < creep.carryCapacity) {
       if (!actions.withdrawFromNearestStorage(creep)) {
         if (!actions.withdrawFromNearestContainer(creep)) {
-        //  actions.recycleSelf(creep);
-        creep.say('no energy');
+          actions.recycleSelf(creep);
+          creep.say('no energy');
         }
       }
     } else {
-
       let tower = Game.getObjectById(creep.memory.target);
-      if (tower.energy < tower.energyCapacity) {
-
+      if (tower && tower.energy < tower.energyCapacity) {
         let target = Game.getObjectById(tower.id);
         let result = creep.transfer(target, RESOURCE_ENERGY);
         if (result == ERR_NOT_IN_RANGE) {
