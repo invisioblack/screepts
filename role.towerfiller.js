@@ -28,6 +28,8 @@ module.exports = {
         if (result == ERR_NOT_IN_RANGE) {
           creep.moveTo(target);
         }
+      } else if (tower && tower.energy == tower.energyCapacity) {
+        creep.memory.role = 'upgrader';
       }
 
     }
