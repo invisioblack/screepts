@@ -16,7 +16,8 @@ module.exports = {
     if(creep.carry.energy < creep.carryCapacity) {
       if (!actions.withdrawFromNearestStorage(creep)) {
         if (!actions.withdrawFromNearestContainer(creep)) {
-          actions.recycleSelf(creep);
+        //  actions.recycleSelf(creep);
+        creep.say('no energy');
         }
       }
     } else {

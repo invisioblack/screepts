@@ -9,6 +9,7 @@ module.exports = {
         jobActions[job.action](creep, job);
       } else {
         creep.say('no job');
+        creep.memory.role = 'upgrader';
       }
   },
 

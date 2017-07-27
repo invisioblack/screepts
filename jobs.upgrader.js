@@ -11,23 +11,31 @@ module.exports = {
             target: target.id
           };
         } else {
-
-          let droppedEnergy = _.map(room.memory.droppedEnergy, de => Game.getObjectById(de.id));
-          let target = upgrader.pos.findClosestByPath(droppedEnergy);
-          if(target) {
+          let containers = _.map(_.filter(room.memory.structuresByType.container, container => container.store[RESOURCE_ENERGY] > 0), container => Game.getObjectById(container.id));
+          let target = upgrader.pos.findClosestByPath(containers);
+          if (target) {
             upgrader.memory.job = {
-              action: 'collectEnergy',
+              action: 'withdrawEnergy',
               room: upgrader.pos.roomName,
               target: target.id
-            };
+            }
           } else {
-            target = upgrader.pos.findClosestByPath(room.memory.structuresByType.spawn);
-            upgrader.memory.job = {
-              action: 'recycleSelf',
-              target: target.id
-            };
+            let droppedEnergy = _.map(room.memory.droppedEnergy, de => Game.getObjectById(de.id));
+            let target = upgrader.pos.findClosestByPath(droppedEnergy);
+            if (target) {
+              upgrader.memory.job = {
+                action: 'collectEnergy',
+                room: upgrader.pos.roomName,
+                target: target.id
+              };
+            } else {
+              target = upgrader.pos.findClosestByPath(room.memory.structuresByType.spawn);
+              upgrader.memory.job = {
+                action: 'recycleSelf',
+                target: target.id
+              };
+            }
           }
-
         }
       } else {
         let target = room.controller;
