@@ -4,9 +4,9 @@ const bodies = require('creeps.bodies');
 module.exports = {
   run: function(creep) {
     if (!creep.memory.target) {
-      let towers = _.filter(spawn.room.memory.structuresByType.tower, struct => struct.energy < struct.energyCapacity);
+      let towers = _.filter(creep.room.memory.structuresByType.tower, struct => struct.energy < struct.energyCapacity);
       towers = _.map(towers, 'id');
-      let towerfillerTargets = _.map(spawn.room.memory.myCreepsByRole.towerfiller, 'memory.target');
+      let towerfillerTargets = _.map(creep.room.memory.myCreepsByRole.towerfiller, 'memory.target');
       let availableTargets = _.filter(towers, t => _.includes(towerfillerTargets, t));
       if (availableTargets.length > 0) {
         creep.memory.target = _.head(availableTargets);
