@@ -47,7 +47,7 @@ const createStrongestMelee = (spawn, base = null) => {
 
 const chooseLargestAffordable = (spawn, bodies) => {
     let costs = _.map(bodies, body => {return {body: body, cost: utils.calculateBodyCost(body)}; } )
-    costs = _.filter(costs, cost => cost.cost <= spawn.room.energyAvailable);
+    costs = _.filter(costs, cost => (cost.cost <= spawn.room.energyAvailable));
     costs = _.sortBy(costs, 'cost');
 
     let body = _.last(costs);

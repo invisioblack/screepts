@@ -25,7 +25,7 @@ module.exports = {
   },
 
   create: function(spawn) {
-    return spawn.createCreep([CARRY, CARRY, MOVE], memory = {
+    return spawn.createCreep([CARRY, CARRY, MOVE, MOVE], memory = {
       role: 'spawnsupplier'
     });
   }

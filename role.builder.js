@@ -20,7 +20,7 @@ module.exports = {
     }
 
     let storageCondition = storage && storage.store[RESOURCE_ENERGY] > (numBuilders.length || 0) * 1000;
-    let csCondition = Math.floor(spawn.room.memory.constructionSites.length/5) - (numBuilders.length || 0) > 0;
+    let csCondition = Math.floor(spawn.room.memory.constructionSites.length/5) - (numBuilders.length || 0) > 2;
 
     if (storage) {
       return storageCondition && csCondition;

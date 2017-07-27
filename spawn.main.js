@@ -17,6 +17,7 @@ module.exports = {
 
     if(spawn.room.energyAvailable < 0.35 * spawn.room.energyCapacityAvailable &&
         spawn.room.storage &&
+        spawn.room.storage.store[RESOURCE_ENERGY] > 0 &&
         (!rolesNum.spawnsupplier || rolesNum.spawnsupplier < 1)) {
           if (roles.spawnsupplier.behavior.create(spawn) == OK)
             return;
