@@ -10,7 +10,18 @@ CONSTRUCTION_PRIORITIES = {
   road: 100
 };
 
+SPAWNING_PRIORITIES = {
+  'miner': 100,
+  'towerfiller': 90,
+  'courier': 75,
+  'builder': 25,
+  'repairman': 10,
+  'spawnsupplier': 80,
+  'upgrader': 25
+}
+
 
 module.exports = {
-  CONSTRUCTION_PRIORITIES
+  CONSTRUCTION_PRIORITIES,
+  SPAWNING_PRIORITIES
 };
