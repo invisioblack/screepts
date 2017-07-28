@@ -19,11 +19,9 @@ module.exports = {
       numBuilders = spawn.room.memory.myCreepsByRole.builder.length;
     }
 
-    let storageCondition = storage && storage.store[RESOURCE_ENERGY] > storage.storeCapacity*0.05;
+    let storageCondition = storage && storage.store[RESOURCE_ENERGY] > storage.storeCapacity*0.005;
     let csCondition = Math.ceil(spawn.room.memory.constructionSites.length/3) - (numBuilders.length || 0) > 0;
     let energyCondition = spawn.room.energyAvailable >= 0.33*spawn.room.energyCapacityAvailable;
-
-    console.log(spawn, storageCondition, csCondition, energyCondition);
 
     if (storage) {
       return storageCondition && csCondition && energyCondition;
