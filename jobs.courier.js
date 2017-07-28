@@ -51,7 +51,7 @@ module.exports = {
           if (target.amount <= 0) {
             _.remove(droppedEnergy, dropped => dropped.id == target.id);
           }
-        } else if (room.memory.structuresByType.container && room.memory.structuresByType.length > 0) {
+        } else if (room.memory.structuresByType.container && room.memory.structuresByType.container.length > 0) {
           var containers = _.map(_.filter(room.memory.structuresByType.container, container => container.store[RESOURCE_ENERGY] > 0), container => Game.getObjectById(container.id));
           target = courier.pos.findClosestByPath(containers);
           if(target) {

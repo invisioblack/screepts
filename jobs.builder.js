@@ -11,7 +11,6 @@ module.exports = {
             target: target.id
           };
         } else {
-          let containers = _.map(_.filter(room.memory.structuresByType.container, container => container.store[RESOURCE_ENERGY] > 0), container => Game.getObjectById(container.id));
           let target = builder.pos.findClosestByPath(containers);
           if (target) {
             builder.memory.job = {
