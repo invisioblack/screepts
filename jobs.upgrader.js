@@ -11,7 +11,7 @@ module.exports = {
             target: target.id
           };
         } else {
-          let containers = _.map(_.filter(room.memory.structuresByType.container, container => container.store[RESOURCE_ENERGY] > 0), container => Game.getObjectById(container.id));
+          let containers = _.map(_.filter(room.memory.structuresByType.container, container => container.store[RESOURCE_ENERGY] > 100), container => Game.getObjectById(container.id));
           let target = upgrader.pos.findClosestByPath(containers);
           if (target) {
             upgrader.memory.job = {
@@ -20,8 +20,9 @@ module.exports = {
               target: target.id
             }
           } else {
-            let droppedEnergy = _.map(room.memory.droppedEnergy, de => Game.getObjectById(de.id));
-            let target = upgrader.pos.findClosestByPath(droppedEnergy);
+            let droppedEnergy = _(room.memory.droppedEnergy).map(de => Game.getObjectById(de.id)).filter(de => de.amount > 50).sortBy(de => de.amount).reverse().value();
+            //let target = upgrader.pos.findClosestByPath(droppedEnergy);
+            let target = _.head(droppedEnergy);
             if (target) {
               upgrader.memory.job = {
                 action: 'collectEnergy',

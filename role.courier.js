@@ -21,7 +21,13 @@ module.exports = {
       numCouriers = spawn.room.memory.myCreepsByRole.courier.length;
     }
 
-    let enoughEnergy = Math.floor(totalDropped/300) - numCouriers > 0;
+    let containers = _.map(
+      _.filter(spawn.room.memory.structuresByType.container, container => container.store[RESOURCE_ENERGY] > 0),
+      container => Game.getObjectById(container.id).store[RESOURCE_ENERGY]
+    );
+    let containersSum = _.sum(containers);
+
+    let enoughEnergy = Math.ceil((totalDropped+containersSum)/1000) - numCouriers > 0;
 
     let structs = spawn.room.memory.structuresByType;
     let unfilledStructures = _.filter(_.union(structs.spawn, structs.extension, structs.storage),
@@ -33,7 +39,7 @@ module.exports = {
                                 }
                               });
 
-    return enoughEnergy || Math.floor(unfilledStructures.length/numCouriers) > 5;
+    return enoughEnergy && Math.ceil(unfilledStructures.length/numCouriers) > 5;
 
   },
 

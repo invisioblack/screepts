@@ -23,7 +23,9 @@ module.exports = {
             return;
     }
 
-    if (spawn.room.memory.sources.length - (rolesNum.miner || 0) > 0 && !isQueued(spawnQueue, 'miner')) {
+    if ((spawn.energy == spawn.energyCapacity || spawn.room.energyAvailable >= 0.33*spawn.room.energyCapacityAvailable) &&
+        spawn.room.memory.sources.length - (rolesNum.miner || 0) > 0 && 
+        !isQueued(spawnQueue, 'miner')) {
       spawnQueue.push({role: 'miner'});
     }
 
