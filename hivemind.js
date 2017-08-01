@@ -8,6 +8,7 @@ const courierJobs = require('jobs.courier');
 const upgraderJobs = require('jobs.upgrader');
 const reclaimerJobs = require('jobs.reclaimer');
 const nextroomerJobs = require('jobs.nextroomer');
+const excavatorJobs = require('jobs.excavator');
 
 hivemind = {};
 
@@ -296,10 +297,12 @@ hivemind.assignJobs = () => {
       let builders = _.filter(creeps, creep => creep.memory.role == 'builder' && !creep.memory.job);
       let couriers = _.filter(creeps, creep => creep.memory.role == 'courier' && !creep.memory.job);
       let upgraders = _.filter(creeps, creep => creep.memory.role == 'upgrader' && !creep.memory.job);
+      let excavators = _.filter(creeps, creep => creep.memory.role == 'excavator' && !creep.memory.job);
 
       courierJobs.assignJobs(room, couriers);
       upgraderJobs.assignJobs(room, upgraders);
       builderJobs.assignJobs(room, builders);
+      excavatorJobs.assignJobs(rom, excavators);
     }
   });
 }

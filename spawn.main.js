@@ -24,9 +24,13 @@ module.exports = {
     }
 
     if ((spawn.energy == spawn.energyCapacity || spawn.room.energyAvailable >= 0.33*spawn.room.energyCapacityAvailable) &&
-        spawn.room.memory.sources.length - (rolesNum.miner || 0) > 0 && 
+        spawn.room.memory.sources.length - (rolesNum.miner || 0) > 0 &&
         !isQueued(spawnQueue, 'miner')) {
       spawnQueue.push({role: 'miner'});
+    }
+
+    if (roles.excavator.behavior.spawnCondition(spawn) && !isQueued(spawnQueue, 'excavator')) {
+      spawnQueue.push({role: 'excavator'});
     }
 
     if (roles.courier.behavior.spawnCondition(spawn) && !isQueued(spawnQueue, 'courier')) {
