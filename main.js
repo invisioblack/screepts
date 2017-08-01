@@ -4,6 +4,7 @@ require('roomPosition.prototype');
 require('hivemind');
 require('config');
 require('utils');
+require('trader');
 
 const stats = require('screepsplus');
 
