@@ -122,6 +122,11 @@ function claimRoomAction(creep, job) {
 }
 
 function mineAction(creep, job) {
+  var sumCarry = _.sum(creep.carry);
+  if (sumCarry > 0 && sumCarry === creep.carryCapacity) {
+       delete creep.memory.job;
+   }
+
   let target = Game.getObjectById(job.target);
   if (target) {
     let result = creep.harvest(target);
