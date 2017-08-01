@@ -11,6 +11,7 @@ const roleReclaimer = require('role.reclaimer');
 const roleReserver = require('role.reserver');
 const roleSpawnSupplier = require('role.spawnsupplier');
 const roleNextroomer = require('role.nextroomer');
+const roleExcavator = require('role.excavator');
 
 module.exports = {
   // Infrastructure
@@ -42,6 +43,9 @@ module.exports = {
   },
   remoteminer: {
     behavior: roleRemoteMiner
+  },
+  excavator: {
+    behavior: roleExcavator
   },
 
   // Military
