@@ -25,7 +25,7 @@ module.exports = {
             let target = _.head(droppedEnergy);
             if (target) {
               builder.memory.job = {
-                action: 'collectEnergy',
+                action: 'collectResource',
                 room: builder.pos.roomName,
                 target: target.id
               };

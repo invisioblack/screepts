@@ -43,6 +43,30 @@ function dumpEnergyAction(creep, job) {
   }
 }
 
+function dumpMineralAction(creep, job) {
+  if (_.sum(creep.carry) === 0) {
+    delete creep.memory.job;
+  }
+
+  let target = Game.getObjectById(job.target);
+  if (target) {
+    for (let mineral in creep.carry) {
+      if (creep.carry[mineral] === 0) {
+        continue;
+      }
+      let result = creep.transfer(target, mineral);
+      if (result == ERR_NOT_IN_RANGE) {
+        creep.moveTo(target);
+      } else if (result == ERR_FULL || _.sum(creep.carry) === 0) {
+        delete creep.memory.job;
+      }
+    }
+
+  } else {
+    delete creep.memory.job;
+  }
+}
+
 function recycleSelfAction(creep, job) {
   let target = Game.getObjectById(job.target);
   if (target) {
@@ -53,7 +77,7 @@ function recycleSelfAction(creep, job) {
   }
 }
 
-function collectEnergyAction(creep, job) {
+function collectResourceAction(creep, job) {
   if (_.sum(creep.carry) === creep.carryCapacity) {
        delete creep.memory.job;
    }
@@ -70,6 +94,7 @@ function collectEnergyAction(creep, job) {
     delete creep.memory.job;
   }
 }
+
 
 function withdrawEnergyAction(creep, job) {
   if (_.sum(creep.carry) === creep.carryCapacity) {
@@ -119,7 +144,7 @@ function buildUpRoomAction(creep, job) {
         let closest = creep.pos.findClosestByPath(droppedEnergy);
         if (closest) {
           creep.memory.job = {
-            action: 'collectEnergy',
+            action: 'collectResource',
             room: creep.pos.roomName,
             target: closest.id
           };
@@ -177,8 +202,9 @@ module.exports = {
   build: buildAction,
   upgrade: upgradeAction,
   dumpEnergy: dumpEnergyAction,
+  dumpMineral: dumpMineralAction,
   recycleSelf: recycleSelfAction,
-  collectEnergy: collectEnergyAction,
+  collectResource: collectResourceAction,
   withdrawEnergy: withdrawEnergyAction,
   claimRoom: claimRoomAction,
   mine: mineAction,

@@ -302,7 +302,7 @@ hivemind.assignJobs = () => {
       courierJobs.assignJobs(room, couriers);
       upgraderJobs.assignJobs(room, upgraders);
       builderJobs.assignJobs(room, builders);
-      excavatorJobs.assignJobs(rom, excavators);
+      excavatorJobs.assignJobs(room, excavators);
     }
   });
 }

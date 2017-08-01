@@ -38,11 +38,10 @@ module.exports = {
         }
       } else {
         let droppedEnergy = _(room.memory.droppedEnergy).map(de => Game.getObjectById(de.id)).filter(de => de.amount > 50).sortBy(de => de.amount).reverse().value();
-        //let target = courier.pos.findClosestByPath(droppedEnergy);
         let target = _.head(droppedEnergy);
         if (target) {
           courier.memory.job = {
-            action: 'collectEnergy',
+            action: 'collectResource',
             room: courier.pos.roomName,
             target: target.id
           };

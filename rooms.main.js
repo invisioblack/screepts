@@ -30,6 +30,7 @@ module.exports = {
     if (room.memory.my) {
       let memory = _.clone(room.memory);
       memory.droppedEnergy = room.find(FIND_DROPPED_RESOURCES, {filter: {resourceType: RESOURCE_ENERGY}});
+      memory.droppedMinerals = room.find(FIND_DROPPED_RESOURCES, {filter: dropped => dropped.resourceType != RESURCE_ENERGY && dropped.resourceType != RESOURCE_POWER});
       memory.structuresByType = _.groupBy(room.find(FIND_STRUCTURES), 'structureType');
       memory.constructionSites = room.find(FIND_CONSTRUCTION_SITES);
       memory.myCreeps = room.find(FIND_MY_CREEPS);

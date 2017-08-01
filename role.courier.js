@@ -27,7 +27,7 @@ module.exports = {
     );
     let containersSum = _.sum(containers);
 
-    let enoughEnergy = Math.ceil((totalDropped+containersSum)/1000) - numCouriers > 0;
+    let enoughEnergy = Math.ceil((totalDropped+containersSum)/300) - numCouriers > 0;
 
     let structs = spawn.room.memory.structuresByType;
     let unfilledStructures = _.filter(_.union(structs.spawn, structs.extension, structs.storage),
@@ -39,7 +39,7 @@ module.exports = {
                                 }
                               });
 
-    return enoughEnergy && Math.ceil(unfilledStructures.length/numCouriers) > 5;
+    return enoughEnergy && Math.ceil(unfilledStructures.length/numCouriers) > 2;
 
   },
 

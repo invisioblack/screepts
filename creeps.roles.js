@@ -12,6 +12,7 @@ const roleReserver = require('role.reserver');
 const roleSpawnSupplier = require('role.spawnsupplier');
 const roleNextroomer = require('role.nextroomer');
 const roleExcavator = require('role.excavator');
+const roleMineralCourier = require('role.mineralCourier');
 
 module.exports = {
   // Infrastructure
@@ -32,6 +33,9 @@ module.exports = {
   },
   nextroomer: {
     behavior: roleNextroomer
+  },
+  mineralCourier: {
+    behavior: roleMineralCourier
   },
 
   // Resource extraction
