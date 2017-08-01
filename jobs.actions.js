@@ -207,7 +207,6 @@ function moveToTargetRoom(creep, job) {
     creep.moveTo(job.targetExit.x, job.targetExit.y);
   } else {
     let route = Game.map.findRoute(creep.room, targetRoom);
-    console.log(creep.name, creep.pos, creep.room.name);
     job.targetExit = creep.pos.findClosestByPath(route[0].exit);
     creep.moveTo(job.targetExit);
 

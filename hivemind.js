@@ -300,7 +300,7 @@ hivemind.manageRemoteMiners = () => {
     let room = Game.rooms[name];
 
     if (room) {
-      remoteminers = _(room.memory.myCreeps)
+      let remoteminers = _(room.memory.myCreeps)
                       .map(c => Game.getObjectById(c.id))
                       .filter(c => creep.memory.role == 'remoteminer' && !creep.memory.job)
                       .value();
