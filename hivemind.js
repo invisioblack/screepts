@@ -298,7 +298,16 @@ hivemind.manageRemoteMiners = () => {
 
   _.forEach(Memory.remoteMineRooms, name => {
     let room = Game.rooms[name];
-    if (room && rom.memory && room.memory.my) {
+
+    if (room) {
+      remoteminers = _(room.memory.myCreeps)
+                      .map(c => Game.getObjectById(c.id))
+                      .filter(c => creep.memory.role == 'remoteminer' && !creep.memory.job)
+                      .value();
+      remoteminerJobs.assignJobs(room, remoteminers);
+    }
+
+    if (room && room.memory && room.memory.my) {
       return;
     }
 
@@ -315,12 +324,6 @@ hivemind.manageRemoteMiners = () => {
                         .filter(c => c.memory.role == 'remoteminer' && !c.memory.job && c.memory.originRoom == closestRoom.name)
                         .value();
     remoteminerJobs.assignJobs(closestRoom, remoteminers);
-
-    remoteminers = _(room.memory.myCreeps)
-                    .map(c => Game.getObjectById(c.id))
-                    .filter(c => creep.memory.role == 'remoteminer' && !creep.memory.job)
-                    .value();
-    remoteminerJobs.assignJobs(room, remoteminers);
 
   });
 }
