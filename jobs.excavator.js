@@ -2,10 +2,10 @@ module.exports = {
   assignJobs: (room, creeps) => {
     let mineral = room.memory.minerals[0];
     _.forEach(creeps, excavator => {
-      if (_.sum(creep.carry) === creep.carryCapacity) {
+      if (_.sum(excavator.carry) === excavator.carryCapacity) {
         let target = room.terminal;
         if (target) {
-          courier.memory.job = {
+          excavator.memory.job = {
             action: 'dumpMineral',
             room: room.name,
             target: target.id
