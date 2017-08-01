@@ -28,10 +28,14 @@ module.exports = {
     [WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE]
   ],
 
-  create: function(spawn, memory) {
-    var body  = bodies.chooseLargestAffordable(spawn, this.sizes);
-    return spawn.createCreep(body, memory = Object.assign({}, {role: 'remoteminer'}, memory));
-  } else {
-    return ERR_NOT_ENOUGH_ENERGY;
+  create : function(spawn, memory) {
+    var body = bodies.chooseLargestAffordable(spawn, this.sizes);
+    if (body) {
+      return spawn.createCreep(body, memory = Object.assign({}, {
+        role: 'remoteminer'
+      }, memory));
+    } else {
+      return ERR_NOT_ENOUGH_ENERGY;
+    }
   }
 }

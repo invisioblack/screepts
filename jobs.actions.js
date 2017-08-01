@@ -140,6 +140,18 @@ function mineAction(creep, job) {
   }
 }
 
+function remoteMineAction(creep, job) {
+  if (creep.pos.roomName == job.room) {
+    let target = creep.pos.findClosestByPath(FIND_SOURCES);
+
+    creep.memory.job = {
+      action: 'mine',
+      room: creep.pos.roomName,
+      target: target.id
+    }
+  }
+}
+
 function buildUpRoomAction(creep, job) {
   if (creep.pos.roomName == job.room) {
     if (creep.carry.energy < creep.carryCapacity) {
@@ -213,6 +225,7 @@ module.exports = {
   withdrawEnergy: withdrawEnergyAction,
   claimRoom: claimRoomAction,
   mine: mineAction,
+  remoteMine: remoteMineAction,
   buildUp: buildUpRoomAction,
   moveToTargetRoom: moveToTargetRoom
 };

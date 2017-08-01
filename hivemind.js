@@ -218,6 +218,7 @@ _.forEach(Game.flags, flag => {
           _.remove(Memory.remoteMineRooms, r => r==flag.pos.roomName);
         }
       }
+      flag.remove();
       break;
     case COLOR_ORANGE:
       if (flag.room && flag.room.controller.my) {
@@ -297,7 +298,7 @@ hivemind.manageRemoteMiners = () => {
 
   _.forEach(Memory.remoteMineRooms, name => {
     let room = Game.rooms[name];
-    if (room.memory.my) {
+    if (room && rom.memory && room.memory.my) {
       return;
     }
 
@@ -306,17 +307,19 @@ hivemind.manageRemoteMiners = () => {
     _.filter(closestRoom.memory.spawnQueue, item => item.role == 'remoteminer' && item.memory.originRoom == closestRoom.name).length;
 
     if (totalMinersAlreadySent < 3) {
-      closestRoom.memory.spawnQueue.push({role:'remoteminer', memory: {originRoom: closestRoom.name, targetRoom: room.name}});
+      closestRoom.memory.spawnQueue.push({role:'remoteminer', memory: {originRoom: closestRoom.name, targetRoom: name}});
     }
 
     let remoteminers = _(closestRoom.memory.myCreeps)
                         .map(c => Game.getObjectById(c.id))
-                        .filter(c => c.memory.role == 'remoteminer' && !c.memory.job && c.memory.originRoom == closestRoom.name);
+                        .filter(c => c.memory.role == 'remoteminer' && !c.memory.job && c.memory.originRoom == closestRoom.name)
+                        .value();
     remoteminerJobs.assignJobs(closestRoom, remoteminers);
 
     remoteminers = _(room.memory.myCreeps)
                     .map(c => Game.getObjectById(c.id))
-                    .filter(c => creep.memory.role == 'remoteminer' && !creep.memory.job);
+                    .filter(c => creep.memory.role == 'remoteminer' && !creep.memory.job)
+                    .value();
     remoteminerJobs.assignJobs(room, remoteminers);
 
   });
