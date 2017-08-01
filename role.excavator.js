@@ -23,8 +23,8 @@ module.exports = {
   },
 
   sizes: [
-    [WORK, WORK, WORK, MOVE],
-    [WORK, WORK, WORK, WORK, WORK, MOVE]
+    [WORK, WORK, WORK, CARRY, MOVE, MOVE, MOVE, MOVE],
+    [WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE]
   ],
 
   create: function(spawn) {

@@ -37,10 +37,6 @@ module.exports = {
       spawnQueue.push({role: 'courier'});
     }
 
-    if (roles.mineralCourier.behavior.spawnCondition(spawn) && !isQueued(spawnQueue, 'mineralCourier')) {
-      spawnQueue.push({role: 'mineralCourier'});
-    }
-
     if (roles.upgrader.behavior.spawnCondition(spawn) && !isQueued(spawnQueue, 'upgrader')) {
       spawnQueue.push({role: 'upgrader'});
     }
