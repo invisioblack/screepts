@@ -11,10 +11,21 @@ trader.createSellOrdersAll = room => {
                       .filter({type: ORDER_SELL, resourceType: resourceType})
                       .sortBy('price')
                       .head()
-                      .value()
                       .price;
-      console.log(bestPrice, resourceType);
+      let result = Game.market.createOrder(
+        ORDER_SELL,
+        resourceType,
+        bestPrice,
+        room.terminal.store[resourceType],
+        room.name
+      );
     }
   }
+}
 
+trader.sellAll = room => {
+  if (room.terminal) {
+    let orders = Game.market.getAllOrders();
+    
+  }
 }

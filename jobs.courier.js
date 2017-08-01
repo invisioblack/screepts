@@ -6,18 +6,16 @@ module.exports = {
     }
     _.forEach(creeps, courier => {
       if (courier.carry.energy > 0) {
-        let target = courier.pos.findClosestByPath(courier.room.memory.structuresByType.spawn, {
-          filter: spawn => spawn.energy < spawn.energyCapacity
-        });
-        if (target) {
+        if (room.terminal && room.terminal.store[RESOURCE_ENERGY] < room.terminal.storeCapacity * 0.01) {
+          let target = room.terminal;
           courier.memory.job = {
             action: 'dumpEnergy',
-            room: courier.pos.roomName,
+            room: room.name,
             target: target.id
           };
         } else {
-          target = courier.pos.findClosestByPath(courier.room.memory.structuresByType.extension, {
-            filter: ext => ext.energy < ext.energyCapacity
+          let target = courier.pos.findClosestByPath(courier.room.memory.structuresByType.spawn, {
+            filter: spawn => spawn.energy < spawn.energyCapacity
           });
           if (target) {
             courier.memory.job = {
@@ -26,12 +24,23 @@ module.exports = {
               target: target.id
             };
           } else {
-            target = courier.room.storage;
+            target = courier.pos.findClosestByPath(courier.room.memory.structuresByType.extension, {
+              filter: ext => ext.energy < ext.energyCapacity
+            });
             if (target) {
               courier.memory.job = {
                 action: 'dumpEnergy',
                 room: courier.pos.roomName,
                 target: target.id
+              };
+            } else {
+              target = courier.room.storage;
+              if (target) {
+                courier.memory.job = {
+                  action: 'dumpEnergy',
+                  room: courier.pos.roomName,
+                  target: target.id
+                }
               }
             }
           }
