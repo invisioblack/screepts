@@ -31,7 +31,8 @@ function collectStats() {
           : null,
         RCL: room.controller.level,
         controllerProgress: room.controller.progress,
-        controllerProgressTotal: room.controller.progressTotal
+        controllerProgressTotal: room.controller.progressTotal,
+        terminal: room.terminal ? room.terminal.store : null
       };
     }
 

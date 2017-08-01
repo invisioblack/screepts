@@ -9,11 +9,6 @@ module.exports = {
     memory.initialized = true;
     memory.my = room.controller && room.controller.my;
 
-    if(!memory.my){
-      room.memory = memory;
-      return;
-    }
-
     memory.sources = room.find(FIND_SOURCES);
     memory.minerals = room.find(FIND_MINERALS);
     memory.exits = [

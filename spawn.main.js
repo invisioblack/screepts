@@ -49,7 +49,6 @@ module.exports = {
       spawnQueue.push({role: 'towerfiller'});
     }
 
-
     let damaged = _.filter(spawn.room.memory.structures, s => s.structureType != STRUCTURE_ROAD && s.hits < s.hitsMax*0.75);
     if ((!rolesNum.repairman || rolesNum.repairman < 1) && damaged.length > 0 && !isQueued(spawnQueue, 'repairman')) {
       spawnQueue.push({role: 'repairman'});

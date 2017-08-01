@@ -7,68 +7,31 @@ const home = 'E68N43';
 module.exports = {
   run: function(creep) {
 
-    if (creep.room.name != creep.memory.targetRoom) {
-
-      if (creep.carry.energy < creep.carryCapacity) {
-
-        // Go to the target room
-        const exitDir = Game.map.findExit(creep.room, creep.memory.targetRoom);
-        const exit = creep.pos.findClosestByRange(exitDir);
-        creep.moveTo(exit);
-
+    if (creep.memory.job) {
+      let job = creep.memory.job;
+      if (creep.pos.roomName != creep.memory.job.room) {
+        jobActions.moveToTargetRoom(creep, job);
       } else {
-
-        //Dump energy at storage structures, else head home
-        if (creep.room.name == home) {
-          if (!actions.dumpEnergyAt(creep, STRUCTURE_STORAGE)) {
-            actions.dumpEnergyAt(creep, STRUCTURE_CONTAINER);
-          }
-        } else {
-          // Head home
-          const exitDir = Game.map.findExit(creep.room, home);
-          const exit = creep.pos.findClosestByRange(exitDir);
-          creep.moveTo(exit);
-        }
-
+        let job = creep.memory.job;
+        jobActions[job.action](creep, job);
       }
 
     } else {
-
-      if (creep.carry.energy < creep.carryCapacity) {
-
-        if (!actions.collectNearestDroppedEnergy(creep)) {
-          // Go to the nearest source and mine until full
-          var source = creep.pos.findClosestByPath(FIND_SOURCES);
-
-          if (source) {
-            if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
-              creep.moveTo(source);
-            }
-          }
-
-        }
-      } else {
-
-        // Head home
-        const exitDir = Game.map.findExit(creep.room, home);
-        const exit = creep.pos.findClosestByRange(exitDir);
-        creep.moveTo(exit);
-
-      }
+      creep.say('no job');
     }
 
   },
 
-  create: function(spawn) {
-    var body  = bodies.createFastest(spawn, [WORK, WORK, CARRY, CARRY, CARRY]);
-    return spawn.createCreep(body, memory = {
-      role: 'remoteminer'
-    });
+  sizes: [
+    [WORK, CARRY, MOVE, MOVE],
+    [WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE],
+    [WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE]
+  ],
 
-    if(Memory.stats.remoteMiningLosses) {
-      Memory.stats.remoteMiningLosses += utils.calculateBodyCost(body);
-    } else {
-      Memory.stats.remoteMiningLosses = utils.calculateBodyCost(body);
-    }
+  create: function(spawn, memory) {
+    var body  = bodies.chooseLargestAffordable(spawn, this.sizes);
+    return spawn.createCreep(body, memory = Object.assign({}, {role: 'remoteminer'}, memory));
+  } else {
+    return ERR_NOT_ENOUGH_ENERGY;
   }
 }
