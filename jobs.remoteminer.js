@@ -5,11 +5,23 @@ module.exports ={
       let targetRoom = Game.rooms[miner.memory.targetRoom];
 
       if (miner.carry.energy < miner.carryCapacity) {
-          miner.memory.job = {
-            action: 'remoteMine',
-            room: miner.memory.targetRoom,
-            target: null
-          };
+          if(miner.pos.roomName != miner.memory.targetRoom) {
+            miner.memory.job = {
+              action: 'remoteMine',
+              room: miner.memory.targetRoom,
+              target: null
+            };
+          } else {
+            let target = miner.pos.findClosestByPath(FIND_SOURCES);
+            if (target) {
+              miner.memory.job = {
+                action: 'mine',
+                room: miner.pos.roomName,
+                target: target.id
+              }
+            }
+          }
+
       } else {
         let target = originRoom.storage;
         if (target) {
