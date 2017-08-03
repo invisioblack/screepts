@@ -26,13 +26,13 @@ module.exports = {
     }
 
     let storageCondition = storage && (storage.store[RESOURCE_ENERGY] > storage.storeCapacity*0.0065);
-    let numberCondition = spawn.room.energyCapacityAvailable > 200*(numUpgraders.length || 0);
+    let numberCondition = spawn.room.energyCapacityAvailable > 250*(numUpgraders.length || 0);
     let energyCondition = spawn.room.energyAvailable >= 0.33*spawn.room.energyCapacityAvailable;
 
     if (storage) {
       return storageCondition && energyCondition;
     } else {
-      return spawn.room.energyAvailable==spawn.room.energyCapacityAvailable && numberCondition && energyCondition && spawn.room.memory.constructionSites.length == 0;
+      return spawn.room.energyAvailable==spawn.room.energyCapacityAvailable && numberCondition && energyCondition;
     }
   },
 

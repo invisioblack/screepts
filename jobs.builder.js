@@ -29,8 +29,6 @@ module.exports = {
                 room: builder.pos.roomName,
                 target: target.id
               };
-            } else {
-              builder.memory.role = 'upgrader';
             }
           }
         }
