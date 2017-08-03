@@ -32,7 +32,7 @@ module.exports = {
     if (storage) {
       return storageCondition && energyCondition;
     } else {
-      return spawn.room.energyAvailable==spawn.room.energyCapacityAvailable && numberCondition && energyCondition;
+      return spawn.room.energyAvailable==spawn.room.energyCapacityAvailable && numberCondition && energyCondition && spawn.room.memory.constructionSites.length == 0;
     }
   },
 
