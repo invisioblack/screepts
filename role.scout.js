@@ -4,52 +4,33 @@ const bodies = require('creeps.bodies');
 module.exports = {
   run: function(creep) {
 
-    if (creep.room.name != creep.memory.targetRoom) {
-      const exitDir = Game.map.findExit(creep.room, creep.memory.targetRoom);
-      const exit = creep.pos.findClosestByRange(exitDir);
-      creep.moveTo(exit);
+    if (creep.memory.job) {
+      let job = creep.memory.job;
+      if (creep.pos.roomName != creep.memory.job.room) {
+        jobActions.moveToTargetRoom(creep, job);
+      } else {
+        let job = creep.memory.job;
+        jobActions[job.action](creep, job);
+      }
+
     } else {
-      var target = creep.pos.findClosestByPath(FIND_HOSTILE_CREEPS, {
-        filter: c => {
-          return !_.includes(config.allies, c.owner.username);
-        }
-      });
-      if (target && creep.attack(target) == ERR_NOT_IN_RANGE) {
-        creep.moveTo(target);
-      }
-
-      if (!target) {
-        target = creep.pos.findClosestByPath(FIND_HOSTILE_SPAWNS, {
-          filter: spawn => {
-            return !_.includes(config.allies, spawn.owner.username);
-          }
-        });
-
-        if (target && creep.attack(target) == ERR_NOT_IN_RANGE) {
-          creep.moveTo(target);
-        }
-
-        if (!target) {
-          target = creep.pos.findClosestByPath(FIND_STRUCTURES, {
-            filter: structure => {
-              return structure.structureType == STRUCTURE_TOWER
-            }
-          });
-
-          if (target && creep.attack(target) == ERR_NOT_IN_RANGE) {
-            creep.moveTo(target);
-          }
-        }
-
-      }
-
+      creep.say('no job');
     }
 
   },
 
+  sizes: [
+    [ATTACK, ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE, MOVE],
+    [TOUGH, TOUGH, ATTACK, ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE],
+    [TOUGH, TOUGH, TOUGH, TOUGH, ATTACK, ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE]
+  ],
+
   create: function(spawn) {
-    return spawn.createCreep([MOVE, MOVE, MOVE, MOVE, ATTACK, ATTACK, ATTACK, ATTACK], memory = {
-      role: 'scout'
-    });
+    let body = bodies.chooseLargestAffordable(spawn, this.sizes);
+    if (body) {
+      return spawn.createCreep(body, memory = Object.assign({}, {role: 'scout'}, memory));
+    } else {
+      return ERR_NOT_ENOUGH_ENERGY;
+    }
   }
 }

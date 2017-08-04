@@ -37,7 +37,7 @@ module.exports = {
   spawnCondition: function(spawn) {
     let numTowerfillers = 0;
     if (spawn.room.memory.myCreepsByRole.towerfiller) {
-      numTowerfillers = spawn.room.memory.myCreepsByRole.towerfiller;
+      numTowerfillers = spawn.room.memory.myCreepsByRole.towerfiller.length;
     }
     let towers = _.filter(spawn.room.memory.structuresByType.tower, struct => struct.energy < struct.energyCapacity);
     let storage = spawn.room.storage && spawn.room.storage.store[RESOURCE_ENERGY] > 0;

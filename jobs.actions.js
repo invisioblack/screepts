@@ -6,7 +6,7 @@ function buildAction(creep, job) {
   let constructionSite = Game.getObjectById(job.target);
   if (constructionSite) {
     let result = creep.build(constructionSite);
-    if (result == ERR_NOT_IN_RANGE) {
+    if (result === ERR_NOT_IN_RANGE) {
       creep.moveTo(constructionSite, {visualizePathStyle: {opacity: 1, stroke: '#ffff00'}});
     } else if (result == OK) {
       if (creep.carry.energy == 0) {
@@ -18,9 +18,19 @@ function buildAction(creep, job) {
   }
 }
 
+function attackAction(creep, job) {
+  let target = Game.getObjectById(job.target);
+  if (target) {
+    let result = creep.attack(target);
+    if (result === ERR_NOT_IN_RANGE) {
+      creep.moveTo(target);
+    }
+  }
+}
+
 function upgradeAction(creep, job) {
   let result = creep.upgradeController(creep.room.controller);
-  if (result == ERR_NOT_IN_RANGE) {
+  if (result === ERR_NOT_IN_RANGE) {
     creep.moveTo(creep.room.controller);
   } else if (result == OK || creep.carry.energy == 0) {
     delete creep.memory.job;
@@ -31,7 +41,7 @@ function dumpEnergyAction(creep, job) {
   let target = Game.getObjectById(job.target);
   if (target) {
     let result = creep.transfer(target, RESOURCE_ENERGY);
-    if (result == ERR_NOT_IN_RANGE) {
+    if (result === ERR_NOT_IN_RANGE) {
       creep.moveTo(target);
     } else if(result == ERR_FULL || creep.carry.energy == 0) {
       delete creep.memory.job;
@@ -200,6 +210,13 @@ function buildUpRoomAction(creep, job) {
   }
 }
 
+function gotoTargetRoomAction(creep, job) {
+  // dummy action - exists to have an action that lets us just travel there
+  if (job.room == creep.pos.roomName) {
+    delete creep.memory.job;
+  }
+}
+
 function moveToTargetRoom(creep, job) {
   let targetRoom = job.room;
 
@@ -209,12 +226,11 @@ function moveToTargetRoom(creep, job) {
     let route = Game.map.findRoute(creep.room, targetRoom);
     job.targetExit = creep.pos.findClosestByPath(route[0].exit);
     creep.moveTo(job.targetExit);
-
   }
-
 }
 
 module.exports = {
+  attack: attackAction,
   build: buildAction,
   upgrade: upgradeAction,
   dumpEnergy: dumpEnergyAction,
@@ -226,5 +242,6 @@ module.exports = {
   mine: mineAction,
   remoteMine: remoteMineAction,
   buildUp: buildUpRoomAction,
+  gotoTargetRoom: gotoTargetRoomAction
   moveToTargetRoom: moveToTargetRoom
 };

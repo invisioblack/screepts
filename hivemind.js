@@ -192,6 +192,11 @@ _.forEach(Game.flags, flag => {
           return creep.memory.role === 'scout'
         }), creep => {
           creep.memory.targetRoom = flag.pos.roomName
+          creep.memory.job = {
+            action: 'gotoTargetRoom',
+            room: flag.pos.roomName,
+            target: null
+          }
         });
       }
       flag.remove();
@@ -343,6 +348,9 @@ hivemind.assignJobs = () => {
       excavatorJobs.assignJobs(room, excavators);
     }
   });
+
+  // Manage roles typically found in remote rooms
+  let scouts = _.map(Game.creeps, creep => creep.memory.role == 'scout');
 }
 
 hivemind.think = () => {
