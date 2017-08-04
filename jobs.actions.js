@@ -242,6 +242,6 @@ module.exports = {
   mine: mineAction,
   remoteMine: remoteMineAction,
   buildUp: buildUpRoomAction,
-  gotoTargetRoom: gotoTargetRoomAction
+  gotoTargetRoom: gotoTargetRoomAction,
   moveToTargetRoom: moveToTargetRoom
 };
