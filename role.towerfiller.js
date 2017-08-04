@@ -46,7 +46,19 @@ module.exports = {
     return (towers.length > numTowerfillers) && (storage || containers.length > 0);
   },
 
+  sizes: [
+    [CARRY, MOVE],
+    [CARRY, CARRY, MOVE, MOVE],
+    [CARRY, CARRY, CARRY, MOVE, MOVE, MOVE],
+    [CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE]
+  ],
+
   create: function(spawn, memory) {
-    return spawn.createCreep(bodies.createBasic(), memory = Object.assign({}, {role: 'towerfiller'}, memory));
+    let body = bodies.chooseLargestAffordable(spawn, this.sizes);
+    if (body) {
+      return spawn.createCreep(body, memory = Object.assign({}, {role: 'towerfiller'}, memory));
+    } else {
+      return ERR_NOT_ENOUGH_ENERGY;
+    }
   }
 }

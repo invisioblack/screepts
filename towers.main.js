@@ -7,16 +7,21 @@ module.exports = {
         return creep.hits < creep.hitsMax;
       }
     });
-    // var damaged = tower.pos.findClosestByPath(FIND_STRUCTURES, {
-    //   filter: structure => {
-    //     return structure.hits < structure.hitsMax;
-    //   }
-    // });
+
+    var toBuild = _.union(tower.room.memory.structuresByType.constructedWall, tower.room.memory.structuresByType.rampart);
+    toBuild = _.filter(toBuild, s => s.hits/s.hitsMax < 0.1);
+    toBuild = _.map(toBuild, s => Game.getObjectById(s.id));
+    toBuild = _.sortBy(toBuild, s => s.hits/s.hitsMax);
 
     if (attacker) {
       tower.attack(attacker);
     } else if (wounded) {
       tower.heal(wounded);
+    } else if (toBuild.length > 0 && tower.energy/tower.energyCapacity > 0.5) {
+      let target = _.head(toBuild);
+      if (target) {
+        tower.repair(target);
+      }
     }
 
   }
