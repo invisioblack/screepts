@@ -46,7 +46,8 @@ module.exports = {
   sizes: [
     [CARRY, MOVE],
     [CARRY, CARRY, MOVE, MOVE],
-    [CARRY, CARRY, CARRY, MOVE, MOVE, MOVE]
+    [CARRY, CARRY, CARRY, MOVE, MOVE, MOVE],
+    [CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE]
   ],
 
   /** @param {StructureSpawn} spawn**/
