@@ -1,5 +1,6 @@
 const bodies = require('creeps.bodies');
 const roles = require('creeps.roles');
+const priorities = require('jobs.priorities');
 
 function isQueued(spawnQueue, role) {
   return _.some(spawnQueue, item => item.role == role);
@@ -23,8 +24,8 @@ module.exports = {
             return;
     }
 
-    if ((spawn.energy == spawn.energyCapacity || spawn.room.energyAvailable >= 0.33*spawn.room.energyCapacityAvailable) &&
-        spawn.room.memory.sources.length - (rolesNum.miner || 0) > 0 &&
+    if ((!spawn.room.memory.myCreeps || !spawn.room.memory.myCreepsByRole.miner) ||
+        (spawn.room.memory.sources.length - (rolesNum.miner || 0) > 0) &&
         !isQueued(spawnQueue, 'miner')) {
       spawnQueue.push({role: 'miner'});
     }
@@ -55,6 +56,14 @@ module.exports = {
     }
 
     if (spawnQueue.length > 0) {
+      spawnQueue = _.sortBy(spawnQueue, item => {
+        let priority = priorities.SPAWNING_PRIORITIES[item.role];
+        if (priority) {
+          return 100-priority;
+        } else {
+          return 50;
+        }
+      });
       let creepToSpawn = _.head(spawnQueue);
       spawn.room.memory.spawnQueue = _.tail(spawnQueue);
 

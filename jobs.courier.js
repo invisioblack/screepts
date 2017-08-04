@@ -6,7 +6,7 @@ module.exports = {
     }
     _.forEach(creeps, courier => {
       if (courier.carry.energy > 0) {
-        if (room.terminal && room.terminal.store[RESOURCE_ENERGY] < room.terminal.storeCapacity * 0.01) {
+        if (room.terminal && room.terminal.store[RESOURCE_ENERGY] < room.terminal.storeCapacity * 0.05) {
           let target = room.terminal;
           courier.memory.job = {
             action: 'dumpEnergy',

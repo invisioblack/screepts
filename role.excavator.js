@@ -18,13 +18,14 @@ module.exports = {
       numExcavators = spawn.room.memory.myCreepsByRole.excavator.length;
     }
 
-    return extractor && (numExcavators < 2);
+    return extractor && (numExcavators < 1);
 
   },
 
   sizes: [
     [WORK, WORK, WORK, CARRY, MOVE, MOVE, MOVE, MOVE],
-    [WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE]
+    [WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE],
+    [WORK, WORK, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE]
   ],
 
   create: function(spawn) {

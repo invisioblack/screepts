@@ -7,7 +7,7 @@ function buildAction(creep, job) {
   if (constructionSite) {
     let result = creep.build(constructionSite);
     if (result == ERR_NOT_IN_RANGE) {
-      creep.moveTo(constructionSite);
+      creep.moveTo(constructionSite, {visualizePathStyle: {opacity: 1, stroke: '#ffff00'}});
     } else if (result == OK) {
       if (creep.carry.energy == 0) {
         delete creep.memory.job;
