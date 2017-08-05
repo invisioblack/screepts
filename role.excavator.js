@@ -13,12 +13,13 @@ module.exports = {
 
   spawnCondition: function(spawn) {
     let extractor = spawn.room.memory.structuresByType.extractor;
+    let mineral = Game.getObjectById(spawn.room.memory.minerals[0].id);
     let numExcavators = 0;
     if (spawn.room.memory.myCreepsByRole.excavator) {
       numExcavators = spawn.room.memory.myCreepsByRole.excavator.length;
     }
 
-    return extractor && (numExcavators < 1);
+    return extractor && (numExcavators < 1) && mineral.amount > 0;
 
   },
 

@@ -9,7 +9,7 @@ module.exports = {
     });
 
     var toBuild = _.union(tower.room.memory.structuresByType.constructedWall, tower.room.memory.structuresByType.rampart);
-    toBuild = _.filter(toBuild, s => s.hits/s.hitsMax < 0.01);
+    toBuild = _.filter(toBuild, s => s.hits/s.hitsMax < 0.0025);
     toBuild = _.map(toBuild, s => Game.getObjectById(s.id));
     toBuild = _.sortBy(toBuild, s => s.hits/s.hitsMax);
 
@@ -20,7 +20,7 @@ module.exports = {
     } else if (toBuild.length > 0 && tower.energy/tower.energyCapacity > 0.25) {
       let target = _.head(toBuild);
       if (target) {
-        tower.repair(target);
+        //tower.repair(target);
       }
     }
 

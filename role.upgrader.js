@@ -26,7 +26,7 @@ module.exports = {
     }
 
     let storageCondition = storage && (storage.store[RESOURCE_ENERGY] > storage.storeCapacity*0.0065);
-    let numberCondition = spawn.room.energyCapacityAvailable > 250*(numUpgraders.length || 0);
+    let numberCondition = spawn.room.energyCapacityAvailable > 500*(numUpgraders.length || 0);
     let energyCondition = spawn.room.energyAvailable >= 0.33*spawn.room.energyCapacityAvailable;
 
     if (storage) {
@@ -39,7 +39,8 @@ module.exports = {
   sizes: [
     [WORK, WORK, CARRY, MOVE, MOVE],
     [WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE],
-    [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, CARRY, WORK, WORK, WORK, CARRY, CARRY]
+    [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, CARRY, WORK, WORK, WORK, CARRY, CARRY],
+    [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, CARRY, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY],
   ],
 
   /** @param {StructureSpawn} spawn**/

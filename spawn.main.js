@@ -65,9 +65,13 @@ module.exports = {
         }
       });
       let creepToSpawn = _.head(spawnQueue);
-      spawn.room.memory.spawnQueue = _.tail(spawnQueue);
 
-      roles[creepToSpawn.role].behavior.create(spawn, memory=creepToSpawn.memory);
+
+      let result = roles[creepToSpawn.role].behavior.create(spawn, memory=creepToSpawn.memory);
+      if (typeof result == 'string') {
+        spawn.room.memory.spawnQueue = _.tail(spawnQueue);
+      }
+        
       return;
     }
 
