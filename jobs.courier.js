@@ -59,6 +59,15 @@ module.exports = {
           if (target.amount <= 0) {
             _.remove(droppedEnergy, dropped => dropped.id == target.id);
           }
+        } else if (room.terminal && room.terminal.store[RESOURCE_ENERGY] > room.terminal.storeCapacity * 0.075) {
+          target = room.terminal;
+          if (target) {
+            courier.memory.job = {
+              action: 'withdrawEnergy',
+              room: courier.pos.roomName,
+              target: target.id
+            }
+          }
         } else if (room.memory.structuresByType.container && room.memory.structuresByType.container.length > 0) {
           var containers = _.map(_.filter(room.memory.structuresByType.container, container => container.store[RESOURCE_ENERGY] > 0), container => Game.getObjectById(container.id));
           target = courier.pos.findClosestByPath(containers);
