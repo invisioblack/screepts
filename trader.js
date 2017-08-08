@@ -36,6 +36,7 @@ trader.sellAll = room => {
                       .sortBy('price')
                       .last();
       if (bestOffer) {
+        let cost = Game.market.calcTransactionCost(bestOffer.amount, bestOffer.roomName, room.name);
         let sellAmount = Math.min(room.terminal.store[resourceType], bestOffer.amount)
         let result = Game.market.deal(
           bestOffer.id,
@@ -44,7 +45,8 @@ trader.sellAll = room => {
         );
 
         if (result == OK) {
-          console.log('Sold resources. Resource type: ' +
+          console.log('Sold resources using' + cost + 'energy.' +
+                      '\n Resource type: ' +
                       resourceType +
                       '\n Amount: ' +
                       sellAmount +
