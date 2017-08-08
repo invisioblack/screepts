@@ -38,7 +38,9 @@ module.exports = {
 
       } else {
         if (miner.carry.energy < miner.carryCapacity) {
-          let target = miner.pos.findClosestByPath(FIND_SOURCES);
+          let target = miner.pos.findClosestByPath(FIND_SOURCES, {
+              filter: source => source.energy > 0
+          });
           if (target) {
             miner.memory.job = {
               action: 'mine',
