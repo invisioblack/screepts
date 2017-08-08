@@ -10,6 +10,7 @@ const reclaimerJobs = require('jobs.reclaimer');
 const nextroomerJobs = require('jobs.nextroomer');
 const excavatorJobs = require('jobs.excavator');
 const remoteminerJobs = require('jobs.remoteminer');
+const scoutJobs = require('jobs.scout');
 
 hivemind = {};
 
@@ -350,7 +351,8 @@ hivemind.assignJobs = () => {
   });
 
   // Manage roles typically found in remote rooms
-  let scouts = _.map(Game.creeps, creep => creep.memory.role == 'scout');
+  let scouts = _.filter(Game.creeps, creep => creep.memory.role == 'scout');
+  scoutJobs.assignJobs(scouts);
 }
 
 hivemind.think = () => {

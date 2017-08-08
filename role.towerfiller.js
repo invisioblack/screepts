@@ -10,6 +10,8 @@ module.exports = {
       let availableTargets = _.reject(towers, t => _.includes(towerfillerTargets, t));
       if (availableTargets.length > 0) {
         creep.memory.target = _.head(availableTargets);
+      } else {
+        actions.recycleSelf(creep);
       }
     }
 
@@ -29,7 +31,7 @@ module.exports = {
           creep.moveTo(target);
         }
       } else if (tower && tower.energy == tower.energyCapacity) {
-        creep.memory.role = 'upgrader';
+        delete creep.memory.target;
       }
 
     }

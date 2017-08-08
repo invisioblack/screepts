@@ -24,9 +24,8 @@ module.exports = {
             return;
     }
 
-    if ((!spawn.room.memory.myCreeps || !spawn.room.memory.myCreepsByRole.miner) ||
-        (spawn.room.memory.sources.length - (rolesNum.miner || 0) > 0) &&
-        !isQueued(spawnQueue, 'miner')) {
+
+    if (_.includes(spawn.room.memory.sourcesToMiners, null) && !isQueued(spawnQueue, 'miner')) {
       spawnQueue.push({role: 'miner'});
     }
 
@@ -65,9 +64,13 @@ module.exports = {
         }
       });
       let creepToSpawn = _.head(spawnQueue);
-      spawn.room.memory.spawnQueue = _.tail(spawnQueue);
 
-      roles[creepToSpawn.role].behavior.create(spawn, memory=creepToSpawn.memory);
+
+      let result = roles[creepToSpawn.role].behavior.create(spawn, memory=creepToSpawn.memory);
+      if (typeof result == 'string') {
+        spawn.room.memory.spawnQueue = _.tail(spawnQueue);
+      }
+
       return;
     }
 

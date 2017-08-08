@@ -221,11 +221,17 @@ function moveToTargetRoom(creep, job) {
   let targetRoom = job.room;
 
   if (job.targetExit && job.targetExit.roomName == creep.pos.roomName) {
-    creep.moveTo(job.targetExit.x, job.targetExit.y);
+    creep.moveTo(job.targetExit.x, job.targetExit.y,
+      {visualizePathStyle: {
+        stroke: '#0000ff'
+      }});
   } else {
     let route = Game.map.findRoute(creep.room, targetRoom);
     job.targetExit = creep.pos.findClosestByPath(route[0].exit);
-    creep.moveTo(job.targetExit);
+    creep.moveTo(job.targetExit,
+      {visualizePathStyle: {
+        stroke: '#0000ff'
+      }});
   }
 }
 
