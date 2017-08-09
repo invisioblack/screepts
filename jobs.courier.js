@@ -5,7 +5,7 @@ module.exports = {
       return;
     }
 
-    let links = room.memory.structuresByType.link;
+    let links = _.map(room.memory.structuresByType.link, link => Game.getObjectById(link.id));
     let storageLink = room.storage.pos.findClosestByPath(links);
 
     _.forEach(creeps, courier => {
@@ -41,9 +41,8 @@ module.exports = {
               let closestLink = courier.pos.findClosestByPath(links, {
                 filter: link => link.energy < link.energyCapacity && link.id != storageLink.id
               });
-              console.log(closestLink);
               target = courier.room.storage;
-              if (courier.pos.findPathTo(closestLink).length < courier.pos.findPathTo(target)) {
+              if (closestLink && courier.pos.findPathTo(closestLink).length < courier.pos.findPathTo(target)) {
                 target = closestLink;
               }
 
