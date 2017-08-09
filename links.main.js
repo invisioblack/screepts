@@ -3,6 +3,9 @@ module.exports = {
     if (room.storage) {
       let links = _.map(room.memory.structuresByType.link, link => Game.getObjectById(link.id));
       let storageLink = room.storage.pos.findClosestByPath(links);
+      if(links.length <= 0 || !storageLink) {
+        return;
+      }
 
       _.forEach(_.filter(links, link => link.id != storageLink.id), link => {
         if(!link.cooldown && link.energy/link.energyCapacity > 0.75 && storageLink.energy < storageLink.energyCapacity) {

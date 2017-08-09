@@ -58,7 +58,7 @@ module.exports = {
         }
       } else {
         let target;
-        if (storageLink.energy / storageLink.energyCapacity > 0.75) {
+        if (storageLink && storageLink.energy / storageLink.energyCapacity > 0.75) {
           target = storageLink;
           courier.memory.job = {
             action: 'withdrawEnergy',
