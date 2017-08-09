@@ -116,7 +116,7 @@ function withdrawEnergyAction(creep, job) {
     let result = creep.withdraw(target, RESOURCE_ENERGY);
     if (result == ERR_NOT_IN_RANGE) {
       creep.moveTo(target);
-    } else if (result == OK || (!target || target.store[RESOURCE_ENERGY] <= 0 || _.sum(creep.carry) === creep.carryCapacity)) {
+    } else if (result == OK || (!target || (target.energyCapacity && target.energy <= 0) || (target.store && target.store[RESOURCE_ENERGY] <= 0) || _.sum(creep.carry) === creep.carryCapacity)) {
       delete creep.memory.job;
     }
   } else {

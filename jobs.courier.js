@@ -42,7 +42,7 @@ module.exports = {
                 filter: link => link.energy < link.energyCapacity && link.id != storageLink.id
               });
               target = courier.room.storage;
-              if (closestLink && courier.pos.findPathTo(closestLink).length < courier.pos.findPathTo(target)) {
+              if (closestLink && courier.pos.findPathTo(closestLink).length < courier.pos.findPathTo(target).length) {
                 target = closestLink;
               }
 
