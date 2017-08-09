@@ -19,7 +19,7 @@ module.exports = {
       numExcavators = spawn.room.memory.myCreepsByRole.excavator.length;
     }
 
-    return extractor && (numExcavators < 1) && mineral.amount > 0;
+    return extractor && (numExcavators < 1) && mineral.mineralAmount > 0;
 
   },
 
