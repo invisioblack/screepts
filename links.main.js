@@ -2,7 +2,7 @@ module.exports = {
   runLinks: (room) => {
     if (room.storage) {
       let links = _.map(room.memory.structuresByType.link, link => Game.getObjectById(link.id));
-      let storageLink = room.memory.storageLink;
+      let storageLink = Game.getObjectById(room.memory.storageLink.id);
       if(links.length <= 0 || !storageLink) {
         return;
       }
