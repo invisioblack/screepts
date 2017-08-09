@@ -13,6 +13,7 @@ const roles = require('creeps.roles');
 const spawnModule = require('spawn.main');
 const roomModule = require('rooms.main');
 const towerModule = require('towers.main');
+const linkModule = require('links.main');
 
 module.exports.loop = function() {
   var profiler = {};
@@ -24,6 +25,7 @@ module.exports.loop = function() {
     roomModule.initRoom(room);
     if (room.memory.my) {
       roomModule.roomBehavior(room);
+      linkModule.runLinks(room);
     }
 
     hivemind.visualizePlans(room);

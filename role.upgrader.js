@@ -27,7 +27,7 @@ module.exports = {
 
     let storageCondition = storage && (storage.store[RESOURCE_ENERGY] > storage.storeCapacity*0.0065);
     let numberCondition = spawn.room.energyCapacityAvailable > 500*(numUpgraders.length || 0);
-    let energyCondition = spawn.room.energyAvailable >= 0.33*spawn.room.energyCapacityAvailable;
+    let energyCondition = spawn.room.energyAvailable >= 0.7*spawn.room.energyCapacityAvailable;
 
 
     if (storage) {

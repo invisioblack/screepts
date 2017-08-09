@@ -4,6 +4,10 @@ module.exports = {
     if (!room.memory.structuresByType) {
       return;
     }
+
+    let links = room.memory.structuresByType.link;
+    let storageLink = room.storage.pos.findClosestByPath(links);
+
     _.forEach(creeps, courier => {
       if (courier.carry.energy > 0) {
         if (room.terminal && room.terminal.store[RESOURCE_ENERGY] < room.terminal.storeCapacity * 0.05) {
@@ -34,7 +38,14 @@ module.exports = {
                 target: target.id
               };
             } else {
+              let closestLink = courier.pos.findClosestByPath(links, {
+                filter: link => link.energy < link.energyCapacity && link.id != storageLink.id
+              });
               target = courier.room.storage;
+              if (courier.pos.findPathTo(closestLink).length < courier.pos.findPathTo(target)) {
+                target = closestLink;
+              }
+
               if (target) {
                 courier.memory.job = {
                   action: 'dumpEnergy',
