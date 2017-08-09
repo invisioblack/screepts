@@ -30,6 +30,9 @@ module.exports = {
       memory.constructionSites = room.find(FIND_CONSTRUCTION_SITES);
       memory.myCreeps = room.find(FIND_MY_CREEPS);
       memory.myCreepsByRole = _.groupBy(memory.myCreeps, creep => creep.memory.role);
+      if (!memory.storageLink && memory.structuresByType.link && memory.structuresByType.link.length > 0) {
+        memory.storageLink = room.storage.pos.findClosestByPath(memory.structuresByType.link);
+      }
       room.memory = memory;
     }
 
