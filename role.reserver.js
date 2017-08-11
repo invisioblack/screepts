@@ -12,7 +12,7 @@ module.exports = {
         creep.moveTo(creep.room.controller);
       }
 
-      if (creep.signController(creep.room.controller, 'Reserved.') == ERR_NOT_IN_RANGE) {
+      if (creep.signController(creep.room.controller, 'Reserved in the name of the Realms of Plannix') == ERR_NOT_IN_RANGE) {
         creep.moveTo(creep.room.controller);
       }
     }
@@ -20,7 +20,7 @@ module.exports = {
 
   },
 
-  create: function(spawn) {
-    return spawn.createCreep(bodies.reserver, memory = {role: 'reserver'})
+  create: function(spawn, memory) {
+    return spawn.createCreep(bodies.reserver, memory = Object.assign({}, {role: 'reserver'}, memory));
   }
 }

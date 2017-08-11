@@ -64,7 +64,7 @@ module.exports = {
     MOVE
   ],
   reserver: [
-    CLAIM, MOVE, MOVE, MOVE, MOVE
+    CLAIM, MOVE, MOVE
   ],
 
   addMax,

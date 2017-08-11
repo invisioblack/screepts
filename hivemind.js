@@ -204,11 +204,16 @@ _.forEach(Game.flags, flag => {
       break;
     case COLOR_BLUE:
       if (flag.room == undefined || !flag.room.controller.my) {
-        _.map(_.filter(Game.creeps, creep => {
-          return creep.memory.role === 'reserver'
-        }), creep => {
-          creep.memory.targetRoom = flag.pos.roomName
-        });
+        let reservers = _.filter(Game.creeps, creep => creep.memory.role === 'reserver');
+        if (!_.any(reservers, creep => creep.memory.targetRoom === flag.pos.roomName)) {
+          let closestRoom = hivemind.getMyClosestRoom(flag.pos.roomName);
+          if (!_.any(closestRoom.memory.spawnQueue, item => item.targetRoom === flag.pos.roomName)) {
+            closestRoom.memory.spawnQueue.push({
+              role: 'reserver',
+              targetRoom: flag.pos.roomName
+            });
+          }
+        }
       }
       break;
     case COLOR_YELLOW:
