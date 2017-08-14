@@ -162,6 +162,30 @@ function remoteMineAction(creep, job) {
   }
 }
 
+function remoteMineDepositAction(creep, job) {
+  if (creep.pos.roomName == job.room) {
+    let room = Game.rooms[job.room];
+    let links = _.map(room.memory.structuresByType.link, link => Game.getObjectById(link.id));
+    let storageLink = Game.getObjectById(room.memory.storageLink.id);
+    let target = room.storage;
+
+    let closestLink = creep.pos.findClosestByPath(links, {
+      filter: link => link.energy < link.energyCapacity && (storageLink ? link.id != storageLink.id : true)
+    });
+    if (closestLink && creep.pos.findPathTo(closestLink).length < creep.pos.findPathTo(target).length) {
+      target = closestLink;
+    }
+
+    if (target) {
+      creep.memory.job = {
+        action: 'dumpEnergy',
+        room: job.room,
+        target: target.id
+      }
+    }
+  }
+}
+
 function buildUpRoomAction(creep, job) {
   if (creep.pos.roomName == job.room) {
     if (creep.carry.energy < creep.carryCapacity) {
@@ -247,6 +271,7 @@ module.exports = {
   claimRoom: claimRoomAction,
   mine: mineAction,
   remoteMine: remoteMineAction,
+  remoteMineDeposit: remoteMineDepositAction,
   buildUp: buildUpRoomAction,
   gotoTargetRoom: gotoTargetRoomAction,
   moveToTargetRoom: moveToTargetRoom

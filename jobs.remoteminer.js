@@ -53,20 +53,11 @@ module.exports = {
             }
           }
         } else {
-          let closestLink = miner.pos.findClosestByPath(links, {
-            filter: link => link.energy < link.energyCapacity && (storageLink ? link.id != storageLink.id : true)
-          });
-
           let target = originRoom.storage;
-
-          if (closestLink && miner.pos.findPathTo(closestLink).length < miner.pos.findPathTo(target).length) {
-            target = closestLink;
-          }
-
 
           if (target) {
             miner.memory.job = {
-              action: 'dumpEnergy',
+              action: 'remoteMineDeposit',
               room: miner.memory.originRoom,
               target: target.id
             };

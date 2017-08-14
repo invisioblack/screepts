@@ -12,15 +12,28 @@ module.exports = {
         creep.moveTo(creep.room.controller);
       }
 
-      if (creep.signController(creep.room.controller, 'Reserved.') == ERR_NOT_IN_RANGE) {
+      if (creep.signController(creep.room.controller, 'Reserved in the name of the Realms of Plannix') == ERR_NOT_IN_RANGE) {
         creep.moveTo(creep.room.controller);
       }
     }
 
 
   },
+  
+  sizes: [
+    [CLAIM, MOVE],
+    [CLAIM, CLAIM, MOVE, MOVE],
+    [CLAIM, CLAIM, CLAIM, MOVE, MOVE, MOVE]
+  ],
 
-  create: function(spawn) {
-    return spawn.createCreep(bodies.reserver, memory = {role: 'reserver'})
+  create: function(spawn, memory) {
+     let body = bodies.chooseLargestAffordable(spawn, this.sizes);
+    if (body) {
+      return spawn.createCreep(body, memory = Object.assign({}, {
+        role: 'reserver'
+      }, memory));
+    } else {
+      return ERR_NOT_ENOUGH_ENERGY;
+    }
   }
 }
