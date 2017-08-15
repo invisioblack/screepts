@@ -11,6 +11,7 @@ const nextroomerJobs = require('jobs.nextroomer');
 const excavatorJobs = require('jobs.excavator');
 const remoteminerJobs = require('jobs.remoteminer');
 const scoutJobs = require('jobs.scout');
+const saboteurJobs = require('jobs.saboteur');
 
 hivemind = {};
 
@@ -265,8 +266,10 @@ _.forEach(Game.flags, flag => {
        }
     case COLOR_GREEN:
       if (flag.room == undefined || !flag.room.controller.my) {
-
+        let closestRoom = hivemind.getMyClosestRoom(flag.pos.roomName);
+        closestRoom.memory.spawnQueue.push({role: 'saboteur', memory: {originRoom: closestRoom.name, targetRoom: flag.pos.roomName}});
       }
+      flag.remove();
   }
 
 });
@@ -342,10 +345,10 @@ hivemind.manageRemoteMiners = () => {
   });
 }
 
+
 hivemind.assignJobs = () => {
   _.forEach(Game.rooms, room => {
     if (room.controller && room.controller.my) {
-      let jobs = _.sortBy(room.memory.jobs, job => job.priority);
       let creeps = _.map(room.memory.myCreeps, creep => Game.getObjectById(creep.id));
       let builders = _.filter(creeps, creep => creep.memory.role == 'builder' && !creep.memory.job);
       let couriers = _.filter(creeps, creep => creep.memory.role == 'courier' && !creep.memory.job);
@@ -357,6 +360,10 @@ hivemind.assignJobs = () => {
       builderJobs.assignJobs(room, builders);
       excavatorJobs.assignJobs(room, excavators);
     }
+
+    let saboteurs = _.filter(Game.creeps, c => c.memory.role == 'saboteur' && c.pos.roomName == room.name);
+
+    saboteurJobs.assignJobs(room, saboteurs);
   });
 
   // Manage roles typically found in remote rooms

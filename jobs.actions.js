@@ -18,6 +18,20 @@ function buildAction(creep, job) {
   }
 }
 
+function dismantleAction(creep, job) {
+  let target = Game.getObjectById(job.target);
+  if (target) {
+    let result = creep.dismantle(target);
+    if (result == ERR_NOT_IN_RANGE) {
+      creep.moveTo(target);
+    } else if (result != OK) {
+      delete creep.memory.job;
+    }
+  } else {
+    delete creep.memory.job;
+  }
+}
+
 function attackAction(creep, job) {
   let target = Game.getObjectById(job.target);
   if (target) {
@@ -243,31 +257,46 @@ function gotoTargetRoomAction(creep, job) {
 
 function moveToTargetRoom(creep, job) {
   let targetRoom = job.room;
-  //
-  // creep.moveTo(new RoomPosition(25, 25, job.room), {
+
+  // creep.moveTo(new RoomPosition(0, 0, job.room), {
   //   visualizePathStyle: {
   //     stroke: '#0000ff'
   //   }
   // });
 
+  // if (job.targetExit && job.targetExit.roomName == creep.pos.roomName) {
+  //   creep.moveTo(job.targetExit.x, job.targetExit.y,
+  //     {visualizePathStyle: {
+  //       stroke: '#0000ff'
+  //     }});
+  // } else {
+  //   let route = Game.map.findRoute(creep.room, targetRoom);
+  //   job.targetExit = creep.pos.findClosestByPath(route[0].exit);
+  //   creep.moveTo(job.targetExit,
+  //     {visualizePathStyle: {
+  //       stroke: '#0000ff'
+  //     }});
+  // }
+
   if (job.targetExit && job.targetExit.roomName == creep.pos.roomName) {
     creep.moveTo(job.targetExit.x, job.targetExit.y,
-      {visualizePathStyle: {
-        stroke: '#0000ff'
-      }});
+        {visualizePathStyle: {
+          stroke: '#0000ff'
+        }});
   } else {
-    let route = Game.map.findRoute(creep.room, targetRoom);
-    job.targetExit = creep.pos.findClosestByPath(route[0].exit);
+    let exitDir = creep.room.findExitTo(targetRoom);
+    job.targetExit = creep.pos.findClosestByPath(exitDir);
     creep.moveTo(job.targetExit,
-      {visualizePathStyle: {
-        stroke: '#0000ff'
-      }});
+        {visualizePathStyle: {
+          stroke: '#0000ff'
+        }});
   }
 }
 
 module.exports = {
   attack: attackAction,
   build: buildAction,
+  dismantle: dismantleAction,
   upgrade: upgradeAction,
   dumpEnergy: dumpEnergyAction,
   dumpMineral: dumpMineralAction,

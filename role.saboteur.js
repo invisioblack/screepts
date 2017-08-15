@@ -1,6 +1,5 @@
-const actions = require('creeps.actions');
-const bodies = require('creeps.bodies');
 const jobActions = require('jobs.actions');
+const bodies = require('creeps.bodies');
 
 module.exports = {
   run: function(creep) {
@@ -21,15 +20,15 @@ module.exports = {
   },
 
   sizes: [
-    [ATTACK, ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE, MOVE],
-    [TOUGH, TOUGH, ATTACK, ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE],
-    [TOUGH, TOUGH, TOUGH, TOUGH, ATTACK, ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE]
+    [WORK, CARRY, MOVE, MOVE],
+    [WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE],
+    [WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE]
   ],
 
   create: function(spawn, memory) {
     let body = bodies.chooseLargestAffordable(spawn, this.sizes);
     if (body) {
-      return spawn.createCreep(body, memory = Object.assign({}, {role: 'scout'}, memory));
+      return spawn.createCreep(body, memory = Object.assign({}, {role: 'saboteur'}, memory));
     } else {
       return ERR_NOT_ENOUGH_ENERGY;
     }

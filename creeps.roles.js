@@ -12,6 +12,7 @@ const roleReserver = require('role.reserver');
 const roleSpawnSupplier = require('role.spawnsupplier');
 const roleNextroomer = require('role.nextroomer');
 const roleExcavator = require('role.excavator');
+const roleSaboteur = require('role.saboteur');
 
 module.exports = {
   // Infrastructure
@@ -60,5 +61,8 @@ module.exports = {
   },
   reserver: {
     behavior: roleReserver
+  },
+  saboteur: {
+    behavior: roleSaboteur
   }
 }
