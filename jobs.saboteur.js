@@ -9,9 +9,10 @@ module.exports = {
           target: null
         }
       } else {
-        let target = saboteur.pos.findClosestByPath(FIND_HOSTILE_STRUCTURES, {
+        let target = saboteur.pos.findClosestByPath(FIND_STRUCTURES, {
           filter: struct => struct.structureType != STRUCTURE_SPAWN && struct.structureType != STRUCTURE_CONTROLLER
         });
+
         if (target) {
           saboteur.memory.job = {
             action: 'dismantle',

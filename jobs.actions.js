@@ -23,7 +23,10 @@ function dismantleAction(creep, job) {
   if (target) {
     let result = creep.dismantle(target);
     if (result == ERR_NOT_IN_RANGE) {
-      creep.moveTo(target);
+      creep.moveTo(target,
+        {visualizePathStyle: {
+          stroke: '#ff55aa'
+        }});
     } else if (result != OK) {
       delete creep.memory.job;
     }
