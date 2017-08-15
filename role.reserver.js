@@ -19,7 +19,7 @@ module.exports = {
 
 
   },
-  
+
   sizes: [
     [CLAIM, MOVE],
     [CLAIM, CLAIM, MOVE, MOVE],
