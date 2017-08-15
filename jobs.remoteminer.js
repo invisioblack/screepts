@@ -5,7 +5,7 @@ module.exports = {
       let originRoom = Game.rooms[miner.memory.originRoom];
       let targetRoom = Game.rooms[miner.memory.targetRoom];
 
-      let links = _.map(originRoom.memory.structuresByType.link, link => Game.getObjectById(link.id));
+      let links = _.map(global.Cache.rooms[originRoom.name].structuresByType.link, link => Game.getObjectById(link.id));
       let storageLink = Game.getObjectById(originRoom.memory.storageLink.id);
 
       if (miner.pos.roomName != miner.memory.targetRoom) {
@@ -19,7 +19,7 @@ module.exports = {
             };
 
           } else {
-            let target = originRoom.controller.pos.findClosestByPath(originRoom.memory.structuresByType.extension, {
+            let target = originRoom.controller.pos.findClosestByPath(global.Cache.rooms[originRoom.name].structuresByType.extension, {
               filter: ext => ext.energy < ext.energyCapacity
             });
 
@@ -63,7 +63,7 @@ module.exports = {
             };
 
           } else {
-            let target = originRoom.controller.pos.findClosestByPath(originRoom.memory.structuresByType.extension, {
+            let target = originRoom.controller.pos.findClosestByPath(global.Cache.rooms[originRoom.name].structuresByType.extension, {
               filter: ext => ext.energy < ext.energyCapacity
             });
 

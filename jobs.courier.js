@@ -1,11 +1,11 @@
 module.exports = {
   assignJobs: (room, creeps) => {
     // Couriers
-    if (!room.memory.structuresByType) {
+    if (!global.Cache.rooms[room.name].structuresByType) {
       return;
     }
 
-    let links = _.map(room.memory.structuresByType.link, link => Game.getObjectById(link.id));
+    let links = _.map(global.Cache.rooms[room.name].structuresByType.link, link => Game.getObjectById(link.id));
     let storageLink = Game.getObjectById(room.memory.storageLink.id);
 
     _.forEach(creeps, courier => {
@@ -18,7 +18,7 @@ module.exports = {
             target: target.id
           };
         } else {
-          let target = courier.pos.findClosestByPath(courier.room.memory.structuresByType.spawn, {
+          let target = courier.pos.findClosestByPath(global.Cache.rooms[courier.room.name].structuresByType.spawn, {
             filter: spawn => spawn.energy < spawn.energyCapacity
           });
           if (target) {
@@ -28,7 +28,7 @@ module.exports = {
               target: target.id
             };
           } else {
-            target = courier.pos.findClosestByPath(courier.room.memory.structuresByType.extension, {
+            target = courier.pos.findClosestByPath(global.Cache.rooms[courier.room.name].structuresByType.extension, {
               filter: ext => ext.energy < ext.energyCapacity
             });
             if (target) {
@@ -66,7 +66,7 @@ module.exports = {
             target: target.id
           }
         } else {
-          let droppedEnergy = _(room.memory.droppedEnergy).map(de => Game.getObjectById(de.id)).filter(de => de.amount > 50).sortBy(de => de.amount).reverse().value();
+          let droppedEnergy = _(global.Cache.rooms[room.name].droppedEnergy).map(de => Game.getObjectById(de.id)).filter(de => de.amount > 50).sortBy(de => de.amount).reverse().value();
           target = _.head(droppedEnergy);
           if (target) {
             courier.memory.job = {
@@ -88,8 +88,8 @@ module.exports = {
                 target: target.id
               }
             }
-          } else if (room.memory.structuresByType.container && room.memory.structuresByType.container.length > 0) {
-            var containers = _.map(_.filter(room.memory.structuresByType.container, container => container.store[RESOURCE_ENERGY] > 0), container => Game.getObjectById(container.id));
+          } else if (global.Cache.rooms[room.name].structuresByType.container && global.Cache.rooms[room.name].structuresByType.container.length > 0) {
+            var containers = _.map(_.filter(global.Cache.rooms[room.name].structuresByType.container, container => container.store[RESOURCE_ENERGY] > 0), container => Game.getObjectById(container.id));
             target = courier.pos.findClosestByPath(containers);
             if (target) {
               courier.memory.job = {
@@ -103,7 +103,7 @@ module.exports = {
                 _.remove(containers, container => container.id == target.id);
               }
             } else {
-              target = courier.pos.findClosestByPath(room.memory.structuresByType.spawn);
+              target = courier.pos.findClosestByPath(global.Cache.rooms[room.name].structuresByType.spawn);
               if (target) {
                 courier.memory.job = {
                   action: 'recycleSelf',

@@ -21,6 +21,9 @@ module.exports.loop = function() {
 
   stats.clearStats();
 
+  global.Cache = global.Cache || {};
+  global.Cache.rooms = global.Cache.rooms || {};
+
   _.forEach(Game.rooms, room => {
     roomModule.initRoom(room);
     if (room.memory.my) {
@@ -28,7 +31,7 @@ module.exports.loop = function() {
       linkModule.runLinks(room);
     }
 
-    hivemind.visualizePlans(room);
+    //hivemind.visualizePlans(room);
   });
 
   profiler.rooms = Game.cpu.getUsed() - _.sum(profiler);

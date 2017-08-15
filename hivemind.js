@@ -233,7 +233,7 @@ _.forEach(Game.flags, flag => {
       break;
     case COLOR_ORANGE:
       if (flag.room && flag.room.controller.my) {
-        var spawns = flag.room.memory.structuresByType.spawn;
+        var spawns = global.Cache.rooms[flag.room.name].structuresByType.spawn;
         _.forEach(spawns, spawn => {
           var road = hivemind.roadFromTo(spawn.pos, flag.pos);
           flag.room.memory.plan.roads.push(road.path);
@@ -283,7 +283,7 @@ hivemind.manageNextRooms = () => {
   _.forEach(Game.rooms, room => {
     if(!room.memory.my) {
       return;
-    } else if (!room.memory.structuresByType.spawn) {
+    } else if (!global.Cache.rooms[room.name].structuresByType.spawn) {
       let closestRoom = hivemind.getMyClosestRoom(room.name);
 
       let totalNextroomersAlreadySent =
@@ -329,7 +329,7 @@ hivemind.manageRemoteMiners = () => {
     let totalMinersAlreadySent = _.filter(Game.creeps, creep => creep.memory.role == 'remoteminer' && creep.memory.originRoom == closestRoom.name).length +
     _.filter(closestRoom.memory.spawnQueue, item => item.role == 'remoteminer' && item.memory.originRoom == closestRoom.name).length;
 
-    if (totalMinersAlreadySent < 3) {
+    if (totalMinersAlreadySent < 4) {
       closestRoom.memory.spawnQueue.push({role:'remoteminer', memory: {originRoom: closestRoom.name, targetRoom: name}});
     }
 

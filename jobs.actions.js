@@ -165,7 +165,7 @@ function remoteMineAction(creep, job) {
 function remoteMineDepositAction(creep, job) {
   if (creep.pos.roomName == job.room) {
     let room = Game.rooms[job.room];
-    let links = _.map(room.memory.structuresByType.link, link => Game.getObjectById(link.id));
+    let links = _.map(global.Cache.rooms[room.name].structuresByType.link, link => Game.getObjectById(link.id));
     let storageLink = Game.getObjectById(room.memory.storageLink.id);
     let target = room.storage;
 
@@ -190,8 +190,8 @@ function buildUpRoomAction(creep, job) {
   if (creep.pos.roomName == job.room) {
     if (creep.carry.energy < creep.carryCapacity) {
 
-      if (creep.room.memory.droppedEnergy.length > 0) {
-        var droppedEnergy = _.compact(_.map(creep.room.memory.droppedEnergy, de => Game.getObjectById(de.id)));
+      if (global.Cache.rooms[creep.room.name].droppedEnergy.length > 0) {
+        var droppedEnergy = _.compact(_.map(global.Cache.rooms[creep.room.name].droppedEnergy, de => Game.getObjectById(de.id)));
         let closest = creep.pos.findClosestByPath(droppedEnergy);
         if (closest) {
           creep.memory.job = {
@@ -243,6 +243,12 @@ function gotoTargetRoomAction(creep, job) {
 
 function moveToTargetRoom(creep, job) {
   let targetRoom = job.room;
+  //
+  // creep.moveTo(new RoomPosition(25, 25, job.room), {
+  //   visualizePathStyle: {
+  //     stroke: '#0000ff'
+  //   }
+  // });
 
   if (job.targetExit && job.targetExit.roomName == creep.pos.roomName) {
     creep.moveTo(job.targetExit.x, job.targetExit.y,

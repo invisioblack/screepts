@@ -8,7 +8,7 @@ module.exports = {
       }
     });
 
-    var toBuild = _.union(tower.room.memory.structuresByType.constructedWall, tower.room.memory.structuresByType.rampart);
+    var toBuild = _.union(global.Cache.rooms[tower.room.name].structuresByType.constructedWall, global.Cache.rooms[tower.room.name].structuresByType.rampart);
     toBuild = _.filter(toBuild, s => s.hits/s.hitsMax < 0.0025);
     toBuild = _.map(toBuild, s => Game.getObjectById(s.id));
     toBuild = _.sortBy(toBuild, s => s.hits/s.hitsMax);

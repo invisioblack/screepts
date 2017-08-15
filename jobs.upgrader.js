@@ -20,8 +20,7 @@ module.exports = {
               target: target.id
             }
           } else {
-            let droppedEnergy = _(room.memory.droppedEnergy).map(de => Game.getObjectById(de.id)).filter(de => de.amount > 50).sortBy(de => de.amount).reverse().value();
-            //let target = upgrader.pos.findClosestByPath(droppedEnergy);
+            let droppedEnergy = _(global.Cache.rooms[room.name].droppedEnergy).map(de => Game.getObjectById(de.id)).filter(de => de.amount > 50).sortBy(de => de.amount).reverse().value();
             let target = _.head(droppedEnergy);
             if (target) {
               upgrader.memory.job = {
@@ -30,7 +29,7 @@ module.exports = {
                 target: target.id
               };
             } else {
-              target = upgrader.pos.findClosestByPath(room.memory.structuresByType.spawn);
+              target = upgrader.pos.findClosestByPath(global.Cache.rooms[room.name].structuresByType.spawn);
               upgrader.memory.job = {
                 action: 'recycleSelf',
                 target: target.id

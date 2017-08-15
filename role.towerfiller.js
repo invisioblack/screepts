@@ -4,7 +4,7 @@ const bodies = require('creeps.bodies');
 module.exports = {
   run: function(creep) {
     if (!creep.memory.target) {
-      let towers = _.filter(creep.room.memory.structuresByType.tower, struct => struct.energy < struct.energyCapacity);
+      let towers = _.filter(global.Cache.rooms[creep.room.name].structuresByType.tower, struct => struct.energy < struct.energyCapacity);
       towers = _.map(towers, 'id');
       let towerfillerTargets = _.map(creep.room.memory.myCreepsByRole.towerfiller, 'memory.target');
       let availableTargets = _.reject(towers, t => _.includes(towerfillerTargets, t));
@@ -41,9 +41,9 @@ module.exports = {
     if (spawn.room.memory.myCreepsByRole.towerfiller) {
       numTowerfillers = spawn.room.memory.myCreepsByRole.towerfiller.length;
     }
-    let towers = _.filter(spawn.room.memory.structuresByType.tower, struct => struct.energy < struct.energyCapacity);
+    let towers = _.filter(global.Cache.rooms[spawn.room.name].structuresByType.tower, struct => struct.energy < struct.energyCapacity);
     let storage = spawn.room.storage && spawn.room.storage.store[RESOURCE_ENERGY] > 0;
-    let containers = _.filter(spawn.room.memory.structuresByType.container, struct => struct.store[RESOURCE_ENERGY] > 0);
+    let containers = _.filter(global.Cache.rooms[spawn.room.name].structuresByType.container, struct => struct.store[RESOURCE_ENERGY] > 0);
 
     return (towers.length > numTowerfillers) && (storage || containers.length > 0);
   },

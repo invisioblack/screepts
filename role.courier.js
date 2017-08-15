@@ -15,21 +15,21 @@ module.exports = {
   },
 
   spawnCondition: function(spawn) {
-    let totalDropped = _.sum(_.map(spawn.room.memory.droppedEnergy, dropped => dropped.amount));
+    let totalDropped = _.sum(_.map(global.Cache.rooms[spawn.room.name].droppedEnergy, dropped => dropped.amount));
     let numCouriers = 0;
     if (spawn.room.memory.myCreepsByRole.courier) {
       numCouriers = spawn.room.memory.myCreepsByRole.courier.length;
     }
 
     let containers = _.map(
-      _.filter(spawn.room.memory.structuresByType.container, container => container.store[RESOURCE_ENERGY] > 0),
+      _.filter(global.Cache.rooms[spawn.room.name].structuresByType.container, container => container.store[RESOURCE_ENERGY] > 0),
       container => Game.getObjectById(container.id).store[RESOURCE_ENERGY]
     );
     let containersSum = _.sum(containers);
 
-    let enoughEnergy = Math.ceil((totalDropped+containersSum)/300) - numCouriers > 0;
+    let enoughEnergy = Math.ceil((totalDropped+containersSum)/450) - numCouriers > 0;
 
-    let structs = spawn.room.memory.structuresByType;
+    let structs = global.Cache.rooms[spawn.room.name].structuresByType;
     let unfilledStructures = _.filter(_.union(structs.spawn, structs.extension, structs.storage),
                               struct => {
                                 if (struct.store) {
@@ -47,7 +47,8 @@ module.exports = {
     [CARRY, MOVE],
     [CARRY, CARRY, MOVE, MOVE],
     [CARRY, CARRY, CARRY, MOVE, MOVE, MOVE],
-    [CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE]
+    [CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE],
+    [CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE],
   ],
 
   /** @param {StructureSpawn} spawn**/
