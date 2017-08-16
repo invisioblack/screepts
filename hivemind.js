@@ -56,14 +56,20 @@ hivemind.designRoom = room => {
     let plan = {};
 
     // Place spawn
-    plan.spawn = room.controller.pos.findNearPosition().next().value
+    plan.spawn = global.Cache.rooms[room.name].structuresByType.spawn
+                    ? global.Cache.rooms[room.name].structuresByType.spawn[0].pos
+                    : room.controller.pos.findNearPosition().next().value
                                     .findNearPosition().next().value
                                     .findNearPosition().next().value
                                     .findNearPosition().next().value;
 
+
     // Place storage
-    plan.storage = room.controller.pos.findNearPosition().next().value
+    plan.storage = room.storage
+                    ? room.storage.pos
+                    : room.controller.pos.findNearPosition().next().value
                                       .findNearPosition().next().value;
+
 
     // Place roads
     let roads = [];
@@ -117,7 +123,9 @@ hivemind.designRoom = room => {
       let struct;
       while (!struct) {
         struct = plan.storage.findClosestByPath(checkerboard, {
-          filter: pos => !pos.inRangeTo(plan.storage, 2) &&
+          filter: pos => !pos.inRangeTo(room.controller.pos, 3) &&
+                         !pos.inRangeTo(plan.storage, 2) &&
+                         !pos.inRangeTo(plan.spawn, 2) &&
                           pos.validPosition() &&
                          !pos.checkForWall() &&
                          !pos.checkForConstructedWall()
@@ -276,8 +284,8 @@ _.forEach(Game.flags, flag => {
 }
 
 hivemind.getMyClosestRoom = roomName => {
-  let myRooms = _.filter(Game.rooms, room => room.controller && room.controller.my);
-  let sortedRooms = _.sortBy(myRooms, room => Game.map.getRoomLinearDistance(roomName, room.name));
+  let myRooms = _.filter(Game.rooms, room => room.name != roomName && room.controller && room.controller.my);
+  let sortedRooms = _.sortBy(myRooms, room => Game.map.getRoomLinearDistance(roomName, room.name) - Game.rooms[room.name].controller.level);
   let closestRoom = _.head(sortedRooms);
   return closestRoom;
 }
@@ -316,6 +324,7 @@ hivemind.manageRemoteMiners = () => {
 
   _.forEach(Memory.remoteMineRooms, name => {
     let room = Game.rooms[name];
+
 
     if (room) {
       let remoteminers = _(room.find(FIND_MY_CREEPS))
@@ -372,19 +381,19 @@ hivemind.assignJobs = () => {
 }
 
 hivemind.think = () => {
-let profiler = {};
-profiler.init = Game.cpu.getUsed();
+  let profiler = {};
+  profiler.init = Game.cpu.getUsed();
 
-hivemind.interpretFlags();
-profiler.interpretFlags = Game.cpu.getUsed() - _.sum(profiler);
-hivemind.cleanUpCreepMemory();
-profiler.cleanUpCreepMemory = Game.cpu.getUsed() - _.sum(profiler);
-hivemind.assignJobs();
-profiler.assignJobs = Game.cpu.getUsed() - _.sum(profiler);
-hivemind.manageNextRooms();
-profiler.manageNextRooms = Game.cpu.getUsed() - _.sum(profiler);
-hivemind.manageRemoteMiners();
-profiler.manageRemoteMiners = Game.cpu.getUsed() - _.sum(profiler);
+  hivemind.interpretFlags();
+  profiler.interpretFlags = Game.cpu.getUsed() - _.sum(profiler);
+  hivemind.cleanUpCreepMemory();
+  profiler.cleanUpCreepMemory = Game.cpu.getUsed() - _.sum(profiler);
+  hivemind.assignJobs();
+  profiler.assignJobs = Game.cpu.getUsed() - _.sum(profiler);
+  hivemind.manageNextRooms();
+  profiler.manageNextRooms = Game.cpu.getUsed() - _.sum(profiler);
+  hivemind.manageRemoteMiners();
+  profiler.manageRemoteMiners = Game.cpu.getUsed() - _.sum(profiler);
 
-Memory.stats.hivemindProfiler = profiler;
+  Memory.stats.hivemindProfiler = profiler;
 }
