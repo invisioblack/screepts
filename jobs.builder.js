@@ -20,7 +20,7 @@ module.exports = {
               target: target.id
             }
           } else {
-            let droppedEnergy = _(global.Cache.rooms[room.name].droppedEnergy).map(de => Game.getObjectById(de.id)).filter(de => de.amount > 50).sortBy(de => de.amount).reverse().value();
+            let droppedEnergy = _(global.Cache.rooms[room.name].droppedEnergy).map(de => Game.getObjectById(de.id)).filter(de => de && de.amount > 50).sortBy(de => de.amount).reverse().value();
             //let target = builder.pos.findClosestByPath(droppedEnergy);
             let target = _.head(droppedEnergy);
             if (target) {
