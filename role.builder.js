@@ -34,6 +34,8 @@ module.exports = {
   },
 
   sizes: [
+      [WORK, CARRY, MOVE],
+      [WORK, CARRY, MOVE, MOVE],
     [WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE],
     [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, CARRY, WORK, WORK, WORK, CARRY, CARRY]
   ],

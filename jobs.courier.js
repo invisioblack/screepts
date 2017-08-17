@@ -6,7 +6,7 @@ module.exports = {
     }
 
     let links = _.map(global.Cache.rooms[room.name].structuresByType.link, link => Game.getObjectById(link.id));
-    let storageLink = Game.getObjectById(room.memory.storageLink.id);
+    let storageLink = room.memory.storageLink ? Game.getObjectById(room.memory.storageLink.id) : null;
 
     _.forEach(creeps, courier => {
       if (courier.carry.energy > 0) {
